@@ -162,7 +162,7 @@
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-success update-button" data-toggle="modal" data-target="#updateNilaiModal"
                                         th:attr="data-id=${seminarHasil.idSeminarHasil}, data-nilai=${seminarHasil.nilai}, data-status=${seminarHasil.statusSemhas}"
-                                        >Update Nilai</button>
+                                        >Ubah Nilai</button>
                                     </div>
                                 </span>
                             </span>
@@ -238,8 +238,6 @@
     document.getElementById("simpanNilai").addEventListener("click", function () {
         var seminarHasilId = this.getAttribute("data-id");
         var nilai = document.getElementById("nilai").value;
-        console.log("###NILAI :"+ nilai);
-        var statusSemhas = document.getElementById("statusSemhas").value;
         
         // Mengecek nilai harus angka dan tidak kosong
         if (isNaN(parseFloat(nilai)) || nilai === "") {
@@ -253,9 +251,6 @@
             nilai: parseFloat(nilai),
         };
         
-        console.log("###OBJECT TYPE :"+ typeof seminarHasilId);
-        console.log("###OBJECT TYPE :"+ typeof nilai);
-        console.log("###OBJECT TYPE :"+ typeof statusSemhas);
         fetch("/seminar-hasil/input-nilai/" + seminarHasilId, {
             method: "POST",
             headers: {

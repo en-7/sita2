@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-    <title>Update Mahasiswa</title>
+    <title>Ubah Mahasiswa</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <style>
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #3c7850 !important;
+            border-color:#3c7850 !important;
+        }
+    </style>
 </head>
 <body>
 <nav th:replace="fragments/fragment :: navbar('/')"></nav>
@@ -12,7 +22,7 @@
     <div class="card m-4 p-4">
         <div class="card-body">
             <div class="justify-content-center">
-                <h2>Update Mahasiswa</h2>
+                <h2>Ubah Mahasiswa</h2>
                 <br>
                 <form th:action="@{'/mahasiswa/update/' + ${mahasiswa.idUser}}" th:object="${mahasiswa}" method="POST">
                     <label>Username</label>
@@ -33,8 +43,7 @@
                     <label>Tahap</label>
                     <input class="form-control" type="text" name="tahap" required onchange="update()"/>
                     <br>
-                    <button class="btn btn-primary" type="submit" name="save">Submit</button>
-                    <a class="btn btn-primary" href="/">Home</a>
+                    <button class="btn btn-primary" type="submit" name="save">Simpan</button>
                 </form>
             </div>
         </div>

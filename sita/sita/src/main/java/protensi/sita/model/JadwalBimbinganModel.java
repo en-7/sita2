@@ -25,12 +25,6 @@ public class JadwalBimbinganModel {
     @Column(name = "id_jadwal_bimbingan", updatable = false, nullable = false)
     private Long idJadwalBimbingan;
 
-    @ElementCollection
-    @CollectionTable(name = "tanggal_bimbingan", joinColumns = @JoinColumn(name = "id_jadwal_bimbingan"))
-    @Column(name = "tanggal_bimbingan", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private Set<LocalDateTime> tanggalBimbingan;
-
     @Column(name = "catatan_bimbingan")
     private String catatanBimbingan;
 

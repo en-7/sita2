@@ -33,9 +33,8 @@ public class BaseController {
 
     @Autowired
     public AnnouncementService announcementService;
-    
-    private TimelineServiceImpl tlService;
 
+    private TimelineServiceImpl tlService;
 
     @GetMapping("/")
     private String home(Model model) {

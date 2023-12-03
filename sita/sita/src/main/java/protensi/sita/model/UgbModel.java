@@ -104,8 +104,4 @@ public class UgbModel {
     @ManyToMany
     @JoinTable(name = "ugb_pembimbing", joinColumns = @JoinColumn(name = "id_ugb"), inverseJoinColumns = @JoinColumn(name = "id_pembimbing"))
     private Set<UserModel> pembimbing;
-
-    @ManyToMany
-    @JoinTable(name = "ugb_koordinator", joinColumns = @JoinColumn(name = "id_ugb"), inverseJoinColumns = @JoinColumn(name = "id_koordinator"))
-    private Set<UserModel> koordinator;
 }

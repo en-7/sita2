@@ -2,13 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
   <title>Login</title>
-  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
-  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+  <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
   <style>
-    .card{
+    .card {
       margin-top: 80px;
+    }
+
+    .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+        background-color: #3c7850 !important;
+        border-color:#3c7850 !important;
     }
   </style>
 </head>
@@ -39,7 +47,7 @@
               <input type="password" class="col-sm-8 form-control input-sm" name="password">
             </div>
             <div class="row form-group justify-content-center">
-              <button type="submit" class="btn btn-primary">Sign In</button>
+              <button type="submit" class="btn btn-primary">Masuk</button>
             </div>
           </form>
         </div>

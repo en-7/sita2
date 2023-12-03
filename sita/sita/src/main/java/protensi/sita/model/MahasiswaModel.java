@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -25,8 +23,7 @@ public class MahasiswaModel extends UserModel {
     @Column(name = "nim", nullable = false)
     private Integer nim;
 
-    @NotNull
-    @Column(name = "tahap", nullable = false)
+    @Column(name = "tahap")
     private String tahap;
 
     // public MahasiswaModel(String nama, Set<EnumRole> roles, String username,

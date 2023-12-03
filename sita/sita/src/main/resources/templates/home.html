@@ -17,6 +17,16 @@
             /* color: #6a5b31; */
             font-weight: bold;
         }
+
+        h2.center {
+            text-align: center;
+        }
+
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #3c7850 !important;
+            border-color:#3c7850 !important;
+        }
+        
         .container-content {
             max-width: 850px;
             margin: 0 auto;
@@ -54,14 +64,10 @@
 
 <body>
     <nav th:replace="fragments/fragment :: navbar (${'/'})"></nav>
-    <div class="d-flex justify-content-center align-items-center">
+    <div sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]', 'ROLE_[MAHASISWA]')" class="d-flex justify-content-center align-items-center">
         <div class="m-4">
-            <div class="d-flex justify-content-around">
-                <h3 style="color: whitesmoke;" th:text=" 'Welcome to SITA, '+${#httpServletRequest.remoteUser}+'!'">Login as</h3>
-            </div>
             <br>
             <div class="container-fluid">
-                <!-- Content here -->
                 <div class="container-content">
                     <br>
                     <div class="header-container-table">
@@ -81,31 +87,17 @@
                         <div th:each="announce, iterationStatus : ${listAnnounce}">
                             <div class="card text-dark bg-light border-dark mb-3" style="max-width: 45rem;">
                                 <div class="card-header border-dark">
-<!-- 
-
-                                    <td>
-                                        <ul th:each="penguji, iterationStatus2 : ${jadwalSidangSeminar.seminarProposal.ugb.penguji}">
-                                            <li th:text="${penguji.nama}"></li>
-                                        </ul>
-                                    </td> -->
 
                                     <div th:each="author, iterationStatus2 : ${announce.author}">
                                         <h5 th:text="${author.nama}"></h5>
                                     </div>
-                                    <!-- <h5 th:text="${announce.author}"></h5> -->
                                     <span style="font-size: smaller;" th:text="${#dates.format(announce.createdAt, 'dd MMMM yyyy')} +' ,'"></span>
                                     <span style="font-size: smaller;" th:text="${#dates.format(announce.createdAt, 'HH:mm')} + ' WIB'"></span>
-                                    <!-- <p th:text="${#temporals.format(announce.createdAt, 'yyyy MMMM dd')}"></p> -->
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="'> '+*{announce.judul}"></h5>
                                     <p class="card-text" th:text="*{announce.deskripsi}"></p>
                                     <a class="text-right" style="color: blue;" th:href="@{/announce/view(id=${announce.idAnnouncement})}">See Details</a>
-                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
-                                        <path d="M5.523 12.424c.14-.082.293-.162.459-.238a7.878 7.878 0 0 1-.45.606c-.28.337-.498.516-.635.572a.266.266 0 0 1-.035.012.282.282 0 0 1-.026-.044c-.056-.11-.054-.216.04-.36.106-.165.319-.354.647-.548zm2.455-1.647c-.119.025-.237.05-.356.078a21.148 21.148 0 0 0 .5-1.05 12.045 12.045 0 0 0 .51.858c-.217.032-.436.07-.654.114zm2.525.939a3.881 3.881 0 0 1-.435-.41c.228.005.434.022.612.054.317.057.466.147.518.209a.095.095 0 0 1 .026.064.436.436 0 0 1-.06.2.307.307 0 0 1-.094.124.107.107 0 0 1-.069.015c-.09-.003-.258-.066-.498-.256zM8.278 6.97c-.04.244-.108.524-.2.829a4.86 4.86 0 0 1-.089-.346c-.076-.353-.087-.63-.046-.822.038-.177.11-.248.196-.283a.517.517 0 0 1 .145-.04c.013.03.028.092.032.198.005.122-.007.277-.038.465z"/>
-                                        <path fill-rule="evenodd" d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.165 13.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.651 11.651 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.697 19.697 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z"/>
-                                    </svg>
-                                    <a th:href="@{/ugb/downloadFile(type='FILE KP',id=${ugb.idUgb})}" th:text="${ugb.nameFileKp}"></a> -->
                                 </div>
                             </div>
                         </div>    
@@ -116,51 +108,36 @@
                 </div>
             </div>
             <!-- <h2 style="color: whitesmoke;">Welcome To SITA</h2> -->
-
-            <div sec:authorize="hasRole('KOORDINATOR')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/mahasiswa/viewall}" class="mx-2 btn btn-outline-success">List Mahasiswa</a>
-            </div>
-            <div sec:authorize="hasRole('ADMIN')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/dokter/viewall}" class="mx-2 btn btn-outline-success" >List Dokter</a>
-            </div>
-            <div sec:authorize="hasRole('ADMIN')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/apoteker/viewall}" class="mx-2 btn btn-outline-success" >List Apoteker</a>
-            </div>
-            <div sec:authorize="hasRole('KOORDINATOR')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/whitelist/add}" class="mx-2 btn btn-outline-success" >Tambah Whitelist</a>
-            </div>
         </div>
     </div>
-    <div class="d-flex justify-content-center">
-        <h2 class="mt-4 pt-4" th:text="'Hello '+${#httpServletRequest.remoteUser}+'!'">Login as</h2>
-    </div>
-    <div class="d-flex justify-content-center">
-        <div class="card m-4 p-4">
-            <div class="card-body">
-                <div class="m-4">
-                    <h2 class="center">Selamat datang di SITA</h2>
-                    <div th:switch="${roleUser}">
-                        <div th:case="'[ROLE_[ADMIN]]'">
-                            <div class="d-flex justify-content-center">
-                                <a th:href="@{/mahasiswa/viewall}" class="mx-2 btn btn-outline-primary">Daftar Mahasiswa</a>
-                                <a th:href="@{/mahasiswa/add}" class="mx-2 btn btn-outline-primary">Tambah Mahasiswa</a>
-                                <!-- <a th:href="@{'/mahasiswa/update/'+ ${mahasiswa.idUser}}" class="mx-2 btn btn-outline-primary">Update Mahasiswa</a> -->
-                            </div>
-                            <div class="my-3 d-flex justify-content-center">
-                                <a th:href="@{/dosen/viewall}" class="mx-2 btn btn-outline-primary">Daftar Dosen</a>
-                                <a th:href="@{/dosen/add}" class="mx-2 btn btn-outline-primary">Tambah Dosen</a>
-                                <!-- <a th:href="@{/dosen/update}" class="mx-2 btn btn-outline-primary">Update Dosen</a> -->
-                            </div>
-                            <div class="my-3 d-flex justify-content-center">
-                                <a th:href="@{/koordinator/viewall}" class="mx-2 btn btn-outline-primary">Daftar Koordinator</a>
-                                <a th:href="@{/koordinator/add}" class="mx-2 btn btn-outline-primary">Tambah Koordinator</a>
-                                <!-- <a th:href="@{/koordinator/update}" class="mx-2 btn btn-outline-primary">Update Koordinator</a> -->
-                            </div>
+    <div sec:authorize="hasAnyAuthority('ROLE_[ADMIN]')">
+        <div class="d-flex justify-content-center">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="m-4">
+                        <h2 class="center">Selamat datang di SITA</h2>
+                            
+                        <div class="d-flex justify-content-center">
+                            <a th:href="@{/mahasiswa/viewall}" class="mx-2 btn btn-outline-primary">Daftar Mahasiswa</a>
+                            <a th:href="@{/mahasiswa/add}" class="mx-2 btn btn-outline-primary">Tambah Mahasiswa</a>
+                            <!-- <a th:href="@{'/mahasiswa/update/'+ ${mahasiswa.idUser}}" class="mx-2 btn btn-outline-primary">Update Mahasiswa</a> -->
                         </div>
+                        <div class="my-3 d-flex justify-content-center">
+                            <a th:href="@{/dosen/viewall}" class="mx-2 btn btn-outline-primary">Daftar Dosen</a>
+                            <a th:href="@{/dosen/add}" class="mx-2 btn btn-outline-primary">Tambah Dosen</a>
+                            <!-- <a th:href="@{/dosen/update}" class="mx-2 btn btn-outline-primary">Update Dosen</a> -->
+                        </div>
+                        <div class="my-3 d-flex justify-content-center">
+                            <a th:href="@{/koordinator/viewall}" class="mx-2 btn btn-outline-primary">Daftar Koordinator</a>
+                            <a th:href="@{/koordinator/add}" class="mx-2 btn btn-outline-primary">Tambah Koordinator</a>
+                            <!-- <a th:href="@{/koordinator/update}" class="mx-2 btn btn-outline-primary">Update Koordinator</a> -->
+                        </div>
+                           
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 </html>

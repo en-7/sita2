@@ -20,8 +20,6 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.*;
 
-
-
 @Controller
 public class TimelineController {
 
@@ -29,27 +27,27 @@ public class TimelineController {
     TimelineDb timelineDb;
 
     @GetMapping("/timeline")
-    public String readTimelinePage(Model model){
+    public String readTimelinePage(Model model) {
         List<TimelineModel> listTl = timelineDb.findAll();
-        Collections.sort(listTl , (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
+        Collections.sort(listTl, (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
 
         int indexNow = listTl.size() - 1;
         LocalDate dateNow = LocalDate.now();
         String month = Integer.toString(dateNow.getMonthValue());
         String year = Integer.toString(dateNow.getYear());
-        String periodeNow = year+"-"+month;
-        System.out.println("nowPeriode: "+periodeNow);
+        String periodeNow = year + "-" + month;
+        System.out.println("nowPeriode: " + periodeNow);
 
-        for(int i = 0; i < listTl.size(); i++){
-            System.out.println("periode_in_list: "+listTl.get(i).getPeriode());
-            if(listTl.get(i).getPeriode().equals(periodeNow)){
+        for (int i = 0; i < listTl.size(); i++) {
+            System.out.println("periode_in_list: " + listTl.get(i).getPeriode());
+            if (listTl.get(i).getPeriode().equals(periodeNow)) {
                 indexNow = i;
             }
         }
 
-        
-        if(!listTl.isEmpty()){
-            DateTimeFormatter ft = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.forLanguageTag("in-ID"));
+        if (!listTl.isEmpty()) {
+            DateTimeFormatter ft = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+                    .withLocale(Locale.forLanguageTag("in-ID"));
             TimelineModel timeline = listTl.get(indexNow);
 
             LocalDate dateRegSidang = timeline.getRegSidang();
@@ -83,89 +81,89 @@ public class TimelineController {
             String reg_val_ta = "-";
             String peng_ta = "-";
 
-            if(dateRegSidang != null){
+            if (dateRegSidang != null) {
                 reg_sidang = dateRegSidang.format(ft);
             }
-            if(dateStartSidang != null && dateEndSidang != null){
+            if (dateStartSidang != null && dateEndSidang != null) {
                 pel_sidang = Integer.toString(dateStartSidang.getDayOfMonth()) + "-"
-                            + Integer.toString(dateEndSidang.getDayOfMonth()) + " "  
-                            + StringUtils.capitalize(dateStartSidang.getMonth().toString().toLowerCase()) + " "
-                            + Integer.toString(dateStartSidang.getYear());
+                        + Integer.toString(dateEndSidang.getDayOfMonth()) + " "
+                        + StringUtils.capitalize(dateStartSidang.getMonth().toString().toLowerCase()) + " "
+                        + Integer.toString(dateStartSidang.getYear());
             }
-            if(datePengSidang != null){
-                peng_sidang = datePengSidang.format(ft) + " " 
-                            + Integer.toString(datePengSidang.getHour()) + ":"
-                            + Integer.toString(datePengSidang.getMinute());
-                
-                if(datePengSidang.getHour() > 11){
+            if (datePengSidang != null) {
+                peng_sidang = datePengSidang.format(ft) + " "
+                        + Integer.toString(datePengSidang.getHour()) + ":"
+                        + Integer.toString(datePengSidang.getMinute());
+
+                if (datePengSidang.getHour() > 11) {
                     peng_sidang += " PM";
-                }else{
+                } else {
                     peng_sidang += " AM";
                 }
             }
 
-            if(dateRegUgb != null){
+            if (dateRegUgb != null) {
                 reg_ugb = dateRegUgb.format(ft);
             }
-            if(datePengUgb != null){
-                peng_ugb = datePengUgb.format(ft) + " " 
-                            + Integer.toString(datePengUgb.getHour()) + ":"
-                            + Integer.toString(datePengUgb.getMinute());
-                
-                if(datePengUgb.getHour() > 11){
+            if (datePengUgb != null) {
+                peng_ugb = datePengUgb.format(ft) + " "
+                        + Integer.toString(datePengUgb.getHour()) + ":"
+                        + Integer.toString(datePengUgb.getMinute());
+
+                if (datePengUgb.getHour() > 11) {
                     peng_ugb += " PM";
-                }else{
+                } else {
                     peng_ugb += " AM";
                 }
             }
 
-            if(dateRegSempro != null){
+            if (dateRegSempro != null) {
                 reg_sempro = dateRegSempro.format(ft);
             }
-            if(dateStartSempro != null && dateEndSempro != null){
+            if (dateStartSempro != null && dateEndSempro != null) {
                 pel_sempro = Integer.toString(dateStartSempro.getDayOfMonth()) + "-"
-                            + Integer.toString(dateEndSempro.getDayOfMonth()) + " "  
-                            + StringUtils.capitalize(dateStartSempro.getMonth().toString().toLowerCase()) + " "
-                            + Integer.toString(dateStartSempro.getYear());
+                        + Integer.toString(dateEndSempro.getDayOfMonth()) + " "
+                        + StringUtils.capitalize(dateStartSempro.getMonth().toString().toLowerCase()) + " "
+                        + Integer.toString(dateStartSempro.getYear());
             }
-            if(datePengSempro != null){
-                peng_sempro = datePengSempro.format(ft) + " " 
-                            + Integer.toString(datePengSempro.getHour()) + ":"
-                            + Integer.toString(datePengSempro.getMinute());
-                
-                if(datePengSempro.getHour() > 11){
+            if (datePengSempro != null) {
+                peng_sempro = datePengSempro.format(ft) + " "
+                        + Integer.toString(datePengSempro.getHour()) + ":"
+                        + Integer.toString(datePengSempro.getMinute());
+
+                if (datePengSempro.getHour() > 11) {
                     peng_sempro += " PM";
-                }else{
+                } else {
                     peng_sempro += " AM";
                 }
             }
 
-            if(dateRegSemhas != null){
+            if (dateRegSemhas != null) {
                 reg_semhas = dateRegSemhas.format(ft);
             }
-            if(dateStartSemhas != null && dateEndSemhas != null){
+            if (dateStartSemhas != null && dateEndSemhas != null) {
                 pel_semhas = Integer.toString(dateStartSemhas.getDayOfMonth()) + "-"
-                            + Integer.toString(dateEndSemhas.getDayOfMonth()) + " "  
-                            + StringUtils.capitalize(dateStartSemhas.getMonth().toString().toLowerCase()) + " "
-                            + Integer.toString(dateStartSemhas.getYear());
+                        + Integer.toString(dateEndSemhas.getDayOfMonth()) + " "
+                        + StringUtils.capitalize(dateStartSemhas.getMonth().toString().toLowerCase()) + " "
+                        + Integer.toString(dateStartSemhas.getYear());
             }
-            if(datePengSemhas != null){
-                peng_semhas = datePengSemhas.format(ft) + " " 
-                            + Integer.toString(datePengSemhas.getHour()) + ":"
-                            + Integer.toString(datePengSemhas.getMinute());
-                
-                if(datePengSemhas.getHour() > 11){
+            if (datePengSemhas != null) {
+                peng_semhas = datePengSemhas.format(ft) + " "
+                        + Integer.toString(datePengSemhas.getHour()) + ":"
+                        + Integer.toString(datePengSemhas.getMinute());
+
+                if (datePengSemhas.getHour() > 11) {
                     peng_semhas += " PM";
-                }else{
+                } else {
                     peng_semhas += " AM";
                 }
             }
 
-            if(dateRegValTa != null){
+            if (dateRegValTa != null) {
                 reg_val_ta = dateRegValTa.format(ft);
             }
 
-            if(datePengTa != null){
+            if (datePengTa != null) {
                 peng_ta = datePengTa.format(ft);
             }
 
@@ -189,20 +187,20 @@ public class TimelineController {
             model.addAttribute("reg_val_ta", reg_val_ta);
             model.addAttribute("peng_ta", peng_ta);
             return "timeline/read-tl";
-        }else{
+        } else {
             return "timeline/read-tl";
         }
-        
+
     }
 
     @GetMapping("/timeline/{periode}")
-    public String readCertainTimelinePage(@PathVariable String periode, Model model){
+    public String readCertainTimelinePage(@PathVariable String periode, Model model) {
         TimelineModel tlUpdate = timelineDb.findByPeriode(periode);
         List<TimelineModel> listTl = timelineDb.findAll();
-        Collections.sort(listTl , (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
+        Collections.sort(listTl, (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
 
-
-        DateTimeFormatter ft = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.forLanguageTag("in-ID"));
+        DateTimeFormatter ft = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+                .withLocale(Locale.forLanguageTag("in-ID"));
         TimelineModel timeline = tlUpdate;
 
         LocalDate dateRegSidang = timeline.getRegSidang();
@@ -236,89 +234,89 @@ public class TimelineController {
         String reg_val_ta = "-";
         String peng_ta = "-";
 
-        if(dateRegSidang != null){
+        if (dateRegSidang != null) {
             reg_sidang = dateRegSidang.format(ft);
         }
-        if(dateStartSidang != null && dateEndSidang != null){
+        if (dateStartSidang != null && dateEndSidang != null) {
             pel_sidang = Integer.toString(dateStartSidang.getDayOfMonth()) + "-"
-                        + Integer.toString(dateEndSidang.getDayOfMonth()) + " "  
-                        + StringUtils.capitalize(dateStartSidang.getMonth().toString().toLowerCase()) + " "
-                        + Integer.toString(dateStartSidang.getYear());
+                    + Integer.toString(dateEndSidang.getDayOfMonth()) + " "
+                    + StringUtils.capitalize(dateStartSidang.getMonth().toString().toLowerCase()) + " "
+                    + Integer.toString(dateStartSidang.getYear());
         }
-        if(datePengSidang != null){
-            peng_sidang = datePengSidang.format(ft) + " " 
-                        + Integer.toString(datePengSidang.getHour()) + ":"
-                        + Integer.toString(datePengSidang.getMinute());
-            
-            if(datePengSidang.getHour() > 11){
+        if (datePengSidang != null) {
+            peng_sidang = datePengSidang.format(ft) + " "
+                    + Integer.toString(datePengSidang.getHour()) + ":"
+                    + Integer.toString(datePengSidang.getMinute());
+
+            if (datePengSidang.getHour() > 11) {
                 peng_sidang += " PM";
-            }else{
+            } else {
                 peng_sidang += " AM";
             }
         }
 
-        if(dateRegUgb != null){
+        if (dateRegUgb != null) {
             reg_ugb = dateRegUgb.format(ft);
         }
-        if(datePengUgb != null){
-            peng_ugb = datePengUgb.format(ft) + " " 
-                        + Integer.toString(datePengUgb.getHour()) + ":"
-                        + Integer.toString(datePengUgb.getMinute());
-            
-            if(datePengUgb.getHour() > 11){
+        if (datePengUgb != null) {
+            peng_ugb = datePengUgb.format(ft) + " "
+                    + Integer.toString(datePengUgb.getHour()) + ":"
+                    + Integer.toString(datePengUgb.getMinute());
+
+            if (datePengUgb.getHour() > 11) {
                 peng_ugb += " PM";
-            }else{
+            } else {
                 peng_ugb += " AM";
             }
         }
 
-        if(dateRegSempro != null){
+        if (dateRegSempro != null) {
             reg_sempro = dateRegSempro.format(ft);
         }
-        if(dateStartSempro != null && dateEndSempro != null){
+        if (dateStartSempro != null && dateEndSempro != null) {
             pel_sempro = Integer.toString(dateStartSempro.getDayOfMonth()) + "-"
-                        + Integer.toString(dateEndSempro.getDayOfMonth()) + " "  
-                        + StringUtils.capitalize(dateStartSempro.getMonth().toString().toLowerCase()) + " "
-                        + Integer.toString(dateStartSempro.getYear());
+                    + Integer.toString(dateEndSempro.getDayOfMonth()) + " "
+                    + StringUtils.capitalize(dateStartSempro.getMonth().toString().toLowerCase()) + " "
+                    + Integer.toString(dateStartSempro.getYear());
         }
-        if(datePengSempro != null){
-            peng_sempro = datePengSempro.format(ft) + " " 
-                        + Integer.toString(datePengSempro.getHour()) + ":"
-                        + Integer.toString(datePengSempro.getMinute());
-            
-            if(datePengSempro.getHour() > 11){
+        if (datePengSempro != null) {
+            peng_sempro = datePengSempro.format(ft) + " "
+                    + Integer.toString(datePengSempro.getHour()) + ":"
+                    + Integer.toString(datePengSempro.getMinute());
+
+            if (datePengSempro.getHour() > 11) {
                 peng_sempro += " PM";
-            }else{
+            } else {
                 peng_sempro += " AM";
             }
         }
 
-        if(dateRegSemhas != null){
+        if (dateRegSemhas != null) {
             reg_semhas = dateRegSemhas.format(ft);
         }
-        if(dateStartSemhas != null && dateEndSemhas != null){
+        if (dateStartSemhas != null && dateEndSemhas != null) {
             pel_semhas = Integer.toString(dateStartSemhas.getDayOfMonth()) + "-"
-                        + Integer.toString(dateEndSemhas.getDayOfMonth()) + " "  
-                        + StringUtils.capitalize(dateStartSemhas.getMonth().toString().toLowerCase()) + " "
-                        + Integer.toString(dateStartSemhas.getYear());
+                    + Integer.toString(dateEndSemhas.getDayOfMonth()) + " "
+                    + StringUtils.capitalize(dateStartSemhas.getMonth().toString().toLowerCase()) + " "
+                    + Integer.toString(dateStartSemhas.getYear());
         }
-        if(datePengSemhas != null){
-            peng_semhas = datePengSemhas.format(ft) + " " 
-                        + Integer.toString(datePengSemhas.getHour()) + ":"
-                        + Integer.toString(datePengSemhas.getMinute());
-            
-            if(datePengSemhas.getHour() > 11){
+        if (datePengSemhas != null) {
+            peng_semhas = datePengSemhas.format(ft) + " "
+                    + Integer.toString(datePengSemhas.getHour()) + ":"
+                    + Integer.toString(datePengSemhas.getMinute());
+
+            if (datePengSemhas.getHour() > 11) {
                 peng_semhas += " PM";
-            }else{
+            } else {
                 peng_semhas += " AM";
             }
         }
 
-        if(dateRegValTa != null){
+        if (dateRegValTa != null) {
             reg_val_ta = dateRegValTa.format(ft);
         }
 
-        if(datePengTa != null){
+        if (datePengTa != null) {
             peng_ta = datePengTa.format(ft);
         }
 
@@ -340,18 +338,15 @@ public class TimelineController {
         return "timeline/read-tl";
     }
 
-    
     @GetMapping("/timeline/add")
-    public String addTimelineFormPage(Model model){
+    public String addTimelineFormPage(Model model) {
         TimelineModel tl = new TimelineModel();
         model.addAttribute("timeline", tl);
         return "timeline/add-tl-form";
     }
-    
 
     @PostMapping("/timeline/add")
-    public String addTimelineSubmitPage(@ModelAttribute TimelineModel tl){
-        
+    public String addTimelineSubmitPage(@ModelAttribute TimelineModel tl) {
 
         System.out.println("*** masuk ***");
         // System.out.println("*** periode: "+ periode);
@@ -370,34 +365,32 @@ public class TimelineController {
     }
 
     @GetMapping("/timeline/update")
-    public String updateTimelineFormPage(Model model){
+    public String updateTimelineFormPage(Model model) {
         List<TimelineModel> listTl = timelineDb.findAll();
-        Collections.sort(listTl , (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
+        Collections.sort(listTl, (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
 
         int indexNow = listTl.size() - 1;
         LocalDate dateNow = LocalDate.now();
         String month = Integer.toString(dateNow.getMonthValue());
         String year = Integer.toString(dateNow.getYear());
-        String periodeNow = year+"-"+month;
-        System.out.println("nowPeriode: "+periodeNow);
+        String periodeNow = year + "-" + month;
+        System.out.println("nowPeriode: " + periodeNow);
         // TimelineModel time
 
-        for(int i = 0; i < listTl.size(); i++){
-            System.out.println("periode_in_list: "+listTl.get(i).getPeriode());
-            if(listTl.get(i).getPeriode().equals(periodeNow)){
+        for (int i = 0; i < listTl.size(); i++) {
+            System.out.println("periode_in_list: " + listTl.get(i).getPeriode());
+            if (listTl.get(i).getPeriode().equals(periodeNow)) {
                 indexNow = i;
             }
         }
 
-
-        if(!listTl.isEmpty()){
+        if (!listTl.isEmpty()) {
             model.addAttribute("timeline", listTl.get(indexNow));
-        }else{
+        } else {
             TimelineModel newTl = new TimelineModel();
 
             model.addAttribute("timeline", newTl);
         }
-
 
         model.addAttribute("listTimeline", listTl);
 
@@ -405,21 +398,19 @@ public class TimelineController {
     }
 
     @GetMapping("/timeline/update/{periode}")
-    public String updateCertainTimelineFormPage(@PathVariable String periode, Model model){
+    public String updateCertainTimelineFormPage(@PathVariable String periode, Model model) {
         TimelineModel tlUpdate = timelineDb.findByPeriode(periode);
         List<TimelineModel> listTl = timelineDb.findAll();
-        Collections.sort(listTl , (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
-
+        Collections.sort(listTl, (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
 
         model.addAttribute("timeline", tlUpdate);
         model.addAttribute("listTimeline", listTl);
 
         return "timeline/update-tl-form";
     }
-    
+
     @PostMapping("/timeline/update")
-    public String updateTimelineSubmitPage(@ModelAttribute TimelineModel tl){
-        
+    public String updateTimelineSubmitPage(@ModelAttribute TimelineModel tl) {
 
         System.out.println("*** masuk ***");
         TimelineModel existingTl = timelineDb.findByPeriode(tl.getPeriode());

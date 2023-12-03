@@ -8,6 +8,7 @@ import protensi.sita.repository.AvailableBimbinganDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,35 +56,44 @@ public class AvailableBimbinganServiceImpl implements AvailableBimbinganService 
 
     @Override
     @Transactional
-    public List<AvailableBimbinganModel> listAvailablePembimbing(UgbModel ugb){
+    public List<AvailableBimbinganModel> listAvailablePembimbing(UgbModel ugb, LocalDate startDate, LocalDate endDate){
         Set<UserModel> pembimbingSet = ugb.getPembimbing();
         List<UserModel> listPembimbing= new ArrayList<>(pembimbingSet);
         List<AvailableBimbinganModel> listAvailable = new ArrayList<AvailableBimbinganModel>();
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atStartOfDay().plusDays(1).minusSeconds(1);
         for (UserModel pembimbing : listPembimbing) {
-            List<AvailableBimbinganModel> listAvailablePembimbing = availableBimbinganDb.findAllByPembimbing_IdUser(pembimbing.getIdUser());
+            List<AvailableBimbinganModel> listAvailablePembimbing = availableBimbinganDb.findAllByPembimbing_IdUserAndStartBimbinganTimeBetween(pembimbing.getIdUser(), startDateTime, endDateTime);
             listAvailable.addAll(listAvailablePembimbing);
         }
         return listAvailable;
     }
 
     @Override
-    public AvailableBimbinganModel findByStartBimbinganTime(LocalDateTime startBimbinganTime) {
-        return availableBimbinganDb.findByStartBimbinganTime(startBimbinganTime);
+    public AvailableBimbinganModel findByStartBimbinganTime(Long idUser, LocalDateTime startBimbinganTime) {
+        return availableBimbinganDb.findByPembimbing_IdUserAndStartBimbinganTime(idUser, startBimbinganTime);
     }
 
     @Override
-    public AvailableBimbinganModel findByEndBimbinganTime(LocalDateTime endBimbinganTime) {
-        return availableBimbinganDb.findByStartBimbinganTime(endBimbinganTime);
+    public AvailableBimbinganModel findByEndBimbinganTime(Long idUser, LocalDateTime endBimbinganTime) {
+        return availableBimbinganDb.findByPembimbing_IdUserAndEndBimbinganTime(idUser, endBimbinganTime);
     }
 
     @Override
-    public List<AvailableBimbinganModel> findByStartBimbinganTimeBetween(LocalDateTime startBimbinganTime, LocalDateTime endBimbinganTime) {
-        return availableBimbinganDb.findByStartBimbinganTimeBetween(startBimbinganTime, endBimbinganTime);
+    public List<AvailableBimbinganModel> findByStartBimbinganTimeBetween(Long idUser, LocalDateTime startBimbinganTime, LocalDateTime endBimbinganTime) {
+        return availableBimbinganDb.findByPembimbing_IdUserAndStartBimbinganTimeBetween(idUser, startBimbinganTime, endBimbinganTime);
     }
 
     @Override
-    public List<AvailableBimbinganModel> findByEndBimbinganTimeBetween(LocalDateTime startBimbinganTime, LocalDateTime endBimbinganTime) {
-        return availableBimbinganDb.findByEndBimbinganTimeBetween(startBimbinganTime, endBimbinganTime);
+    public List<AvailableBimbinganModel> findByEndBimbinganTimeBetween(Long idUser, LocalDateTime startBimbinganTime, LocalDateTime endBimbinganTime) {
+        return availableBimbinganDb.findByPembimbing_IdUserAndEndBimbinganTimeBetween(idUser, startBimbinganTime, endBimbinganTime);
+    }
+
+    @Override
+    public List<AvailableBimbinganModel> findAllByIdPembimbingAndDateRange(Long idUser, LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atStartOfDay().plusDays(1).minusSeconds(1);
+        return availableBimbinganDb.findAllByPembimbing_IdUserAndStartBimbinganTimeBetween(idUser, startDateTime, endDateTime);
     }
 
 }

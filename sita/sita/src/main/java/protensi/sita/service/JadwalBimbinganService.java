@@ -2,6 +2,8 @@ package protensi.sita.service;
 
 import protensi.sita.model.AvailableBimbinganModel;
 import protensi.sita.model.JadwalBimbinganModel;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public interface JadwalBimbinganService {
@@ -14,4 +16,5 @@ public interface JadwalBimbinganService {
     void save(JadwalBimbinganModel jadwalBimbingan);
     void delete(Long idJadwalBimbingan);
     JadwalBimbinganModel update(JadwalBimbinganModel jadwalBimbingan);
+    List<JadwalBimbinganModel> findAllByIdPembimbingAndDateRange(Long idUser, LocalDate startDate, LocalDate endDate);
 }

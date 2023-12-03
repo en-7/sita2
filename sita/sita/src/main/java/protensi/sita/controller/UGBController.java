@@ -35,7 +35,10 @@ import protensi.sita.service.TimelineServiceImpl;
 import protensi.sita.service.MahasiswaServiceImpl;
 import protensi.sita.security.UserDetailsServiceImpl;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -82,6 +85,12 @@ public class UGBController {
 
         TimelineModel tl = tlService.checkDate();
         LocalDate nowDate = LocalDate.now();
+        Instant now = Instant.now();
+        ZonedDateTime nowJakarta = now.atZone(ZoneId.of("Asia/Jakarta")); 
+  
+        LocalDate nowTimezonedDate = nowJakarta.toLocalDate();
+
+        System.out.println("nowTimeZonedDate: "+ nowTimezonedDate);
 
         if (retrievedUgb != null) {
             String idUgb = retrievedUgb.getIdUgb().toString();

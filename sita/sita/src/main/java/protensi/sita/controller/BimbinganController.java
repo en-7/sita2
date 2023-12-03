@@ -1,10 +1,15 @@
 package protensi.sita.controller;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -76,24 +81,25 @@ public class BimbinganController {
         @ModelAttribute AvailableBimbinganModel availableBimbingan, Model model,
         Authentication authentication) {
 
+        String namaUser = authentication.getName();
+        UserModel user = userDetailsService.findByUsername(namaUser);
+
         LocalDateTime startBimbinganTime = availableBimbingan.getStartBimbinganTime();
         LocalDateTime endBimbinganTime = availableBimbingan.getEndBimbinganTime();
 
-        List<AvailableBimbinganModel> overlappingBimbingan = availableBimbinganService.findByStartBimbinganTimeBetween(startBimbinganTime, endBimbinganTime);
-        overlappingBimbingan.addAll(availableBimbinganService.findByEndBimbinganTimeBetween(startBimbinganTime, endBimbinganTime));
+        List<AvailableBimbinganModel> overlappingBimbingan = availableBimbinganService.findByStartBimbinganTimeBetween(user.getIdUser(), startBimbinganTime, endBimbinganTime);
+        overlappingBimbingan.addAll(availableBimbinganService.findByEndBimbinganTimeBetween(user.getIdUser(), startBimbinganTime, endBimbinganTime));
 
-        AvailableBimbinganModel startBimbinganExist = availableBimbinganService.findByStartBimbinganTime(availableBimbingan.getStartBimbinganTime());
-        AvailableBimbinganModel endBimbinganExist = availableBimbinganService.findByEndBimbinganTime(availableBimbingan.getEndBimbinganTime());
-        AvailableBimbinganModel startBimbinganBentrok = availableBimbinganService.findByStartBimbinganTime(availableBimbingan.getEndBimbinganTime());
-        AvailableBimbinganModel endBimbinganBentrok = availableBimbinganService.findByEndBimbinganTime(availableBimbingan.getStartBimbinganTime());
+        AvailableBimbinganModel startBimbinganExist = availableBimbinganService.findByStartBimbinganTime(user.getIdUser(), availableBimbingan.getStartBimbinganTime());
+        AvailableBimbinganModel endBimbinganExist = availableBimbinganService.findByEndBimbinganTime(user.getIdUser(), availableBimbingan.getEndBimbinganTime());
+        AvailableBimbinganModel startBimbinganBentrok = availableBimbinganService.findByStartBimbinganTime(user.getIdUser(), availableBimbingan.getEndBimbinganTime());
+        AvailableBimbinganModel endBimbinganBentrok = availableBimbinganService.findByEndBimbinganTime(user.getIdUser(), availableBimbingan.getStartBimbinganTime());
         
         if (startBimbinganExist == null){
             if (startBimbinganBentrok == null){
                 if (endBimbinganExist == null){
                     if (endBimbinganBentrok == null){
                         if (overlappingBimbingan.isEmpty()) {
-                            String namaUser = authentication.getName();
-                            UserModel user = userDetailsService.findByUsername(namaUser);
                             PembimbingModel pembimbing = pembimbingService.findPembimbingById(user.getIdUser()); 
                             availableBimbingan.setPembimbing(pembimbing);
                             availableBimbingan.setBookingStatus("AVAILABLE");
@@ -136,17 +142,20 @@ public class BimbinganController {
     }
 
     @PostMapping("/atur-jadwal/update")
-    public String updateAvailableBimbinganSubmitPage(@ModelAttribute AvailableBimbinganModel availableBimbingan, Model model) {
+    public String updateAvailableBimbinganSubmitPage(@ModelAttribute AvailableBimbinganModel availableBimbingan, Authentication authentication, Model model) {
+        String namaUser = authentication.getName();
+        UserModel user = userDetailsService.findByUsername(namaUser);
+        
         LocalDateTime startBimbinganTime = availableBimbingan.getStartBimbinganTime();
         LocalDateTime endBimbinganTime = availableBimbingan.getEndBimbinganTime();
 
-        List<AvailableBimbinganModel> overlappingBimbingan = availableBimbinganService.findByStartBimbinganTimeBetween(startBimbinganTime, endBimbinganTime);
-        overlappingBimbingan.addAll(availableBimbinganService.findByEndBimbinganTimeBetween(startBimbinganTime, endBimbinganTime));
+        List<AvailableBimbinganModel> overlappingBimbingan = availableBimbinganService.findByStartBimbinganTimeBetween(user.getIdUser(), startBimbinganTime, endBimbinganTime);
+        overlappingBimbingan.addAll(availableBimbinganService.findByEndBimbinganTimeBetween(user.getIdUser(), startBimbinganTime, endBimbinganTime));
 
-        AvailableBimbinganModel startBimbinganExist = availableBimbinganService.findByStartBimbinganTime(availableBimbingan.getStartBimbinganTime());
-        AvailableBimbinganModel endBimbinganExist = availableBimbinganService.findByEndBimbinganTime(availableBimbingan.getEndBimbinganTime());
-        AvailableBimbinganModel startBimbinganBentrok = availableBimbinganService.findByStartBimbinganTime(availableBimbingan.getEndBimbinganTime());
-        AvailableBimbinganModel endBimbinganBentrok = availableBimbinganService.findByEndBimbinganTime(availableBimbingan.getStartBimbinganTime());
+        AvailableBimbinganModel startBimbinganExist = availableBimbinganService.findByStartBimbinganTime(user.getIdUser(), availableBimbingan.getStartBimbinganTime());
+        AvailableBimbinganModel endBimbinganExist = availableBimbinganService.findByEndBimbinganTime(user.getIdUser(), availableBimbingan.getEndBimbinganTime());
+        AvailableBimbinganModel startBimbinganBentrok = availableBimbinganService.findByStartBimbinganTime(user.getIdUser(), availableBimbingan.getEndBimbinganTime());
+        AvailableBimbinganModel endBimbinganBentrok = availableBimbinganService.findByEndBimbinganTime(user.getIdUser(), availableBimbingan.getStartBimbinganTime());
         
         if (startBimbinganExist == null){
             if (startBimbinganBentrok == null){
@@ -181,13 +190,27 @@ public class BimbinganController {
 
 
     @GetMapping("/viewall")
-    public String listBimbingan(Model model, Authentication authentication) {
+    public String listBimbingan(Model model, Authentication authentication,
+                                @RequestParam(value = "selectedDate", required = false)
+                                @DateTimeFormat(iso = ISO.DATE) LocalDate selectedDate) {
         String namaUser = authentication.getName();
         UserModel user = userDetailsService.findByUsername(namaUser);
         if (user.getRoles().contains(EnumRole.PEMBIMBING)) {
             PembimbingModel pembimbing = pembimbingService.findPembimbingById(user.getIdUser());
             List<JadwalBimbinganModel> listBimbingan = jadwalBimbinganService.findBimbinganByIdPembimbing(pembimbing.getIdUser());
+            if (selectedDate == null) {
+                // Jika tidak ada tanggal yang dipilih, set default ke minggu ini
+                selectedDate = LocalDate.now();
+            }
+
+            LocalDate startOfWeek = selectedDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+            LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+            // List<JadwalBimbinganModel> listBimbingan = jadwalBimbinganService
+            //         .findAllByIdPembimbingAndDateRange(pembimbing.getIdUser(), startOfWeek, endOfWeek);
+    
             model.addAttribute("listBimbingan", listBimbingan);
+            model.addAttribute("selectedDate", selectedDate);
             return "bimbingan/viewall-jadwal-bimbingan-dosen";
 
         } else if (user.getRoles().contains(EnumRole.MAHASISWA)){
@@ -232,15 +255,30 @@ public class BimbinganController {
         }
     }
 
+
     @GetMapping("/atur-jadwal")
-    public String listAvailable(Model model, Authentication authentication) {
+    public String listAvailable(Model model, Authentication authentication,
+                                @RequestParam(value = "selectedDate", required = false)
+                                @DateTimeFormat(iso = ISO.DATE) LocalDate selectedDate) {
         String namaUser = authentication.getName();
         UserModel user = userDetailsService.findByUsername(namaUser);
 
         if (user.getRoles().contains(EnumRole.PEMBIMBING)) {
             PembimbingModel pembimbing = pembimbingService.findPembimbingById(user.getIdUser());
-            List<AvailableBimbinganModel> listAvailable = availableBimbinganService.findAllByIdPembimbing(pembimbing.getIdUser());
+            // List<AvailableBimbinganModel> listAvailable = availableBimbinganService.findAllByIdPembimbing(pembimbing.getIdUser());
+            if (selectedDate == null) {
+                // Jika tidak ada tanggal yang dipilih, set default ke minggu ini
+                selectedDate = LocalDate.now();
+            }
+
+            LocalDate startOfWeek = selectedDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+            LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+            List<AvailableBimbinganModel> listAvailable = availableBimbinganService
+                    .findAllByIdPembimbingAndDateRange(pembimbing.getIdUser(), startOfWeek, endOfWeek);
+                    
             model.addAttribute("listAvailable", listAvailable);
+            model.addAttribute("selectedDate", selectedDate);
             return "bimbingan/viewall-available-bimbingan";
         } else if (user.getRoles().contains(EnumRole.MAHASISWA)){
             MahasiswaModel mahasiswa = mahasiswaService.findMahasiswaById(user.getIdUser());
@@ -249,11 +287,20 @@ public class BimbinganController {
                 model.addAttribute("pesan", "Anda belum melakukan pendaftaran UGB");
                 return "bimbingan/error-bimbingan";
             }else {
-                List<AvailableBimbinganModel> listAvailable = availableBimbinganService.listAvailablePembimbing(ugb);
+                if (selectedDate == null) {
+                // Jika tidak ada tanggal yang dipilih, set default ke minggu ini
+                    selectedDate = LocalDate.now();
+                }
+
+                LocalDate startOfWeek = selectedDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+                LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+                List<AvailableBimbinganModel> listAvailable = availableBimbinganService.listAvailablePembimbing(ugb, startOfWeek, endOfWeek);
                 List<JadwalBimbinganModel> listBimbingan = jadwalBimbinganService.findBimbinganByListAvailable(listAvailable);
                 model.addAttribute("user", mahasiswa);
                 model.addAttribute("listBimbingan", listBimbingan);
                 model.addAttribute("listAvailable", listAvailable);
+                model.addAttribute("selectedDate", selectedDate);
                 return "bimbingan/viewall-booking-bimbingan";
             }
         } else{
