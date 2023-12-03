@@ -30,6 +30,13 @@
     #topButton:hover{
     background-color: rgb(38, 63, 14);
     }
+
+    #similarity{
+           display: none; 
+           color: red;
+           font-size: smaller;
+
+    }
 </style>
 </head>
 <body>
@@ -52,7 +59,8 @@
 
                             </td>
                             <td>
-                                <input id="period" class="form-control" type="month" th:field="*{periode}" onchange="limit()" >
+                                <p id="similarity" style="margin-bottom: 0;margin-block-end: 0;">Timeline pada periode tersebut sudah ada</p>
+                                <input id="period" class="form-control" type="month" th:field="*{periode}" oninput="validate()" onchange="limit()" >
                                 
                             </td>
                         </tr>
@@ -215,6 +223,44 @@
                     <div class="pb-2 d-flex justify-content-center">
                         <button class="btn btn-primary" id="submitBtn" type="submit" name="save">Submit</button>
                     </div>
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                            var listPeriod = /*[[${listPeriod}]]*/ 'default';
+                            // let i = 0;
+                            // const periods = [];
+                            // while(i < listTimeline.length){
+                            //     periods.push(listTimeline[i].period);
+                            //     console.log("period: " + listTimeline[i].period);
+                            //     i++;
+                            // }
+                            console.log("list period: " + listPeriod);
+                            function validate(){
+                                var chosenPeriod = document.getElementById("period").value;
+                                console.log("chosenPeriod: "+chosenPeriod);
+                                var similarity = document.getElementById("similarity");
+
+                                let isExist = false;
+                                let i = 0;
+                                while(i < listPeriod.length){
+                                    console.log("i = "+i.toString() + " and listPeriodNow = "+ listPeriod[i]);
+                                    if(chosenPeriod == listPeriod[i]){
+                                        isExist = true;
+                                        console.log("EXISTS");
+                                    }
+                                    i++;
+                                }
+                                if(isExist == true){
+                                    console.log("chage input");
+                                    $('#period').val(null);
+                                    $('.dateInput').val(null);
+                                    $('.dateTime').val(null);
+                                    similarity.style.display = "block";
+                                }else{
+                                    similarity.style.display = "none";
+                                }
+                            }
+                        /*]]>*/
+                    </script>
                 </form>
                 
             </div>
@@ -224,12 +270,6 @@
 </body>
 </html>
 <script>
-    // function print(){
-    //     var checked = document.getElementById("checked").value;
-    //     console.log(checked);
-    //     console.log(typeof checked);
-
-    // }
     function limit(){
         var periodChosen = document.getElementById("period");
         var today = new Date();
