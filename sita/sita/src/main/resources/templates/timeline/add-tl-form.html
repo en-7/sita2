@@ -37,6 +37,17 @@
            font-size: smaller;
 
     }
+
+    #pastWarning{
+           display: none; 
+           color: red;
+           font-size: smaller;
+
+    }
+
+    .form-control{
+        width: 220px;
+    }
 </style>
 </head>
 <body>
@@ -60,13 +71,20 @@
                             </td>
                             <td>
                                 <p id="similarity" style="margin-bottom: 0;margin-block-end: 0;">Timeline pada periode tersebut sudah ada</p>
+                                <p id="pastWarning" style="margin-bottom: 0;margin-block-end: 0;">Bulan Tersebut Sudah Lewat</p>
                                 <input id="period" class="form-control" type="month" th:field="*{periode}" oninput="validate()" onchange="limit()" >
                                 
                             </td>
                         </tr>
                         <tr>
+
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
                             <td align="right">
-                                Pendaftaran Sidang: 
+                                Pendaftaran Sidang<FONT COLOR="red"> * </FONT>: 
                             </td>
                             <td class="pembatas">
 
@@ -102,66 +120,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td align="right">
-                                Pendaftaran UGB: 
-                            </td>
-                            <td class="pembatas">
-
-                            </td>
-                            <td>
-                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regUGB}" data-date-format="DD MMMM YYYY" required>
-                            </td>
+                            
+                        </tr>
+                        <tr>
+                            
                         </tr>
                         <tr>
                             <td align="right">
-                                Pengumuman Evaluasi UGB: 
-                            </td>
-                            <td class="pembatas">                
-                            </td>
-                            <td>
-                                <input class="form-control dateTime" type="datetime-local" name="pengumumanUGB" th:value="*{pengumumanUGB}"/>  
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right">
-                                Pendaftaran Seminar Proposal: 
-                            </td>
-                            <td class="pembatas">
-
-                            </td>
-                            <td>
-                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regSempro}" data-date-format="DD MMMM YYYY" required>
-                            </td>
-                        </tr>
-                        <tr id="mergedRow">
-                            <td align="right">
-                                Pelaksanaan Seminar Proposal: 
-                            </td>
-                            <td class="pembatas">
-
-                            </td>
-                            <td>
-                                <h1 class="marker">start date</h1>
-                                <input class="form-control dateInput" type="date" data-date="" th:field="*{startSempro}" data-date-format="DD MMMM YYYY">
-                            </td>
-                            <td>   
-                                <h1 class="marker">end date</h1>
-                                <input class="form-control dateInput" type="date" data-date="" th:field="*{endSempro}"  data-date-format="DD MMMM YYYY">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right">
-                                Pengumuman Hasil Sempro: 
-                            </td>
-                            <td class="pembatas">                
-                            </td>
-                            <td>
-                                <input class="form-control dateTime" type="datetime-local" name="pengumumanSempro" th:value="*{pengumumanSempro}"/>  
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right">
-                                Pendaftaran Seminar Hasil: 
+                                Pendaftaran Seminar Hasil<FONT COLOR="red"> * </FONT>: 
                             </td>
                             <td class="pembatas">
 
@@ -197,8 +163,84 @@
                             </td>
                         </tr>
                         <tr>
+                            
+                        </tr>
+                        <tr>
+                            
+                        </tr>
+                        <tr>
                             <td align="right">
-                                Pendaftaran Validasi TA: 
+                                Pendaftaran UGB<FONT COLOR="red"> * </FONT>: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regUGB}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumuman Evaluasi UGB: 
+                            </td>
+                            <td class="pembatas">                
+                            </td>
+                            <td>
+                                <input class="form-control dateTime" type="datetime-local" name="pengumumanUGB" th:value="*{pengumumanUGB}"/>  
+                            </td>
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran Seminar Proposal<FONT COLOR="red"> * </FONT>: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regSempro}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr id="mergedRow">
+                            <td align="right">
+                                Pelaksanaan Seminar Proposal: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <h1 class="marker">start date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{startSempro}" data-date-format="DD MMMM YYYY">
+                            </td>
+                            <td>   
+                                <h1 class="marker">end date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{endSempro}"  data-date-format="DD MMMM YYYY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumuman Hasil Sempro: 
+                            </td>
+                            <td class="pembatas">                
+                            </td>
+                            <td>
+                                <input class="form-control dateTime" type="datetime-local" name="pengumumanSempro" th:value="*{pengumumanSempro}"/>  
+                            </td>
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran Validasi TA<FONT COLOR="red"> * </FONT>: 
                             </td>
                             <td class="pembatas">
 
@@ -218,6 +260,12 @@
                                 <input class="form-control dateInput" type="date" data-date="" th:field="*{pengumpulanTA}" data-date-format="DD MMMM YYYY">
                             </td>
                         </tr>
+                        <tr>
+
+                        </tr>
+                        <tr>
+
+                        </tr>
                     </table>
 
                     <div class="pb-2 d-flex justify-content-center">
@@ -236,27 +284,44 @@
                             console.log("list period: " + listPeriod);
                             function validate(){
                                 var chosenPeriod = document.getElementById("period").value;
+                                const myArray = chosenPeriod.split("-");
+
                                 console.log("chosenPeriod: "+chosenPeriod);
                                 var similarity = document.getElementById("similarity");
+                                var today = new Date();
+                                var month = today.getMonth() +1;
+                                console.log("monthNoew: "+month);
+                                var retrievedMonth = myArray[1] * 1;
+                                let a = 5;
 
                                 let isExist = false;
+                                let isPast = false;
                                 let i = 0;
                                 while(i < listPeriod.length){
                                     console.log("i = "+i.toString() + " and listPeriodNow = "+ listPeriod[i]);
                                     if(chosenPeriod == listPeriod[i]){
                                         isExist = true;
-                                        console.log("EXISTS");
                                     }
                                     i++;
                                 }
+                                if(retrievedMonth < month){
+                                    isPast = true;
+                                }
                                 if(isExist == true){
-                                    console.log("chage input");
                                     $('#period').val(null);
                                     $('.dateInput').val(null);
                                     $('.dateTime').val(null);
                                     similarity.style.display = "block";
                                 }else{
                                     similarity.style.display = "none";
+                                }
+                                if(isPast == true){
+                                    $('#period').val(null);
+                                    $('.dateInput').val(null);
+                                    $('.dateTime').val(null);
+                                    pastWarning.style.display = "block";
+                                }else{
+                                    pastWarning.style.display = "none";
                                 }
                             }
                         /*]]>*/

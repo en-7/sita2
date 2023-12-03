@@ -108,8 +108,8 @@
             <tr>
                 <th>Status UGB</th>
                 <td>
-                    <span th:if="${ugb?.statusDokumen == null}">-</span>
-                    <span class="status-text" th:unless="${ugb?.statusDokumen == null}" th:text="${ugb?.statusDokumen}"></span>
+                    <span th:if="${ugb?.statusUgb == null}">-</span>
+                    <span class="status-text" th:unless="${ugb?.statusUgb == null}" th:text="${ugb?.statusUgb}"></span>
                 </td>
             </tr>
             <tr>
@@ -164,7 +164,7 @@
         <div th:switch="${roleUser}">
             <div th:case="'[ROLE_[KOORDINATOR]]'">
                 <div class="pb-2 d-flex justify-content-center">
-                    <span th:if="${ugb.statusUgb == 'SUBMITTED'}">
+                    <span th:if="${ugb.statusUgb == 'TERDAFTAR'}">
                         <a class="btn btn-primary mx-1" data-toggle="modal" data-target="#approveModal">Approve</a>
                         <a class="btn btn-primary" data-toggle="modal" data-target="#denyModal">Deny</a>
                         <a class="btn btn-primary mx-1" th:href="@{'/ugb/update/'+ ${ugb.idUgb}}">Update</a>
@@ -173,8 +173,8 @@
             </div>
             <div th:case="'[ROLE_[MAHASISWA]]'">
                 <div class="buttonHolder">
-                    <a th:if="${ugb.statusUgb == 'DENIED'}" class="btn btn-primary mx-1" id="update-btn-m" th:href="@{'/ugb/update/'+ ${ugb.idUgb}}">Update</a>
-                    <a th:if="${ugb.statusUgb == 'DIEVALUASI'}" class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}">Detail Evaluasi</a>
+                    <a th:if="${ugb.statusUgb == 'DITOLAK'}" class="btn btn-primary mx-1" id="update-btn-m" th:href="@{'/ugb/update/'+ ${ugb.idUgb}}">Update</a>
+                    <a th:if="${ugb.statusUgb == 'LULUS'}" class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}">Detail Evaluasi</a>
                 </div>
             </div>
         </div>

@@ -361,18 +361,18 @@ public class TimelineController {
         // tl.setPeriode(periode);
         // LocalDate dateRegSidang = LocalDate.parse(regSidang);
         // tl.setRegSidang(dateRegSidang);
-        System.out.println("pengumuman :" + tl.getPengumumanSidang());
-        System.out.println("pengumuman :" + tl.getPengumumanSempro());
-        System.out.println("pengumuman :" + tl.getPengumumanSemhas());
-        TimelineModel existingTl = timelineDb.findByPeriode(tl.getPeriode());
-        if(existingTl != null){
-            System.out.println("exists");
-        }else{
-            System.out.println("doesn't exist");
+        // System.out.println("pengumuman :" + tl.getPengumumanSidang());
+        // System.out.println("pengumuman :" + tl.getPengumumanSempro());
+        // System.out.println("pengumuman :" + tl.getPengumumanSemhas());
+        // TimelineModel existingTl = timelineDb.findByPeriode(tl.getPeriode());
+        // if(existingTl != null){
+        //     System.out.println("exists");
+        // }else{
+        //     System.out.println("doesn't exist");
 
-        }
-        // timelineDb.save(tl);
-        return "redirect:/";
+        // }
+        timelineDb.save(tl);
+        return "redirect:/timeline";
     }
 
     @GetMapping("/timeline/update")
@@ -443,6 +443,6 @@ public class TimelineController {
         existingTl.setPengumpulanTA(tl.getPengumpulanTA());
 
         timelineDb.save(existingTl);
-        return "redirect:/";
+        return "redirect:/timeline";
     }
 }
