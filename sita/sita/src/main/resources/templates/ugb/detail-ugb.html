@@ -54,9 +54,7 @@
             margin-bottom: 200px;
         }
 
-        .btn-primary{
-            margin-bottom: 40px;
-        }
+
         #update-btn-m{
             margin-bottom: 40px;
         }
@@ -165,16 +163,25 @@
             <div th:case="'[ROLE_[KOORDINATOR]]'">
                 <div class="pb-2 d-flex justify-content-center">
                     <span th:if="${ugb.statusUgb == 'TERDAFTAR'}">
-                        <a class="btn btn-primary mx-1" data-toggle="modal" data-target="#approveModal">Approve</a>
-                        <a class="btn btn-primary" data-toggle="modal" data-target="#denyModal">Deny</a>
-                        <a class="btn btn-primary mx-1" th:href="@{'/ugb/update/'+ ${ugb.idUgb}}">Update</a>
+                        <a class="btn btn-danger" data-toggle="modal" data-target="#denyModal">Tolak</a>
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#approveModal">Setujui</a>
+                        <a class="btn btn-warning" th:href="@{'/ugb/update/'+ ${ugb.idUgb}}">Update</a>
                     </span>
                 </div>
             </div>
             <div th:case="'[ROLE_[MAHASISWA]]'">
                 <div class="buttonHolder">
                     <a th:if="${ugb.statusUgb == 'DITOLAK'}" class="btn btn-primary mx-1" id="update-btn-m" th:href="@{'/ugb/update/'+ ${ugb.idUgb}}">Update</a>
-                    <a th:if="${ugb.statusUgb == 'LULUS'}" class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}">Detail Evaluasi</a>
+                </div>
+            </div>
+            <div th:if="${ugb.statusUgb} == 'DIEVALUASI' OR ${ugb.statusUgb} == 'LULUS'" sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]')">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}" style="margin-top: 2px; margin-left: 350px;">Hasil Evaluasi</a>
+                </div>
+            </div>
+            <div th:if="${ugb.statusUgb} == 'LULUS'" sec:authorize="hasAnyAuthority('ROLE_[MAHASISWA]')">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}" style="margin-top: 2px; margin-left: 350px;">Hasil Evaluasi</a>
                 </div>
             </div>
         </div>
