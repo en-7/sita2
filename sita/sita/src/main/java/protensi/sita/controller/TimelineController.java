@@ -341,6 +341,12 @@ public class TimelineController {
     @GetMapping("/timeline/add")
     public String addTimelineFormPage(Model model) {
         TimelineModel tl = new TimelineModel();
+        List <TimelineModel> listTl = timelineDb.findAll();
+        List<String> listPeriod = new ArrayList();
+        for(TimelineModel timeline : listTl){
+            listPeriod.add(timeline.getPeriode());
+        }
+        model.addAttribute("listPeriod", listPeriod);
         model.addAttribute("timeline", tl);
         return "timeline/add-tl-form";
     }
@@ -355,13 +361,18 @@ public class TimelineController {
         // tl.setPeriode(periode);
         // LocalDate dateRegSidang = LocalDate.parse(regSidang);
         // tl.setRegSidang(dateRegSidang);
-        System.out.println("pengumuman :" + tl.getPengumumanSidang());
-        System.out.println("pengumuman :" + tl.getPengumumanSempro());
-        System.out.println("pengumuman :" + tl.getPengumumanSemhas());
+        // System.out.println("pengumuman :" + tl.getPengumumanSidang());
+        // System.out.println("pengumuman :" + tl.getPengumumanSempro());
+        // System.out.println("pengumuman :" + tl.getPengumumanSemhas());
         // TimelineModel existingTl = timelineDb.findByPeriode(tl.getPeriode());
-        // if(existingTl != )
+        // if(existingTl != null){
+        //     System.out.println("exists");
+        // }else{
+        //     System.out.println("doesn't exist");
+
+        // }
         timelineDb.save(tl);
-        return "redirect:/";
+        return "redirect:/timeline";
     }
 
     @GetMapping("/timeline/update")
@@ -432,6 +443,6 @@ public class TimelineController {
         existingTl.setPengumpulanTA(tl.getPengumpulanTA());
 
         timelineDb.save(existingTl);
-        return "redirect:/";
+        return "redirect:/timeline";
     }
 }

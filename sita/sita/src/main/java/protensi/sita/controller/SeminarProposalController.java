@@ -75,7 +75,7 @@ public class SeminarProposalController {
             UgbModel ugb = ugbService.findByIdMahasiswa(mahasiswa);
             SeminarProposalModel seminarProposal = seminarProposalService.findSemproByUgb(ugb);
             if (ugb != null) {
-                if (ugb.getStatusDokumen().equals("DIEVALUASI")) {
+                if (ugb.getStatusUgb().equals("LULUS")) {
                     if (seminarProposal != null) {
                         model.addAttribute("seminarProposal", seminarProposal);
                         return "sempro/detail-sempro-mahasiswa";
