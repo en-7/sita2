@@ -5,6 +5,7 @@ import protensi.sita.model.EnumRole;
 import protensi.sita.model.MahasiswaModel;
 import protensi.sita.model.SeminarHasilModel;
 import protensi.sita.model.SeminarProposalModel;
+import protensi.sita.model.TimelineModel;
 import protensi.sita.model.UgbModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,14 @@ import protensi.sita.service.MahasiswaServiceImpl;
 import protensi.sita.security.UserDetailsServiceImpl;
 import protensi.sita.service.SeminarHasilServiceImpl;
 import protensi.sita.service.SeminarProposalServiceImpl;
+import protensi.sita.service.TimelineServiceImpl;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -57,6 +63,9 @@ public class SeminarHasilController {
     private SeminarHasilServiceImpl seminarHasilService;
 
     @Autowired
+    private TimelineServiceImpl tlService;
+
+    @Autowired
     public BaseService baseService;
 
     @GetMapping("/seminar-hasil/add")
@@ -75,10 +84,21 @@ public class SeminarHasilController {
                         model.addAttribute("seminarHasil", seminarHasil);
                         return "detail-semhas-mahasiswa";
                     } else {
-                        seminarHasil = new SeminarHasilModel();
-                        model.addAttribute("roleUser", baseService.getCurrentRole());
-                        model.addAttribute("seminarHasil", seminarHasil);
-                        return "semhas/add-semhas-form";
+                        TimelineModel tl = tlService.checkDate();
+                        Instant now = Instant.now();
+                        ZonedDateTime nowJakarta = now.atZone(ZoneId.of("Asia/Jakarta")); 
+                        LocalDate nowTimezonedDate = nowJakarta.toLocalDate();
+                        System.out.println("nowTimeZonedDate: "+ nowTimezonedDate);
+
+                        if (tl.getRegSemhas() != null && tl.getRegSemhas().equals(nowTimezonedDate)){
+                            seminarHasil = new SeminarHasilModel();
+                            model.addAttribute("roleUser", baseService.getCurrentRole());
+                            model.addAttribute("seminarHasil", seminarHasil);
+                            return "semhas/add-semhas-form";
+                        }else{
+                            return "semhas/no-access-semhas";
+                        }
+                        
                     }
                 } else {
                     model.addAttribute("roleUser", baseService.getCurrentRole());

@@ -14,6 +14,8 @@ import protensi.sita.service.TimelineServiceImpl;
 import protensi.sita.service.UgbServiceImpl;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Resource
@@ -81,9 +85,12 @@ public class SeminarProposalController {
                         return "sempro/detail-sempro-mahasiswa";
                     } else {
                         TimelineModel tl = tlService.checkDate();
-                        LocalDate nowDate = LocalDate.now();
+                        Instant now = Instant.now();
+                        ZonedDateTime nowJakarta = now.atZone(ZoneId.of("Asia/Jakarta")); 
+                        LocalDate nowTimezonedDate = nowJakarta.toLocalDate();
+                        System.out.println("nowTimeZonedDate: "+ nowTimezonedDate);
 
-                        if (tl.getRegSempro() != null && tl.getRegSempro().equals(nowDate)) {
+                        if (tl.getRegSempro() != null && tl.getRegSempro().equals(nowTimezonedDate)) {
                             seminarProposal = new SeminarProposalModel();
                             model.addAttribute("seminarProposal", seminarProposal);
                             return "sempro/add-sempro-form";

@@ -37,8 +37,11 @@ import protensi.sita.service.TugasAkhirServiceImpl;
 import protensi.sita.service.UgbServiceImpl;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -92,8 +95,11 @@ public class TugasAkhirController {
                         return "tugasakhir/detail-ta-mahasiswa";
                     } else {
                         TimelineModel tl = tlService.checkDate();
-                        LocalDate nowDate = LocalDate.now();
-                        if(tl.getRegSidang() != null && tl.getRegSidang().equals(nowDate)){
+                        Instant now = Instant.now();
+                        ZonedDateTime nowJakarta = now.atZone(ZoneId.of("Asia/Jakarta")); 
+                        LocalDate nowTimezonedDate = nowJakarta.toLocalDate();
+                        System.out.println("nowTimeZonedDate: "+ nowTimezonedDate);
+                        if(tl.getRegSidang() != null && tl.getRegSidang().equals(nowTimezonedDate)){
                             tugasAkhir = new TugasAkhirModel();
                             model.addAttribute("roleUser", baseService.getCurrentRole());
                             model.addAttribute("tugasAkhir", tugasAkhir);

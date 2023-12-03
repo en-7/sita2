@@ -84,10 +84,8 @@ public class UGBController {
         UgbModel retrievedUgb = ugbService.findByIdMahasiswa(thisMahasiswa);
 
         TimelineModel tl = tlService.checkDate();
-        LocalDate nowDate = LocalDate.now();
         Instant now = Instant.now();
         ZonedDateTime nowJakarta = now.atZone(ZoneId.of("Asia/Jakarta")); 
-  
         LocalDate nowTimezonedDate = nowJakarta.toLocalDate();
 
         System.out.println("nowTimeZonedDate: "+ nowTimezonedDate);
@@ -97,9 +95,9 @@ public class UGBController {
             return "redirect:/ugb/detail/" + idUgb;
         } else {
             System.out.println("regugb: " + tl.getRegUGB());
-            System.out.println("now: " + nowDate);
+            System.out.println("now: " + nowTimezonedDate);
 
-            if (tl.getRegUGB() != null && tl.getRegUGB().equals(nowDate)) {
+            if (tl.getRegUGB() != null && tl.getRegUGB().equals(nowTimezonedDate)) {
                 UgbModel ugbModel = new UgbModel();
                 model.addAttribute("ugb", ugbModel);
                 model.addAttribute("listPembimbing", ugbService.getListPembimbing());
@@ -141,15 +139,28 @@ public class UGBController {
     @PostMapping("/ugb/addcatatan")
     public String addCatatanUgbSubmitPage(@ModelAttribute EvaluasiUgbModel evaluasiUgb,
             Model model, UgbModel ugb, Authentication authentication) {
-
-        System.out.println("id ugb" + evaluasiUgb.getUgb());
-        List<EvaluasiUgbModel> listEval = evaluasiUgbDb.getEvaluasiByUgb(evaluasiUgb.getUgb());
-        if(listEval.size() == 2){
-            ugb.setStatusDokumen("LULUS");
-            ugb.setStatusUgb("LULUS");
-        }
-
         evaluasiUgbDb.save(evaluasiUgb);
+        System.out.println("id ugb" + evaluasiUgb.getUgb());
+        List<EvaluasiUgbModel> eumList = evaluasiUgbDb.getEvaluasiByUgb(evaluasiUgb.getUgb());
+        if(eumList.size() == 2){
+            evaluasiUgb.getUgb().setStatusDokumen("LULUS");
+            evaluasiUgb.getUgb().setStatusUgb("LULUS");
+            ugbDb.save(evaluasiUgb.getUgb());
+        }
+        // List<EvaluasiUgbModel> allEvalList = evaluasiUgbDb.findAll();
+        // int checker = 0;
+        // for(EvaluasiUgbModel eum : allEvalList){
+        //     if(eum.getUgb() == evaluasiUgb.getUgb()){
+        //         checker ++;
+        //     }
+        // }
+        // // List<EvaluasiUgbModel> listEval = evaluasiUgbDb.getEvaluasiByUgb(evaluasiUgb.getUgb());
+        // System.out.println("listEvaluasi size: "+checker);
+        // if(checker == 1){
+        //     ugb.setStatusDokumen("LULUS");
+        //     ugb.setStatusUgb("LULUS");
+        // }
+
         model.addAttribute("roleUser", baseService.getCurrentRole());
         return "ugb/viewall-ugb";
         // return "redirect:/ugb/catatan/" + idUgb;
@@ -235,6 +246,7 @@ public class UGBController {
         List<UgbModel> filteredUGBList = ugbService.filterUgb(status);
         model.addAttribute("listUgb", filteredUGBList);
         model.addAttribute("roleUser", baseService.getCurrentRole());
+        model.addAttribute("stat", status);
         return "ugb/viewall-ugb";
     }
 
