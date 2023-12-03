@@ -1,9 +1,11 @@
 body{
-    background-color: darkseagreen;
+    background-color: #e0e0e0;
     font-family: Poppins;
 }
 
-
+#usernameDisplay{
+    margin-left: 5px;
+}
 
 .table tr th {
     vertical-align: middle;

@@ -85,7 +85,7 @@ public class TugasAkhirController {
             UgbModel ugb = ugbService.findByIdMahasiswa(mahasiswa);
             TugasAkhirModel tugasAkhir = tugasAkhirService.findTAByUgb(ugb);
             if (ugb != null) {
-                if (ugb.getStatusDokumen().equals("DIEVALUASI")) {
+                if (ugb.getStatusUgb().equals("LULUS")) {
                     if (tugasAkhir != null) {
                         model.addAttribute("roleUser", baseService.getCurrentRole());
                         model.addAttribute("tugasAkhir", tugasAkhir);

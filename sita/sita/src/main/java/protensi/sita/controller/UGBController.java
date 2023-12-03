@@ -143,8 +143,11 @@ public class UGBController {
             Model model, UgbModel ugb, Authentication authentication) {
 
         System.out.println("id ugb" + evaluasiUgb.getUgb());
-        ugb.setStatusDokumen("DIEVALUASI");
-        ugb.setStatusUgb("DIEVALUASI");
+        List<EvaluasiUgbModel> listEval = evaluasiUgbDb.getEvaluasiByUgb(evaluasiUgb.getUgb());
+        if(listEval.size() == 2){
+            ugb.setStatusDokumen("LULUS");
+            ugb.setStatusUgb("LULUS");
+        }
 
         evaluasiUgbDb.save(evaluasiUgb);
         model.addAttribute("roleUser", baseService.getCurrentRole());
