@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SITA</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <style>
+        body {
+            background-color: #e0e0e0;
+        }
+        .container-content {
+            width: 850px;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 80px;
+        }
+
+        .container-table {
+            width: 900px;
+            height: auto;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #2D89FF;
+        }
+
+        .content-container-table {
+            display: flex;
+            justify-content: center;
+        }
+
+        .table {
+            margin-top: 20px;
+            width: 1000px;
+            height: auto;
+        }
+
+        th {
+            text-align: center;
+            color: #000000;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        #filterAdmin{
+            border-radius: 0 15px 0 0;
+        }
+
+        #filterMahasiswa{
+            border-radius: 15px 0 0 0;
+        }
+
+        .filter-bar {
+            border-radius: 15px 15px 0 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 1000px;
+            margin: 20px auto 0;
+            background-color: rgb(38, 63, 14);
+            padding: 0 0;
+        }
+
+        .filter-bar button {
+            color: #ffffff;
+            border: none;
+            padding: 10px 0;
+            cursor: pointer;
+            text-align: center;
+            background-color: #3c7850;
+            width: 100%;
+        }
+
+        .filter-bar button:hover {
+            background-color:  rgb(38, 63, 14);
+        }
+
+        .filter-bar button.active {
+            border-bottom: 3px solid #000000;
+        }
+
+        .table-row-hidden {
+            display: none; 
+        }
+
+        .table{
+            margin-top: 0px;
+        }
+    </style>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar (${'/ugb'})"></nav>
+
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h2 class="mt-4" style="font-weight: bold; padding-top: 20px;">Daftar Pengguna</h2>
+    </div>
+    <a class="btn btn-secondary" style="float: right; margin-top: 30px; margin-bottom: 10px;" th:href="@{'/users/add'}">Add Timeline</a>
+
+    <div class="filter-bar">
+        <button id="filterMahasiswa">Mahasiswa</button>
+        <button id="filterDosen" >Dosen</button>
+        <button id="filterKoordinator">Koordinator</button>
+        <button id="filterAdmin">Admin</button>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="content-container-table">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Email</th>
+                    <th>Nama</th>
+                    <th colspan="4" style="text-align: center">Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u, iterationStatus : ${listUser}" 
+                    th:style="${iterationStatus.even} ? 'background-color:#f2f2f2;' : 'background-color:#eceaea;'">
+                        <td th:text="${iterationStatus.count}"></td>
+        
+                        <td th:text="${u.email}"></td>
+                        <td th:text="${u.nama}"></td>
+                        <td class="d-flex justify-content-center">
+                            <a class="btn btn-danger" style="margin-right: 5px;">Delete</a>
+                            <a class="btn btn-primary" style="margin-right: 5px;" th:href="@{/users/update/} + ${u.idUser}">Update</a>
+                            <a class="btn btn-primary">Detail</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+    const btn1 = document.getElementById("filterMahasiswa");
+    if(btn1){
+        btn1.addEventListener("click", function () {
+            window.location.href = "/users/filter?role=MAHASISWA";
+            console.log("MASUK KOORDINATORRR");
+        });
+    }
+
+    const btn2 = document.getElementById("filterDosen");
+    if(btn2){
+        btn2.addEventListener("click", function () {
+            console.log("MASUK KOORDINATORRR");
+            window.location.href = "/users/filter?role=DOSEN";
+        });
+    }
+
+    const btn3 = document.getElementById("filterKoordinator");
+    if(btn3){
+        btn3.addEventListener("click", function () {
+            console.log("MASUK KOORDINATORRR");
+            window.location.href = "/users/filter?role=KOORDINATOR";
+        });
+    }
+
+    const btn4 = document.getElementById("filterAdmin");
+    if(btn4){
+        btn4.addEventListener("click", function () {
+            console.log("MASUK KOORDINATORRR");
+            window.location.href = "/users/filter?role=ADMIN";
+        });
+    }
+
+
+    // document.getElementById("filterVerify").addEventListener("click", function () {
+    //     window.location.href = "/ugb/filter?status=SUBMITTED";
+    //     console.log("MASUK KOORDINATORRR");
+    // });
+    // document.getElementById("filterAllocate").addEventListener("click", function () {
+    //     console.log("MASUK KOORDINATORRR");
+    //     window.location.href = "/ugb/filter?status=ALLOCATE";
+    // });
+    // document.getElementById("filterAllocated").addEventListener("click", function () {
+    //     console.log("MASUK KOORDINATORRR");
+    //     window.location.href = "/ugb/filter?status=ALLOCATED";
+    // });
+    // document.getElementById("filterBimbingan").addEventListener("click", function () {
+    //     console.log("MASUK");
+    //     window.location.href = "/ugb/filter?status=SUBMITTED";
+    // });
+    // document.getElementById("filterEvaluate").addEventListener("click", function () {
+    //     console.log("MASUK");
+    //     window.location.href = "/ugb/filter?status=EVALUATE";
+    // });
+    // document.getElementById("filterEvaluated").addEventListener("click", function () {
+    //     console.log("MASUK");
+    //     window.location.href = "/ugb/filter?status=EVALUATED";
+    // });
+    
+</script>

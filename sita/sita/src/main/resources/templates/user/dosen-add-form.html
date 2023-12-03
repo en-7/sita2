@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-    <title>Add Dosen</title>
+    <title>Tambah Dosen</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <style>
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #3c7850 !important;
+            border-color:#3c7850 !important;
+        }
+    </style>
 </head>
 <body>
 <nav th:replace="fragments/fragment :: navbar('/')"></nav>
@@ -27,8 +37,7 @@
                     <label>Password</label>
                     <input class="form-control" type="password" name="password" required/>
                     <br>
-                    <button class="btn btn-primary" type="submit" name="save">Submit</button>
-                    <a class="btn btn-primary" href="/">Home</a>
+                    <button class="btn btn-primary" type="submit" name="save">Simpan</button>
                 </form>
             </div>
         </div>

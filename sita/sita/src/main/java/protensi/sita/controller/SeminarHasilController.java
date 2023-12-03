@@ -5,6 +5,7 @@ import protensi.sita.model.EnumRole;
 import protensi.sita.model.MahasiswaModel;
 import protensi.sita.model.SeminarHasilModel;
 import protensi.sita.model.SeminarProposalModel;
+import protensi.sita.model.TimelineModel;
 import protensi.sita.model.UgbModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,14 @@ import protensi.sita.service.MahasiswaServiceImpl;
 import protensi.sita.security.UserDetailsServiceImpl;
 import protensi.sita.service.SeminarHasilServiceImpl;
 import protensi.sita.service.SeminarProposalServiceImpl;
+import protensi.sita.service.TimelineServiceImpl;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -57,6 +63,9 @@ public class SeminarHasilController {
     private SeminarHasilServiceImpl seminarHasilService;
 
     @Autowired
+    private TimelineServiceImpl tlService;
+
+    @Autowired
     public BaseService baseService;
 
     @GetMapping("/seminar-hasil/add")
@@ -75,23 +84,34 @@ public class SeminarHasilController {
                         model.addAttribute("seminarHasil", seminarHasil);
                         return "detail-semhas-mahasiswa";
                     } else {
-                        seminarHasil = new SeminarHasilModel();
-                        model.addAttribute("roleUser", baseService.getCurrentRole());
-                        model.addAttribute("seminarHasil", seminarHasil);
-                        return "add-semhas-form";
+                        TimelineModel tl = tlService.checkDate();
+                        Instant now = Instant.now();
+                        ZonedDateTime nowJakarta = now.atZone(ZoneId.of("Asia/Jakarta")); 
+                        LocalDate nowTimezonedDate = nowJakarta.toLocalDate();
+                        System.out.println("nowTimeZonedDate: "+ nowTimezonedDate);
+
+                        if (tl.getRegSemhas() != null && tl.getRegSemhas().equals(nowTimezonedDate)){
+                            seminarHasil = new SeminarHasilModel();
+                            model.addAttribute("roleUser", baseService.getCurrentRole());
+                            model.addAttribute("seminarHasil", seminarHasil);
+                            return "semhas/add-semhas-form";
+                        }else{
+                            return "semhas/no-access-semhas";
+                        }
+                        
                     }
                 } else {
                     model.addAttribute("roleUser", baseService.getCurrentRole());
-                    return "error-semhas";
+                    return "semhas/error-semhas";
                 }
             } else {
                 model.addAttribute("roleUser", baseService.getCurrentRole());
-                return "error-semhas";
+                return "semhas/error-semhas";
             }
         }
 
         model.addAttribute("roleUser", baseService.getCurrentRole());
-        return "error-semhas";
+        return "semhas/error-semhas";
     }
 
     @PostMapping("/seminar-hasil/add")
@@ -139,7 +159,7 @@ public class SeminarHasilController {
 
         seminarHasilService.addSeminarHasil(seminarHasil);
         model.addAttribute("seminarHasil", seminarHasil);
-        return "detail-semhas-mahasiswa";
+        return "semhas/detail-semhas-mahasiswa";
     }
 
     @GetMapping("/seminar-hasil/viewall")
@@ -151,7 +171,7 @@ public class SeminarHasilController {
             List<SeminarHasilModel> listSeminarHasil = seminarHasilService.findAllSeminarHasil();
             model.addAttribute("roleUser", baseService.getCurrentRole());
             model.addAttribute("listSeminarHasil", listSeminarHasil);
-            return "viewall-semhas";
+            return "semhas/viewall-semhas";
         } else if (user.getRoles().contains(EnumRole.PEMBIMBING) && user.getRoles().contains(EnumRole.PENGUJI)) {
             List<SeminarHasilModel> listSemhasPembimbing = seminarHasilService.findAllByPembimbing(user.getIdUser());
             List<SeminarHasilModel> listSemhasPenguji = seminarHasilService.findAllByPenguji(user.getIdUser());
@@ -160,10 +180,10 @@ public class SeminarHasilController {
             listSeminarHasil.addAll(listSemhasPenguji);
             model.addAttribute("roleUser", baseService.getCurrentRole());
             model.addAttribute("listSeminarHasil", listSeminarHasil);
-            return "viewall-semhas-dosen";
+            return "semhas/viewall-semhas-dosen";
         } else {
             model.addAttribute("roleUser", baseService.getCurrentRole());
-            return "error-semhas";
+            return "semhas/error-semhas";
         }
     }
 
@@ -176,11 +196,11 @@ public class SeminarHasilController {
         model.addAttribute("seminarHasil", seminarHasil);
         model.addAttribute("id", seminarHasil.getIdSeminarHasil());
         if (user.getRoles().contains(EnumRole.KOORDINATOR)) {
-            return "detail-semhas-koordinator";
+            return "semhas/detail-semhas-koordinator";
         } else if (user.getRoles().contains(EnumRole.PEMBIMBING) && user.getRoles().contains(EnumRole.PENGUJI)) {
-            return "detail-semhas-dosen";
+            return "semhas/detail-semhas-dosen";
         } else {
-            return "detail-semhas-mahasiswa";
+            return "semhas/detail-semhas-mahasiswa";
         }
     }
 
@@ -188,7 +208,7 @@ public class SeminarHasilController {
     public String updateSemhasFormPage(@PathVariable Long idSeminarHasil, Model model) {
         SeminarHasilModel seminarHasil = seminarHasilService.findSemhasById(idSeminarHasil);
         model.addAttribute("seminarHasil", seminarHasil);
-        return "update-semhas-form";
+        return "semhas/update-semhas-form";
     }
 
     @PostMapping("/seminar-hasil/update/{idSeminarHasil}")
@@ -251,7 +271,7 @@ public class SeminarHasilController {
             seminarHasil.setStatusDokumen("TERDAFTAR");
             seminarHasilService.updateSemhas(seminarHasil);
             model.addAttribute("seminarHasil", seminarHasil);
-            return "detail-semhas-mahasiswa";
+            return "semhas/detail-semhas-mahasiswa";
         } catch (IOException e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
@@ -263,7 +283,7 @@ public class SeminarHasilController {
         List<SeminarHasilModel> filteredSemhas = seminarHasilService.findSemhasByStatusDokumen(status);
         model.addAttribute("listSeminarHasil", filteredSemhas);
         model.addAttribute("roleUser", baseService.getCurrentRole());
-        return "viewall-semhas";
+        return "semhas/viewall-semhas";
     }
 
     @PostMapping("/seminar-hasil/input-nilai/{idSeminarHasil}")
@@ -318,15 +338,15 @@ public class SeminarHasilController {
             seminarHasil.setTanggalLulus(nowTime);
             seminarHasilService.updateSemhas(seminarHasil);
 
-            model.addAttribute("roleUser", baseService.getCurrentRole());
             model.addAttribute("seminarHasil", seminarHasil);
-            return "detail-semhas-koordinator";
+            model.addAttribute("roleUser", baseService.getCurrentRole());
+            return "semhas/detail-semhas-koordinator";
 
         }
 
         else {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi error ketika save file.");
         }
 
     }
@@ -385,7 +405,7 @@ public class SeminarHasilController {
 
             model.addAttribute("seminarHasil", seminarHasil);
             model.addAttribute("roleUser", baseService.getCurrentRole());
-            return "detail-semhas-koordinator";
+            return "semhas/detail-semhas-koordinator";
         }
 
         else {
@@ -402,7 +422,7 @@ public class SeminarHasilController {
             seminarHasilService.updateSemhas(seminarHasil);
 
             model.addAttribute("seminarHasil", seminarHasil);
-            return "detail-semhas-koordinator";
+            return "semhas/detail-semhas-koordinator";
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
@@ -419,7 +439,7 @@ public class SeminarHasilController {
             seminarHasilService.updateSemhas(seminarHasil);
 
             model.addAttribute("seminarHasil", seminarHasil);
-            return "detail-semhas-koordinator";
+            return "semhas/detail-semhas-koordinator";
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");

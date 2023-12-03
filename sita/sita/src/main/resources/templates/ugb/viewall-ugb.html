@@ -51,11 +51,21 @@
             border-radius: 0 15px 0 0;
         }
 
-        #filterVerify, #filterBimbingan{
+        #filterAll, #filterBimbingan{
             border-radius: 15px 0 0 0;
         }
 
         .filter-bar {
+            border-radius: 15px 15px 0 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 1000px;
+            margin: 20px auto 0;
+            background-color: rgb(38, 63, 14);
+            padding: 0 0;
+        }
+
+        .filter-bar1 {
             border-radius: 15px 15px 0 0;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -92,6 +102,26 @@
             border-bottom: 3px solid #000000;
         }
 
+        
+        .filter-bar1 button {
+            color: #ffffff;
+            border: none;
+            padding: 10px 0;
+            cursor: pointer;
+            text-align: center;
+            background-color: #3c7850;
+            width: 100%;
+        }
+
+        
+        .filter-bar1 button:hover {
+            background-color:  rgb(38, 63, 14);
+        }
+
+        .filter-bar1 button.active {
+            border-bottom: 3px solid #000000;
+        }
+
         .table-row-hidden {
             display: none; 
         }
@@ -111,20 +141,21 @@
     </div>
     <div th:switch="${roleUser}">
         <div class="filter-bar" th:case="'[ROLE_[KOORDINATOR]]'">
-            <button id="filterVerify">VERIFY</button>
-            <button id="filterAllocate">ALLOCATE</button>
-            <button id="filterAllocated">ALLOCATED</button>
+            <button id="filterAll">ALL</button>
+            <button id="filterVerify">VERIFIKASI</button>
+            <button id="filterAllocate">ALOKASI</button>
+            <button id="filterAllocated">EVALUASI</button>
         </div> 
         <div class="filter-bar3"th:case="'[ROLE_[PEMBIMBING]]'">
         </div>
         <div class="filter-bar2"th:case="'[ROLE_[PENGUJI]]'">
-            <button id="filterEvaluate">EVALUATE</button>
-            <button id="filterEvaluated">EVALUATED</button>
+            <button id="filterEvaluate">EVALUASI</button>
+            <button id="filterEvaluated">LULUS</button>
         </div>
-        <div class="filter-bar" th:case="*">
+        <div class="filter-bar1" th:case="*">
             <button id="filterBimbingan">BIMBINGAN</button>
-            <button id="filterEvaluate" >EVALUATE</button>
-            <button id="filterEvaluated">EVALUATED</button>
+            <button id="filterEvaluate" >EVALUASI</button>
+            <button id="filterEvaluated">LULUS</button>
         </div>
     </div>
     <div class="d-flex justify-content-center">
@@ -153,15 +184,18 @@
                         </td>                    
                         <td>
                             <div th:switch="${ugb.statusUgb}">
-                                <div th:case="'ALLOCATE'">
+                                <div th:case="'DISETUJUI'">
                                     <div class="btn-group">
-                                        <a class="btn btn-sm btn-primary" th:href="@{/ugb/allocate/} + ${ugb.idUgb}">Allocate</a>
+                                        <a class="btn btn-sm btn-primary" th:href="@{/ugb/allocate/} + ${ugb.idUgb}">Alokasi</a>
                                     </div>
                                 </div>
-                                <div th:case="*">
-                                    <div class="btn-group">
+                                <div th:case="DIEVALUASI">
+                                    <div class="btn-group" th:if="${stat} == 'DIEVALUASI'" sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]')">
                                         <a class="btn btn-sm btn-primary" th:href="@{/ugb/addcatatan/} + ${ugb.idUgb}">Evaluasi</a>
                                     </div>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-primary" th:href="@{/ugb/detail/} + ${ugb.idUgb}" style="margin-top: 2px;">Detail</a>
                                 </div>
                             </div>
                         </td>
@@ -178,7 +212,7 @@
     const btnk1 = document.getElementById("filterVerify");
     if(btnk1){
         btnk1.addEventListener("click", function () {
-            window.location.href = "/ugb/filter?status=SUBMITTED";
+            window.location.href = "/ugb/filter?status=TERDAFTAR";
             console.log("MASUK KOORDINATORRR");
         });
     }
@@ -187,7 +221,7 @@
     if(btnk2){
         btnk2.addEventListener("click", function () {
             console.log("MASUK KOORDINATORRR");
-            window.location.href = "/ugb/filter?status=ALLOCATE";
+            window.location.href = "/ugb/filter?status=DISETUJUI";
         });
     }
 
@@ -195,7 +229,7 @@
     if(btnk3){
         btnk3.addEventListener("click", function () {
             console.log("MASUK KOORDINATORRR");
-            window.location.href = "/ugb/filter?status=ALLOCATED";
+            window.location.href = "/ugb/filter?status=DIEVALUASI";
         });
     }
 
@@ -203,7 +237,7 @@
     if(btnd1){
         btnd1.addEventListener("click", function () {
             console.log("MASUK");
-            window.location.href = "/ugb/filter?status=SUBMITTED";
+            window.location.href = "/ugb/filter?status=BIMBINGAN";
         });
     }
 
@@ -211,7 +245,7 @@
     if(btnd2){
         btnd2.addEventListener("click", function () {
             console.log("MASUK");
-            window.location.href = "/ugb/filter?status=EVALUATE";
+            window.location.href = "/ugb/filter?status=DIEVALUASI";
         });
     }
 
@@ -219,7 +253,15 @@
     if(btnd3){
         btnd3.addEventListener("click", function () {
             console.log("MASUK");
-            window.location.href = "/ugb/filter?status=EVALUATED";
+            window.location.href = "/ugb/filter?status=LULUS";
+        });
+    }
+
+    const btnd4 = document.getElementById("filterAll");
+    if(btnd4){
+        btnd4.addEventListener("click", function () {
+            console.log("MASUK");
+            window.location.href = "/ugb/filter?status=ALL";
         });
     }
 

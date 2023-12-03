@@ -54,4 +54,7 @@ public class UserModel {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
+
+    @Transient
+    private String role_user;
 }

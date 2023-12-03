@@ -9,6 +9,10 @@
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
     <style>
+        body {
+            background-color: #e0e0e0;
+        }
+
         .container-content {
             max-width: 850px;
             margin: 0 auto;
@@ -45,28 +49,6 @@
         th {
             font-weight: bold;
         }
-
-        .status-text{
-            font-weight:bold;
-        }
-        
-        #formdetail{
-            margin-bottom: 200px;
-        }
-
-        .btn-primary{
-            margin-bottom: 40px;
-        }
-        #update-btn-m{
-            margin-bottom: 40px;
-        }
-        #denyButton, #approveButton{
-            margin-bottom: 0;
-        }
-        .buttonHolder{ 
-            text-align: center; 
-        }
-
     </style>
 </head>
 <body>
@@ -77,35 +59,155 @@
         <h2 class="mt-4 font-weight-bold">Detail Evaluasi UGB</h2>
     </div>
     <div class="container-content mt-4" id="formdetail">
-            <h5 class="table-title ml-4 mt-2" th:text="${ugb.judulUgb}"></h5>
-            <h6 class="table-title ml-4 mt-2" th:text="${ugb.mahasiswa.nama}"></h6>
-            <h6 class="table-title ml-4 mt-2" th:text="${ugb.mahasiswa.nim}"></h6>
+        <div class="header-container-table">
+            <h5 class="table-title ml-4 mt-2" th:text="${evaluasiUgb1?.ugb?.judulUgb}"></h5>
+            <h6 class="table-title ml-4 mt-2" th:text="${evaluasiUgb1?.ugb?.mahasiswa?.nama}"></h6>
+            <h6 class="table-title ml-4 mt-2" th:text="${evaluasiUgb1?.ugb?.mahasiswa?.nim}"></h6>
+        </div>
         
             <table class="table">
                 <tr>
-                    <th>Judul UGB</th>
-                    <td th:textarea="${ugb.catatanJudulUgb}"></td>
+                    <th>Kategori</th>
+                    <td>Penguji 1</td>
+                    <td>Penguji 2</td>
                 </tr>
                 <tr>
-                    <th>Latar Belakang</th>
-                    <td th:textarea="${ugb.latarBelakang}"></td>
+                    <th>Catatan Judul UGB</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.catatanJudul == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.catatanJudul == null}" th:text="${evaluasiUgb1?.catatanJudul}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.catatanJudul == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.catatanJudul == null}" th:text="${evaluasiUgb2?.catatanJudul}"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Catatan Latar Belakang</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.latarBelakang == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.latarBelakang == null}" th:text="${evaluasiUgb1?.latarBelakang}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.latarBelakang == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.latarBelakang == null}" th:text="${evaluasiUgb2?.latarBelakang}"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Catatan Tujuan dan Manfaat</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.tujuanManfaat == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.tujuanManfaat == null}" th:text="${evaluasiUgb1?.tujuanManfaat}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.tujuanManfaat == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.tujuanManfaat == null}" th:text="${evaluasiUgb2?.tujuanManfaat}"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Catatan Ruang Lingkup</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.ruangLingkup == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.ruangLingkup == null}" th:text="${evaluasiUgb1?.ruangLingkup}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.ruangLingkup == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.ruangLingkup == null}" th:text="${evaluasiUgb2?.ruangLingkup}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <th>Tujuan dan Manfaat</th>
-                    <td th:textarea="${ugb.tujuanManfaat}"></td>
+                    <th>Catatan Keterbaruan</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.keterbaruan == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.keterbaruan == null}" th:text="${evaluasiUgb1?.keterbaruan}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.keterbaruan == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.keterbaruan == null}" th:text="${evaluasiUgb2?.keterbaruan}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <th>Ruang Lingkup</th>
-                    <td th:textarea="${ugb.ruangLingkup}"></td>
+                    <th>Catatan Metodologi</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.metodologi == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.metodologi == null}" th:text="${evaluasiUgb1?.metodologi}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.metodologi == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.metodologi == null}" th:text="${evaluasiUgb2?.metodologi}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <th>Keterbaruan</th>
-                    <td th:textarea="${ugb.keterbaruan}"></td>
+                    <th>Nilai Judul UGB</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.nilaiJudul == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.nilaiJudul == null}" th:text="${evaluasiUgb1?.nilaiJudul}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.nilaiJudul == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.nilaiJudul == null}" th:text="${evaluasiUgb2?.nilaiJudul}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <th>Metodologi</th>
-                    <td th:textarea="${ugb.metodologi}"></td>
+                    <th>Nilai Latar Belakang</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.nilaiLatarBelakang == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.nilaiLatarBelakang == null}" th:text="${evaluasiUgb1?.nilaiLatarBelakang}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.nilaiLatarBelakang == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.nilaiLatarBelakang == null}" th:text="${evaluasiUgb2?.nilaiLatarBelakang}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nilai Tujuan dan Manfaat</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.nilaiTujuanManfaat == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.nilaiTujuanManfaat == null}" th:text="${evaluasiUgb1?.nilaiTujuanManfaat}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.nilaiTujuanManfaat == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.nilaiTujuanManfaat == null}" th:text="${evaluasiUgb2?.nilaiTujuanManfaat}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nilai Ruang Lingkup</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.nilaiRuangLingkup == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.nilaiRuangLingkup == null}" th:text="${evaluasiUgb1?.nilaiRuangLingkup}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.nilaiRuangLingkup == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.nilaiRuangLingkup == null}" th:text="${evaluasiUgb2?.nilaiRuangLingkup}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nilai Keterbaruan</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.nilaiKeterbaruan == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.nilaiKeterbaruan == null}" th:text="${evaluasiUgb1?.nilaiKeterbaruan}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.nilaiKeterbaruan == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.nilaiKeterbaruan == null}" th:text="${evaluasiUgb2?.nilaiKeterbaruan}"></span>
+                    </td>
+                </tr>  
+                <tr>
+                    <th>Nilai Metodologi</th>
+                    <td>
+                        <span th:if="${evaluasiUgb1?.nilaiMetodologi == null}">-</span>
+                        <span th:unless="${evaluasiUgb1?.nilaiMetodologi == null}" th:text="${evaluasiUgb1?.nilaiMetodologi}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${evaluasiUgb2?.nilaiMetodologi == null}">-</span>
+                        <span th:unless="${evaluasiUgb2?.nilaiMetodologi == null}" th:text="${evaluasiUgb2?.nilaiMetodologi}"></span>
+                    </td>
                 </tr>
                            
             </table>
+    </div>
+</div>
     

@@ -52,12 +52,12 @@ public class ProfileController {
     MahasiswaDb mahasiswaDb;
 
     @GetMapping("/profile/{parameter}")
-    public String profileIdPage(@PathVariable Long parameter, Model model){
+    public String profileIdPage(@PathVariable Long parameter, Model model) {
         UserModel thisUser = userDb.findByIdUser(parameter);
         MahasiswaModel mahasiswa = mahasiswaDb.findByIdUser(thisUser.getIdUser());
         UgbModel thisUgb = ugbService.findByIdMahasiswa(mahasiswa);
 
-        if(!mahasiswa.getTahap().equals("NEW")){
+        if (!mahasiswa.getTahap().equals("NEW")) {
             Set<UserModel> setPembimbing = thisUgb.getPembimbing();
             Iterator iterator = setPembimbing.iterator();
             UserModel pembimbing1 = (UserModel) iterator.next();
@@ -65,7 +65,8 @@ public class ProfileController {
             model.addAttribute("pembimbing2", pembimbing2);
             model.addAttribute("pembimbing1", pembimbing1);
 
-            if(mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG") || mahasiswa.getTahap().equals("EVAL_UGB")){
+            if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
+                    || mahasiswa.getTahap().equals("SIDANG") || mahasiswa.getTahap().equals("EVAL_UGB")) {
                 Set<UserModel> setPenguji = thisUgb.getPenguji();
 
                 iterator = setPenguji.iterator();
@@ -74,21 +75,20 @@ public class ProfileController {
                 model.addAttribute("penguji2", penguji2);
                 model.addAttribute("penguji1", penguji1);
             }
-            
-            if(mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")){
+
+            if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
+                    || mahasiswa.getTahap().equals("SIDANG")) {
                 SeminarProposalModel sempro = semproService.findSemproByUgb(thisUgb);
                 model.addAttribute("sempro", sempro);
 
-                if(mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")){
+                if (mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")) {
                     SeminarHasilModel semhas = semhasService.findSemhasBySempro(sempro);
                     model.addAttribute("semhas", semhas);
 
                 }
             }
 
-
-
-            if(mahasiswa.getTahap().equals("SIDANG")){
+            if (mahasiswa.getTahap().equals("SIDANG")) {
                 TugasAkhirModel ta = taService.findTAByUgb(thisUgb);
                 model.addAttribute("tugas_akhir", ta);
 
@@ -103,15 +103,14 @@ public class ProfileController {
     }
 
     @GetMapping("/profile")
-    public String profilePage(Model model){
+    public String profilePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         UserModel thisUser = userDb.findByUsername(username);
         MahasiswaModel mahasiswa = mahasiswaDb.findByIdUser(thisUser.getIdUser());
         UgbModel thisUgb = ugbService.findByIdMahasiswa(mahasiswa);
 
-
-        if(!mahasiswa.getTahap().equals("NEW")){
+        if (!mahasiswa.getTahap().equals("NEW")) {
             Set<UserModel> setPembimbing = thisUgb.getPembimbing();
             Iterator iterator = setPembimbing.iterator();
             UserModel pembimbing1 = (UserModel) iterator.next();
@@ -119,7 +118,8 @@ public class ProfileController {
             model.addAttribute("pembimbing2", pembimbing2);
             model.addAttribute("pembimbing1", pembimbing1);
 
-            if(mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG") || mahasiswa.getTahap().equals("EVAL_UGB")){
+            if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
+                    || mahasiswa.getTahap().equals("SIDANG") || mahasiswa.getTahap().equals("EVAL_UGB")) {
                 Set<UserModel> setPenguji = thisUgb.getPenguji();
 
                 iterator = setPenguji.iterator();
@@ -128,30 +128,26 @@ public class ProfileController {
                 model.addAttribute("penguji2", penguji2);
                 model.addAttribute("penguji1", penguji1);
             }
-            
-            if(mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")){
+
+            if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
+                    || mahasiswa.getTahap().equals("SIDANG")) {
                 SeminarProposalModel sempro = semproService.findSemproByUgb(thisUgb);
                 model.addAttribute("sempro", sempro);
 
-                if(mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")){
+                if (mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")) {
                     SeminarHasilModel semhas = semhasService.findSemhasBySempro(sempro);
                     model.addAttribute("semhas", semhas);
 
                 }
             }
 
-
-
-            if(mahasiswa.getTahap().equals("SIDANG")){
+            if (mahasiswa.getTahap().equals("SIDANG")) {
                 TugasAkhirModel ta = taService.findTAByUgb(thisUgb);
                 model.addAttribute("tugas_akhir", ta);
 
             }
 
         }
-
-
-
 
         model.addAttribute("pengguna", thisUser);
         model.addAttribute("mahasiswa", mahasiswa);
@@ -160,29 +156,29 @@ public class ProfileController {
     }
 
     @GetMapping("/updatePass")
-    public String updatePassFormPage(Model model){
+    public String updatePassFormPage(Model model) {
         boolean wrongPass = false;
         model.addAttribute("wrongPass", wrongPass);
         return "profile/update-password-form";
     }
 
     @PostMapping("/updatePass")
-    public String updatePassSubmitPage(Model model, 
-                                       @RequestParam("psw") String newPass,
-                                       @RequestParam("oldPassword") String oldPass){
-        
-        
-        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String updatePassSubmitPage(Model model,
+            @RequestParam("psw") String newPass,
+            @RequestParam("oldPassword") String oldPass) {
+
+        // Authentication authentication =
+        // SecurityContextHolder.getContext().getAuthentication();
         // String username = authentication.getName();
         // UserModel thisUser = userDb.findByUsername(username);
         // System.out.println("this pass: "+ thisUser.getPassword());
         // System.out.println("input pass: "+ userService.encrypt(oldPass));
         boolean isMatched = userService.matcher(oldPass);
-        if(isMatched){
+        if (isMatched) {
             userService.updatePass(newPass);
 
             return "redirect:/logout";
-        }else{
+        } else {
             boolean wrongPass = true;
             model.addAttribute("wrongPass", wrongPass);
             return "profile/update-password-form";
@@ -190,11 +186,3 @@ public class ProfileController {
     }
 
 }
-
-
-
-
-
-
-
-

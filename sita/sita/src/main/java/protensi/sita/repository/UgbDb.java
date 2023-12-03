@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public interface UgbDb extends JpaRepository<UgbModel, Long> {
-   @Query("SELECT o FROM UgbModel o WHERE o.statusUgb = :status ")
+   @Query("SELECT o FROM UgbModel o WHERE o.statusDokumen = :status ")
    List<UgbModel> getUgbBasedOnStatus(@Param("status") String status);
 
    UgbModel findByIdUgb(Long idUgb);
