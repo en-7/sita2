@@ -37,6 +37,7 @@ import protensi.sita.security.UserDetailsServiceImpl;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -145,6 +146,7 @@ public class UGBController {
         if(eumList.size() == 2){
             evaluasiUgb.getUgb().setStatusDokumen("LULUS");
             evaluasiUgb.getUgb().setStatusUgb("LULUS");
+            evaluasiUgb.getUgb().setTanggalLulus(LocalDateTime.now());
             ugbDb.save(evaluasiUgb.getUgb());
         }
         // List<EvaluasiUgbModel> allEvalList = evaluasiUgbDb.findAll();
