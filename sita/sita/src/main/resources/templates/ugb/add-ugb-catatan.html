@@ -8,100 +8,71 @@
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
-    <style>
-        .select2-container .select2-selection--single {
-            height: 40px !important;
-        }
-    
-        .kuantitas-input{
-            height: 40px !important;
-        }
-    
-        .container-content {
-            width: 850px;
-            display: flex;
-            justify-content: center;
-            padding-bottom: 80px;
-        }
-    
-        .container-table {
-            width: 900px;
-            height: auto;
-            border-radius: 10px;
-            border-style: solid;
-            border-color: #2D89FF;
-        }
-    
-        .header-container-table {
-            height: 60px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            background-color: #2D89FF;
-        }
-
-        #formadd{
-            width: 800px;
-            margin-top: 80px;
-            margin-bottom: 150px;
-        }
-    
-        .table {
-            margin-top: 20px;
-            width: 800px;
-            height: auto;
-        }
-    
-        th {
-            text-align: center;
-        }
-    
-        td {
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
-    <div th:replace="fragments/fragment :: navbar(${'/ugb'})"></div>
-
-<div class="container" id="formadd">
+<nav th:replace="fragments/fragment :: navbar('/ugb')"></nav>
+<div class="container">
     <div class="card m-4 p-4">
         <div class="card-body">
             <div class="justify-content-center">
-                <h2>Catatan Evaluasi UGB</h2>
+                <h2 class="text-center">Catatan Evaluasi UGB</h2>
                 <br>
-                <form th:action="@{/ugb/addcatatan/}" th:object="${ugb}" method="POST" enctype="multipart/form-data">
-                    Judul UGB <br>
-                    <textarea id="catatanJudulUgb" name="catatanJudulUgb" rows="4" cols="75"></textarea>
+
+                <form th:action="@{'/ugb/addcatatan'}" th:object="${evaluasiUgbModel}" method="POST" enctype="multipart/form-data">
+                    <!-- <input type="hidden" name="ugb" th:value="${evaluasiUgbModel.ugb}"> -->
+                    <input type="hidden" th:field="*{ugb}">
+                    Catatan Judul UGB <br>
+                    <textarea required class="form-control" id="catatanJudul" name="catatanJudul"></textarea>
                     <br>
 
-                    Latar Belakang <br>
-                    <textarea id="latarBelakang" name="latarBelakang" rows="4" cols="75"></textarea>
+                    Nilai Judul UGB : <br>
+                    <input required class="form-control" type="number" name="nilaiJudul" maxlength="3"/>
+                    <br><br>
+
+                    Catatan Latar Belakang <br>
+                    <textarea required class="form-control" id="latarBelakang" name="latarBelakang"></textarea>
                     <br>
 
-                    Tujuan dan Manfaat <br>
-                    <textarea id="tujuanManfaat" name="tujuanManfaat" rows="4" cols="75"></textarea>
+                    Nilai Latar Belakang : <br>
+                    <input required class="form-control" type="number" name="nilaiLatarBelakang" maxlength="3"/>
+                    <br><br>
+
+                    Catatan Tujuan dan Manfaat <br>
+                    <textarea required class="form-control" id="tujuanManfaat" name="tujuanManfaat"></textarea>
                     <br>
 
-                    Ruang Lingkup <br>
-                    <textarea id="ruangLingkup" name="ruangLingkup" rows="4" cols="75"></textarea>
+                    Nilai Tujuan dan Manfaat : <br>
+                    <input required class="form-control" type="number" name="nilaiTujuanManfaat" maxlength="3"/>
+                    <br><br>
+
+                    Catatan Ruang Lingkup <br>
+                    <textarea required class="form-control" id="ruangLingkup" name="ruangLingkup"></textarea>
                     <br>
 
-                    Keterbaruan <br>
-                    <textarea id="keterbaruan" name="keterbaruan" rows="4" cols="75"></textarea>
+                    Nilai Ruang Lingkup : <br>
+                    <input required class="form-control" type="number" name="nilaiRuangLingkup" maxlength="3"/>
+                    <br><br>
+
+                    Catatan Keterbaruan <br>
+                    <textarea required class="form-control" id="keterbaruan" name="keterbaruan"></textarea>
                     <br>
 
-                    Metodologi <br>
-                    <textarea id="metodologi" name="metodologi" rows="4" cols="75"></textarea>
+                    Nilai Keterbaruan : <br>
+                    <input required class="form-control" type="number" name="nilaiKeterbaruan" maxlength="3"/>
+                    <br><br>
+
+                    Catatan Metodologi <br>
+                    <textarea required class="form-control" id="metodologi" name="metodologi"></textarea>
                     <br>
 
+                    Nilai Metodologi : <br>
+                    <input required class="form-control" type="number" name="nilaiMetodologi" maxlength="3"/>
+                    <br><br>
+
                     <br>
-                    <div class="pb-2 d-flex justify-content-center">
-                        <button class="btn btn-primary" type="submit" name="save">Submit</button>
-                    </div>
+                    <button class="btn btn-primary float-right" type="submit" name="save">Submit</button>
+                    <a class="btn btn-secondary" th:href="@{/ugb/viewall}">Kembali</a>
+                    
                 </form>
                 
             </div>
