@@ -6,10 +6,13 @@ import protensi.sita.model.SeminarProposalModel;
 import protensi.sita.model.TimelineModel;
 import protensi.sita.model.TugasAkhirModel;
 import protensi.sita.model.UgbModel;
+import protensi.sita.model.EvaluasiUgbModel;
 import protensi.sita.model.UserModel;
 import protensi.sita.repository.MahasiswaDb;
 import protensi.sita.repository.PembimbingDb;
 import protensi.sita.repository.UserDb;
+import protensi.sita.repository.UgbDb;
+import protensi.sita.repository.EvaluasiUgbDb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,6 +32,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import protensi.sita.service.UgbServiceImpl;
 import protensi.sita.service.BaseService;
 import protensi.sita.service.TimelineServiceImpl;
+import protensi.sita.service.MahasiswaServiceImpl;
+import protensi.sita.security.UserDetailsServiceImpl;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -48,14 +53,25 @@ public class UGBController {
     private TimelineServiceImpl tlService;
 
     @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private MahasiswaServiceImpl mahasiswaService;
+
+    @Autowired
     PembimbingDb pembimbingDb;
 
     @Autowired
     UserDb userDb;
 
     @Autowired
+    UgbDb ugbDb;
+
+    @Autowired
+    EvaluasiUgbDb evaluasiUgbDb;
+
+    @Autowired
     MahasiswaDb mahasiswaDb;
-    
 
     @Autowired
     public BaseService baseService;
@@ -80,15 +96,15 @@ public class UGBController {
             String idUgb = retrievedUgb.getIdUgb().toString();
             return "redirect:/ugb/detail/" + idUgb;
         } else {
-            System.out.println("regugb: "+ tl.getRegUGB());
-            System.out.println("now: "+ nowDate);
+            System.out.println("regugb: " + tl.getRegUGB());
+            System.out.println("now: " + nowDate);
 
-            if(tl.getRegUGB() != null && tl.getRegUGB().equals(nowDate)){
+            if (tl.getRegUGB() != null && tl.getRegUGB().equals(nowDate)) {
                 UgbModel ugbModel = new UgbModel();
                 model.addAttribute("ugb", ugbModel);
                 model.addAttribute("listPembimbing", ugbService.getListPembimbing());
                 return "ugb/add-ugb-form";
-            }else{
+            } else {
                 return "ugb/no-access-ugb";
             }
         }
@@ -111,37 +127,46 @@ public class UGBController {
     }
 
     @GetMapping("/ugb/addcatatan/{idUgb}")
-    public String addCatatanUgbFormPage(Model model, String catatanJudulUgb, String latarBelakang, String tujuanManfaat,
-            String ruangLingkup, String keterbaruan, String metodologi) {
+    public String addCatatanUgbFormPage(@PathVariable Long idUgb, Model model) {
+
+        // EvaluasiUgbModel getUgbUser = ugbService.getEvaluasiUgbById(idUgb);
+        EvaluasiUgbModel evaluasiUgbModel = new EvaluasiUgbModel();
+        UgbModel retrievedUgb = ugbDb.findByIdUgb(idUgb);
+        evaluasiUgbModel.setUgb(retrievedUgb);
+        System.out.println("ini get ugb user" + evaluasiUgbModel.getUgb());
+        model.addAttribute("evaluasiUgbModel", evaluasiUgbModel);
         return "ugb/add-ugb-catatan";
     }
 
-    @PostMapping("/ugb/addcatatan/{idUgb}")
-    public String addCatatanUgbSubmitPage(@ModelAttribute UgbModel ugb, String catatanJudulUgb, String latarBelakang,
-            String tujuanManfaat, String ruangLingkup, String keterbaruan, String metodologi) {
+    @PostMapping("/ugb/addcatatan")
+    public String addCatatanUgbSubmitPage(@ModelAttribute EvaluasiUgbModel evaluasiUgb,
+            Model model, UgbModel ugb, Authentication authentication) {
 
-        String result = ugbService.addCatatanUgb(ugb, catatanJudulUgb, latarBelakang, tujuanManfaat, ruangLingkup,
-                keterbaruan, metodologi);
-        String idUgb = ugb.getIdUgb().toString();
-        return "redirect:/ugb/catatan/" + idUgb;
+        System.out.println("id ugb" + evaluasiUgb.getUgb());
+        ugb.setStatusDokumen("DIEVALUASI");
+        ugb.setStatusUgb("DIEVALUASI");
+
+        evaluasiUgbDb.save(evaluasiUgb);
+        model.addAttribute("roleUser", baseService.getCurrentRole());
+        return "ugb/viewall-ugb";
+        // return "redirect:/ugb/catatan/" + idUgb;
     }
 
     @GetMapping("/ugb/catatan/{idUgb}")
     public String viewCatatanUgb(@PathVariable Long idUgb, Model model) {
-        UgbModel retrievedUgb = ugbService.getUgbById(idUgb);
-        model.addAttribute("ugb", retrievedUgb);
+        EvaluasiUgbModel evaluasiUgb = new EvaluasiUgbModel();
+        UgbModel retrievedUgb = ugbDb.findByIdUgb(idUgb);
+        List<EvaluasiUgbModel> listEval = evaluasiUgbDb.getEvaluasiByUgb(retrievedUgb);
+        // System.out.println("-----" + listEval);
+        model.addAttribute("evaluasiUgb1", listEval.get(0));
+        if (listEval.size() > 1) {
+            model.addAttribute("evaluasiUgb2", listEval.get(1));
+        } else {
+            model.addAttribute("evaluasiUgb2", evaluasiUgb);
+        }
         model.addAttribute("roleUser", baseService.getCurrentRole());
         return "ugb/detail-catatan-ugb";
-    }
 
-    @PostMapping("/ugb/catatan/{idUgb}")
-    public String viewSubbmittedCatatanUgb(@ModelAttribute UgbModel ugb, String catatanJudulUgb, String latarBelakang,
-            String tujuanManfaat, String ruangLingkup, String keterbaruan, String metodologi) {
-
-        String result = ugbService.addCatatanUgb(ugb, catatanJudulUgb, latarBelakang, tujuanManfaat, ruangLingkup,
-                keterbaruan, metodologi);
-        String idUgb = ugb.getIdUgb().toString();
-        return "ugb/detail-catatan-ugb" + idUgb;
     }
 
     @GetMapping("/ugb/update/{idUgb}")
@@ -251,7 +276,7 @@ public class UGBController {
     }
 
     @GetMapping("/ugb/allocate/{idUgb}")
-    public String allocateUgb(@PathVariable Long idUgb, Model model){
+    public String allocateUgb(@PathVariable Long idUgb, Model model) {
         UgbModel getUgbUser = ugbService.getUgbById(idUgb);
         model.addAttribute("ugbUser", getUgbUser);
         model.addAttribute("listPenguji", ugbService.getListPenguji());
@@ -259,14 +284,13 @@ public class UGBController {
     }
 
     @PostMapping("/ugb/allocate/{idUgb}")
-    public String allocateUgbSubmitPage(@PathVariable Long idUgb, 
-                                        @RequestParam("id_pj1") Long idPJ1, 
-                                        @RequestParam("id_pj2") Long idPJ2,
-                                        Model model ) {
+    public String allocateUgbSubmitPage(@PathVariable Long idUgb,
+            @RequestParam("id_pj1") Long idPJ1,
+            @RequestParam("id_pj2") Long idPJ2,
+            Model model) {
         ugbService.updateUGBKoordinatorforPenguji(idUgb, idPJ1, idPJ2);
         model.addAttribute("roleUser", baseService.getCurrentRole());
         // String idUgb = ugb.getIdUgb().toString();
         return "ugb/viewall-ugb";
     }
 }
-
