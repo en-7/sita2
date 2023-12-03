@@ -79,7 +79,7 @@
     <div sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]', 'ROLE_[MAHASISWA]')" class="d-flex justify-content-center align-items-center">
         <div class="m-4" style="align-self: start; width: fit-content;">
             <a th:href="@{/timeline}">
-                <div class="d-flex justify-content-center" style="background-color: whitesmoke;  border-radius: 10px;  margin-top: 30%;">
+                <div class="d-flex justify-content-center" style="background-color: #fff;  border-radius: 10px;  margin-top: 30%;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="grey" class="bi bi-calendar4-week" viewBox="0 0 16 16">
                         <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
                         <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
@@ -94,9 +94,9 @@
             <br>
                 <div class="container-content">
                     <br>
-                    <div class="header-container-table">
+                    <div class="header-container-table" style="    margin-bottom: 10px;">
                         <div class="text-left">
-                            <h4 style="font-weight: bold;">Pengumuman</h4>
+                            <h4 style="font-weight: medium;margin-bottom: 0;">Pengumuman</h4>
                         </div>
 
                         <div id="buttonDiv" sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]')">
@@ -105,7 +105,6 @@
                             </div>
                         </div>
                     </div>
-                    <br>
 
                     <div th:if="*{listAnnounce.size() !=0}">
                         <div th:each="announce, iterationStatus : ${listAnnounce}">
@@ -120,8 +119,8 @@
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="'> '+*{announce.judul}"></h5>
-                                    <p class="card-text" th:text="*{announce.deskripsi}"></p>
-                                    <a class="text-right" style="color: blue;" th:href="@{/announce/view(id=${announce.idAnnouncement})}">See Details</a>
+                                    <p class="card-text" style="font-size: 90%;" th:text="*{announce.deskripsi}"></p>
+                                    <a class="text-right" style="color: blue; font-size: small; font-style: oblique;" th:href="@{/announce/view(id=${announce.idAnnouncement})}">See Details</a>
                                 </div>
                             </div>
                         </div>    
