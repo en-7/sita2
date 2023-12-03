@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(
                 "/js/**",
                 "/css/**",
+                "/logo/**",
                 "/images/**",
                 "/create-dummy").permitAll()
                 .antMatchers("/ugb/viewall").hasAnyAuthority("ROLE_[KOORDINATOR]","ROLE_[PEMBIMBING, PENGUJI]","ROLE_[PENGUJI, PEMBIMBING]")
