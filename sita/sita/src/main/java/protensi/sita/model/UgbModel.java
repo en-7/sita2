@@ -40,6 +40,12 @@ public class UgbModel {
     @Transient
     private Long idPembimbing2;
 
+    // @Transient
+    // private Long idPenguji1;
+
+    // @Transient
+    // private Long idPenguji2;
+
     @Lob
     @Column(name = "bukti_kp", nullable = false)
     private byte[] buktiKp;
@@ -102,34 +108,4 @@ public class UgbModel {
     @ManyToMany
     @JoinTable(name = "ugb_koordinator", joinColumns = @JoinColumn(name = "id_ugb"), inverseJoinColumns = @JoinColumn(name = "id_koordinator"))
     private Set<UserModel> koordinator;
-
-    @NotNull
-    @Length(max = 1000)
-    @Column(name = "latar_belakang", nullable = false)
-    private String latarBelakang;
-
-    @NotNull
-    @Length(max = 1000)
-    @Column(name = "tujuan_manfaat", nullable = false)
-    private String tujuanManfaat;
-
-    @NotNull
-    @Length(max = 1000)
-    @Column(name = "ruang_lingkup", nullable = false)
-    private String ruangLingkup;
-
-    @NotNull
-    @Length(max = 1000)
-    @Column(name = "ugb_keterbaruan", nullable = false)
-    private String keterbaruan;
-
-    @NotNull
-    @Length(max = 1000)
-    @Column(name = "ugb_metodologi", nullable = false)
-    private String metodologi;
-
-    @NotNull
-    @Length(max = 1000)
-    @Column(name = "catatan_judul_ugb", nullable = false)
-    private String catatanJudulUgb;
 }

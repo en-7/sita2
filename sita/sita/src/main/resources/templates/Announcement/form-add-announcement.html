@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar (${'/'})"></nav>
+    <div class="container">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+                <div class="justify-content-center">
+                    <h2>Add Pengumuman</h2>
+                    <br>
+                    <!-- <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" enctype="multipart/form-data"> -->
+                    <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" >
+                        Judul :
+                        <input required class="form-control" type="text" name="judul" th:value="*{judul}"/>
+                        <br><br>
+
+                        Deskripsi :
+                        <input required class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}"/>
+                        <br><br>
+
+                        <!-- File (PDF) :
+                        <input class="form-control" type="file" id="file" name="file" accept=".pdf" onchange="validateFile()"/>
+                        <br><br> -->
+
+                        <button class="btn btn-primary float-right" type="submit">Submit</button>
+                        <a class="btn btn-secondary" href="/">Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    function validateFile() {
+
+        var file = document.getElementById("file");
+        var isValid = true;
+
+        if (!isValidFileType(file, 'application/pdf')) {
+            isValid = false;
+            file.value = '';
+        }
+        // Nonaktifkan tombol submit jika file tidak valid
+        submitButton.disabled = !isValid;
+
+        // Tampilkan alert jika ada file yang tidak valid
+        if (!isValid) {
+            alert("Invalid file type. Please choose PDF files for all attachments.");
+        }
+    }
+
+    function isValidFileType(input, validType) {
+        if (input.files.length > 0) {
+            var fileType = input.files[0].type;
+            return fileType === validType;
+        } 
+        return true;
+    } 
+</script>

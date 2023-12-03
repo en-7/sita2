@@ -65,14 +65,20 @@
                 <tr>
                     <th>Hari, Tanggal</th>
                     <th>Waktu</th>
+                    <th>Mahasiswa</th>
                     <th style="text-align: center">Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr th:each="availableBimbingan, iterationStatus : ${listAvailable}" 
                     th:style="${iterationStatus.even} ? 'background-color:#f2f2f2;' : 'background-color:#eceaea;'">
-                    <td th:text="${#temporals.format(availableBimbingan.startBimbinganTime, 'EEEE, dd MMMM yyyy')}"></td>
-                    <td th:text="${#temporals.format(availableBimbingan.startBimbinganTime, 'HH:mm')} + ' - ' + ${#temporals.format(availableBimbingan.endBimbinganTime, 'HH:mm')}"></td>
+                        <td th:text="${#temporals.format(availableBimbingan.startBimbinganTime, 'EEEE, dd MMMM yyyy')}"></td>
+                        <td th:text="${#temporals.format(availableBimbingan.startBimbinganTime, 'HH:mm')} + ' - ' + ${#temporals.format(availableBimbingan.endBimbinganTime, 'HH:mm')}"></td>
+                        <td>
+                            <span th:if="${availableBimbingan?.bookingStatus == 'BOOKED'}" th:text="${availableBimbingan.mahasiswa.nama}"></span>
+                            <span th:unless="${availableBimbingan?.bookingStatus == 'BOOKED'}">-</span>
+                            
+                        </td>
                         <td>
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-primary" th:attr="href=@{/bimbingan/atur-jadwal/update/{id}(id=${availableBimbingan.idAvailableBimbingan})}">Ubah</a>
@@ -129,7 +135,7 @@
                 $("#deleteConfirmationModal").modal("hide");
                 window.location.href = "/bimbingan/atur-jadwal";
             } else {
-                alert("Gagal menghapus waktu luang bimbingan.");
+                alert("Waktu Luang tidak dapat dihapus karena jadwal bimbingan sudah dipesan oleh mahasiswa.");
             }
         })
         .catch(function(error) {

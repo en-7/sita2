@@ -23,6 +23,7 @@ import protensi.sita.model.EnumRole;
 import protensi.sita.model.MahasiswaModel;
 import protensi.sita.model.SeminarHasilModel;
 import protensi.sita.model.SeminarProposalModel;
+import protensi.sita.model.TimelineModel;
 import protensi.sita.model.TugasAkhirModel;
 import protensi.sita.model.UgbModel;
 import protensi.sita.model.UserModel;
@@ -30,11 +31,13 @@ import protensi.sita.security.UserDetailsServiceImpl;
 import protensi.sita.service.BaseService;
 import protensi.sita.service.MahasiswaServiceImpl;
 import protensi.sita.service.SeminarProposalServiceImpl;
+import protensi.sita.service.TimelineServiceImpl;
 import protensi.sita.service.SeminarHasilServiceImpl;
 import protensi.sita.service.TugasAkhirServiceImpl;
 import protensi.sita.service.UgbServiceImpl;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +71,9 @@ public class TugasAkhirController {
     private MahasiswaServiceImpl mahasiswaService;
 
     @Autowired
+    private TimelineServiceImpl tlService;
+
+    @Autowired
     public BaseService baseService;
 
     @GetMapping("/tugas-akhir/add")
@@ -85,10 +91,17 @@ public class TugasAkhirController {
                         model.addAttribute("tugasAkhir", tugasAkhir);
                         return "tugasakhir/detail-ta-mahasiswa";
                     } else {
-                        tugasAkhir = new TugasAkhirModel();
-                        model.addAttribute("roleUser", baseService.getCurrentRole());
-                        model.addAttribute("tugasAkhir", tugasAkhir);
-                        return "tugasakhir/add-ta-form";
+                        TimelineModel tl = tlService.checkDate();
+                        LocalDate nowDate = LocalDate.now();
+                        if(tl.getRegSidang() != null && tl.getRegSidang().equals(nowDate)){
+                            tugasAkhir = new TugasAkhirModel();
+                            model.addAttribute("roleUser", baseService.getCurrentRole());
+                            model.addAttribute("tugasAkhir", tugasAkhir);
+                            return "tugasakhir/add-ta-form";
+                        }else{
+                            return "tugasakhir/no-access-ta";
+                        }
+
                     }
                 } else {
                     model.addAttribute("roleUser", baseService.getCurrentRole());

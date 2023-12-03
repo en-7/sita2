@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar (${'/'})"></nav>
+    <div class="container">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+                <div class="justify-content-center">
+                    <h2>Update Pengumuman</h2>
+                    <br>
+                    <!-- <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" enctype="multipart/form-data"> -->
+                    <form th:action="@{/announce/update}" th:object="${updateAnnounce}" method="POST">
+                        <input type="hidden" th:field="*{createdAt}">
+                        <input type="hidden" th:field="*{idAnnouncement}">
+
+                        Judul :
+                        <input required class="form-control" type="text" name="judul" th:value="*{judul}"/>
+                        <br><br>
+
+                        Deskripsi :
+                        <input required class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}"/>
+                        <br><br>
+
+                        <!-- File (PDF) :
+                        <input class="form-control" type="file" id="file" name="file" accept=".pdf" onchange="validateFile()"/>
+                        <br><br> -->
+
+                        <button class="btn btn-primary float-right" type="submit">Submit</button>
+                        <a class="btn btn-secondary" href="/">Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -31,7 +31,6 @@ public class JadwalBimbinganModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Set<LocalDateTime> tanggalBimbingan;
 
-    @Size(max = 1000)
     @Column(name = "catatan_bimbingan")
     private String catatanBimbingan;
 

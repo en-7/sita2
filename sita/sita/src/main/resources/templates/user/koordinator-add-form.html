@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Add Koordinator</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar('/')"></nav>
+
+<div class="container">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Tambah Koordinator</h2>
+                <br>
+                <form th:action="@{/koordinator/add}" th:object="${koordinator}" method="POST">
+                    <label>Username</label>
+                    <input class="form-control" type="text" name="username" required/>
+                    <br>
+                    <label>Nama</label>
+                    <input class="form-control" type="text" name="nama" required/>
+                    <br>
+                    <label>Email</label>
+                    <input class="form-control" type="text" name="email" required/>
+                    <br>
+                    <label>Password</label>
+                    <input class="form-control" type="password" name="password" required/>
+                    <br>
+                    <button class="btn btn-primary" type="submit" name="save">Submit</button>
+                    <a class="btn btn-primary" href="/">Home</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+</body>
+</html>

@@ -8,13 +8,8 @@ import protensi.sita.model.SeminarProposalModel;
 import protensi.sita.model.UgbModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.UserDetailsAwareConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.util.StringUtils;
@@ -32,7 +26,6 @@ import protensi.sita.service.UgbServiceImpl;
 import protensi.sita.service.BaseService;
 import protensi.sita.service.MahasiswaServiceImpl;
 import protensi.sita.security.UserDetailsServiceImpl;
-import protensi.sita.service.BaseService;
 import protensi.sita.service.SeminarHasilServiceImpl;
 import protensi.sita.service.SeminarProposalServiceImpl;
 
@@ -76,7 +69,7 @@ public class SeminarHasilController {
             SeminarProposalModel sempro = seminarProposalService.findSemproByUgb(ugb);
             SeminarHasilModel seminarHasil = seminarHasilService.findSemhasBySempro(sempro);
             if (sempro != null) {
-                if (sempro.getStatusDokumen().equals("APPROVED")) {
+                if (sempro.getStatusDokumen().equals("DISETUJUI")) {
                     if (seminarHasil != null) {
                         model.addAttribute("roleUser", baseService.getCurrentRole());
                         model.addAttribute("seminarHasil", seminarHasil);
@@ -95,10 +88,10 @@ public class SeminarHasilController {
                 model.addAttribute("roleUser", baseService.getCurrentRole());
                 return "error-semhas";
             }
-        } else {
-            model.addAttribute("roleUser", baseService.getCurrentRole());
-            return "error-semhas";
         }
+
+        model.addAttribute("roleUser", baseService.getCurrentRole());
+        return "error-semhas";
     }
 
     @PostMapping("/seminar-hasil/add")
@@ -127,6 +120,7 @@ public class SeminarHasilController {
 
         seminarHasil.setPersetujuanPembimbing(acc_pembimbing.getBytes());
         seminarHasil.setLaporanKp(bukti_kp.getBytes());
+        seminarHasil.setLaporanKp(bukti_kp.getBytes());
         seminarHasil.setRisalahSempro(risalah_sempro.getBytes());
         seminarHasil.setCatatanSempro(notes_sempro.getBytes());
         seminarHasil.setSaps(form_saps.getBytes());
@@ -141,7 +135,7 @@ public class SeminarHasilController {
         seminarHasil.setSeminarProposal(sempro);
 
         seminarHasil.getUgb().getMahasiswa().setTahap("SEMHAS");
-        seminarHasil.setStatusDokumen("SUBMITTED");
+        seminarHasil.setStatusDokumen("TERDAFTAR");
 
         seminarHasilService.addSeminarHasil(seminarHasil);
         model.addAttribute("seminarHasil", seminarHasil);
@@ -155,17 +149,20 @@ public class SeminarHasilController {
 
         if (user.getRoles().contains(EnumRole.KOORDINATOR)) {
             List<SeminarHasilModel> listSeminarHasil = seminarHasilService.findAllSeminarHasil();
+            model.addAttribute("roleUser", baseService.getCurrentRole());
             model.addAttribute("listSeminarHasil", listSeminarHasil);
             return "viewall-semhas";
         } else if (user.getRoles().contains(EnumRole.PEMBIMBING) && user.getRoles().contains(EnumRole.PENGUJI)) {
             List<SeminarHasilModel> listSemhasPembimbing = seminarHasilService.findAllByPembimbing(user.getIdUser());
             List<SeminarHasilModel> listSemhasPenguji = seminarHasilService.findAllByPenguji(user.getIdUser());
-            List<SeminarHasilModel> listSemhas = new ArrayList<SeminarHasilModel>();
-            listSemhas.addAll(listSemhasPembimbing);
-            listSemhas.addAll(listSemhasPenguji);
-            model.addAttribute("listSemhas", listSemhas);
+            List<SeminarHasilModel> listSeminarHasil = new ArrayList<SeminarHasilModel>();
+            listSeminarHasil.addAll(listSemhasPembimbing);
+            listSeminarHasil.addAll(listSemhasPenguji);
+            model.addAttribute("roleUser", baseService.getCurrentRole());
+            model.addAttribute("listSeminarHasil", listSeminarHasil);
             return "viewall-semhas-dosen";
         } else {
+            model.addAttribute("roleUser", baseService.getCurrentRole());
             return "error-semhas";
         }
     }
@@ -177,6 +174,7 @@ public class SeminarHasilController {
         UserModel user = userDetailsService.findByUsername(namaUser);
         SeminarHasilModel seminarHasil = seminarHasilService.findSemhasById(idSeminarHasil);
         model.addAttribute("seminarHasil", seminarHasil);
+        model.addAttribute("id", seminarHasil.getIdSeminarHasil());
         if (user.getRoles().contains(EnumRole.KOORDINATOR)) {
             return "detail-semhas-koordinator";
         } else if (user.getRoles().contains(EnumRole.PEMBIMBING) && user.getRoles().contains(EnumRole.PENGUJI)) {
@@ -193,7 +191,7 @@ public class SeminarHasilController {
         return "update-semhas-form";
     }
 
-    @PostMapping("/seminar-hasil/update")
+    @PostMapping("/seminar-hasil/update/{idSeminarHasil}")
     public String updateSeminarHasilSubmitPage(@ModelAttribute SeminarHasilModel seminarHasil,
             @PathVariable Long idSeminarHasil,
             @RequestParam("acc_pembimbing") MultipartFile acc_pembimbing,
@@ -250,7 +248,7 @@ public class SeminarHasilController {
             }
 
             seminarHasil.setCatatan(null);
-            seminarHasil.setStatusDokumen("SUBMITTED");
+            seminarHasil.setStatusDokumen("TERDAFTAR");
             seminarHasilService.updateSemhas(seminarHasil);
             model.addAttribute("seminarHasil", seminarHasil);
             return "detail-semhas-mahasiswa";
@@ -263,38 +261,72 @@ public class SeminarHasilController {
     @GetMapping("/seminar-hasil/filter")
     public String filterSeminarHasil(@RequestParam String status, Model model) {
         List<SeminarHasilModel> filteredSemhas = seminarHasilService.findSemhasByStatusDokumen(status);
-        model.addAttribute("listSemhas", filteredSemhas);
+        model.addAttribute("listSeminarHasil", filteredSemhas);
+        model.addAttribute("roleUser", baseService.getCurrentRole());
         return "viewall-semhas";
     }
 
     @PostMapping("/seminar-hasil/input-nilai/{idSeminarHasil}")
     public String inputNilaiSemhas(@PathVariable Long idSeminarHasil, @RequestBody Map<String, Object> data,
             Model model) {
-        System.out.println("--- nilai :" + (String) data.get("nilai"));
-
         SeminarHasilModel seminarHasil = seminarHasilService.findSemhasById(idSeminarHasil);
+        // Long nilai = Long.valueOf(((Integer) data.get("nilai")).longValue());
         Long nilai = ((Integer) data.get("nilai")).longValue();
 
-        // Long nilai = ((Integer) data.get("nilai")).longValue();
-        System.out.println("--- parsed nilai :" + nilai);
+        if (nilai != null) {
+            if (nilai < 40) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("E");
+                seminarHasil.setStatusSemhas("TIDAK LULUS");
+            } else if (nilai < 50) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("D");
+                seminarHasil.setStatusSemhas("TIDAK LULUS");
+            } else if (nilai < 55) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("C");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 60) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("C+");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 65) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("B-");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 70) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("B");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 75) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("B+");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 80) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("A-");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai <= 100) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("A");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else {
+                throw new IllegalArgumentException("Invalid nilai: " + nilai);
+            }
 
-        // Long nilai = Long.parseLong((String) data.get("nilai"));
-        // Long nilai = (Long) data.get("nilai");
-        String statusSemhas = (String) data.get("statusSemhas");
-        SeminarHasilModel updatedSeminarHasil = seminarHasilService.saveNilaiAndStatus(idSeminarHasil,
-                nilai, statusSemhas);
+            LocalDateTime nowTime = LocalDateTime.now();
+            seminarHasil.setTanggalLulus(nowTime);
+            seminarHasilService.updateSemhas(seminarHasil);
 
-        System.out.println("--- updated semhas :" + updatedSeminarHasil);
-        LocalDateTime nowTime = LocalDateTime.now();
-        seminarHasil.setTanggalLulus(nowTime);
-        seminarHasilService.updateSemhas(seminarHasil);
-
-        if (updatedSeminarHasil != null) {
+            model.addAttribute("roleUser", baseService.getCurrentRole());
             model.addAttribute("seminarHasil", seminarHasil);
             return "detail-semhas-koordinator";
-        } else {
+
+        }
+
+        else {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi error ketika save file.");
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
         }
 
     }
@@ -303,18 +335,62 @@ public class SeminarHasilController {
     public String updateNilaiSemhas(@PathVariable Long idSeminarHasil, @RequestBody Map<String, Object> data,
             Model model) {
         SeminarHasilModel seminarHasil = seminarHasilService.findSemhasById(idSeminarHasil);
+        // Long nilai = Long.valueOf(((Integer) data.get("nilai")).longValue());
         Long nilai = ((Integer) data.get("nilai")).longValue();
-        String statusSemhas = (String) data.get("statusSemhas");
-        SeminarHasilModel updatedSeminarHasil = seminarHasilService.saveNilaiAndStatus(idSeminarHasil,
-                nilai, statusSemhas);
 
-        seminarHasilService.updateSemhas(seminarHasil);
-        if (updatedSeminarHasil != null) {
+        if (nilai != null) {
+            if (nilai < 40) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("E");
+                seminarHasil.setStatusSemhas("TIDAK LULUS");
+            } else if (nilai < 50) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("D");
+                seminarHasil.setStatusSemhas("TIDAK LULUS");
+            } else if (nilai < 55) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("C");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 60) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("C+");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 65) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("B-");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 70) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("B");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 75) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("B+");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai < 80) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("A-");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else if (nilai <= 100) {
+                seminarHasil.setNilai(nilai);
+                seminarHasil.setNilaiHuruf("A");
+                seminarHasil.setStatusSemhas("LULUS");
+            } else {
+                throw new IllegalArgumentException("Invalid nilai: " + nilai);
+            }
+
+            LocalDateTime nowTime = LocalDateTime.now();
+            seminarHasil.setTanggalLulus(nowTime);
+            seminarHasilService.updateSemhas(seminarHasil);
+
             model.addAttribute("seminarHasil", seminarHasil);
+            model.addAttribute("roleUser", baseService.getCurrentRole());
             return "detail-semhas-koordinator";
-        } else {
+        }
+
+        else {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi error ketika save file.");
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
         }
     }
 
@@ -322,14 +398,14 @@ public class SeminarHasilController {
     public String approveSeminarHasil(@PathVariable Long idSeminarHasil, Model model) {
         try {
             SeminarHasilModel seminarHasil = seminarHasilService.findSemhasById(idSeminarHasil);
-            seminarHasil.setStatusDokumen("APPROVED");
+            seminarHasil.setStatusDokumen("DISETUJUI");
             seminarHasilService.updateSemhas(seminarHasil);
 
             model.addAttribute("seminarHasil", seminarHasil);
             return "detail-semhas-koordinator";
         } catch (Exception e) {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi error ketika save file.");
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
         }
     }
 
@@ -338,7 +414,7 @@ public class SeminarHasilController {
             Model model) {
         try {
             SeminarHasilModel seminarHasil = seminarHasilService.findSemhasById(idSeminarHasil);
-            seminarHasil.setStatusDokumen("DENY");
+            seminarHasil.setStatusDokumen("DITOLAK");
             seminarHasil.setCatatan(catatan);
             seminarHasilService.updateSemhas(seminarHasil);
 
@@ -346,7 +422,7 @@ public class SeminarHasilController {
             return "detail-semhas-koordinator";
         } catch (Exception e) {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi error ketika save file.");
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
         }
     }
 

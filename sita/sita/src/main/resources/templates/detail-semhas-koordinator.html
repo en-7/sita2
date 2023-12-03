@@ -83,7 +83,7 @@
                 </td>
             </tr>
             <tr>
-                <th>Nilai Sempro</th>
+                <th>Nilai Semhas</th>
                 <td>
                     <span th:if="${seminarHasil?.nilai == null}">-</span>
                     <span th:unless="${seminarHasil?.nilai == null}" th:text="${seminarHasil?.nilai}"></span>
@@ -174,9 +174,9 @@
         </table>
         <br><br>
         <div class="pb-2 d-flex justify-content-center">
-            <span th:if="${seminarHasil?.statusDokumen == 'SUBMITTED'}">
-                <a class="btn btn-primary mx-1" data-toggle="modal" data-target="#approveModal">Approve</a>
-                <a class="btn btn-primary" data-toggle="modal" data-target="#denyModal">Deny</a>
+            <span th:if="${seminarHasil?.statusDokumen == 'TERDAFTAR'}">
+                <a class="btn btn-primary" data-toggle="modal" data-target="#denyModal">Tolak</a>
+                <a class="btn btn-primary mx-1" data-toggle="modal" data-target="#approveModal">Setujui</a>
             </span>
         </div>
     </div>

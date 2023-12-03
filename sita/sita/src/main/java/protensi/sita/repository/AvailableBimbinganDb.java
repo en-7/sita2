@@ -1,6 +1,7 @@
 package protensi.sita.repository;
 
 import protensi.sita.model.AvailableBimbinganModel;
+import protensi.sita.model.PembimbingModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,4 +17,5 @@ public interface AvailableBimbinganDb extends JpaRepository<AvailableBimbinganMo
     List<AvailableBimbinganModel> findByStartBimbinganTimeBetween(LocalDateTime startBimbinganTime, LocalDateTime endBimbinganTime);
     List<AvailableBimbinganModel> findByEndBimbinganTimeBetween(LocalDateTime startBimbinganTime, LocalDateTime endBimbinganTime);
     
+
 }

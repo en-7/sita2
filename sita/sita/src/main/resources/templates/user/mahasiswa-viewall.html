@@ -1,65 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <title>User Management</title>
-  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
-  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <title>Daftar Mahasiswa</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
 </head>
 
 <body>
-<nav th:replace="fragments/fragment :: navbar('/')"></nav>
-
+  <nav th:replace="fragments/fragment :: navbar('/')"></nav>
 <div class="container">
-  <div class="text-center mt-4">
-    <h3>Daftar Mahasiswa</h3>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item justify-content-center">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Daftar Mahasiswa</h2>
+                <a th:href="@{/}" class="mx-2 my-4 btn btn-primary">Home</a>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Email</th>
+                        <th>Nama</th>
+                        <th>NIM</th>
+                        <th>Tahap</th>
+                        <th colspan="4" style="text-align: center">Aksi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="mahasiswa, iterationStatus : ${listMahasiswa}"
+                        th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                        <td th:text="${iterationStatus.count}"></td>
 
-      <div class="card m-4 mt-0 border-primary">
-        <div class="card-header bg-primary text-white">
-          <div class="row">
-            <div class="col m-2">
-              Daftar Mahasiswa
+                        <td th:text="${mahasiswa.email}"></td>
+                        <td th:text="${mahasiswa.nama}"></td>
+                        <td th:text="${mahasiswa.nim}"></td>
+                        <td th:text="${mahasiswa.tahap}"></td>
+                        <td>
+                            <a class="btn btn-primary" th:href="@{'/mahasiswa/update/'+ ${mahasiswa.idUser}}">Update</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="col text-right">
-              <a class="btn btn-outline-primary btn-light" th:href="@{/mahasiswa/add}">Tambah Mahasiswa</a>
-            </div>
-          </div>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <table class="table table-striped">
-              <thead class="text-primary">
-              <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Email</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="mahasiswa, iterationStatus : ${listMahasiswa}">
-                <td th:text="${iterationStatus.count}"></td>
-                <td th:text="${mahasiswa.id_user}"></td>
-                <td th:text="${mahasiswa.nama}"></td>
-                <td th:text="${mahasiswa.username}"></td>
-                <td th:text="${mahasiswa.password}"></td>
-                <td th:text="${mahasiswa.email}"></td>
-                <td th:text="${mahasiswa.created_at}"></td>
-                <td th:text="${mahasiswa.nim}"></td>
-                <td th:text="${mahasiswa.tahap}"></td>
-              </tr>
-              </tbody>
-            </table>
-          </li>
-        </ul>
-      </div>
-    </li>
-  </ul>
+    </div>
 </div>
-
 </body>
+
 </html>

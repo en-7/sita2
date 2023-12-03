@@ -13,5 +13,4 @@ public interface PembimbingDb extends JpaRepository<PembimbingModel, Long> {
     PembimbingModel findByIdUser(Long idUser);
 
     PembimbingModel findByUsername(String username);
-
 }

@@ -4,6 +4,7 @@ import protensi.sita.model.MahasiswaModel;
 import protensi.sita.model.PembimbingModel;
 import protensi.sita.model.UserModel;
 import protensi.sita.model.UgbModel;
+import protensi.sita.model.EvaluasiUgbModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UgbService {
         List<UserModel> getListPembimbing();
 
+        List<UserModel> getListPenguji();
+
         String addUgb(UgbModel ugb, MultipartFile bukti_kp, MultipartFile transcript, MultipartFile file_khs,
                         MultipartFile file_ugb);
 
-        String addCatatanUgb(UgbModel ugb, String catatanJudulUgb, String latarBelakang, String tujuanManfaat,
+        String addCatatanUgb(EvaluasiUgbModel idUgb, UgbModel ugb, String catatanJudulUgb, String latarBelakang,
+                        String tujuanManfaat,
                         String ruangLingkup, String keterbaruan, String metodologi);
 
         List<UgbModel> viewAllUgb();
@@ -44,4 +48,9 @@ public interface UgbService {
         void denyUgb(UgbModel ugb, String ctt);
 
         UgbModel getUgbById(Long idUgb);
+
+        EvaluasiUgbModel getEvaluasiUgbById(Long idEvaluasiUgb);
+
+        UgbModel findUgbById(Long idIgb);
+
 }

@@ -1,27 +1,12 @@
 package protensi.sita.controller;
 
-import protensi.sita.model.AvailableBimbinganModel;
-import protensi.sita.model.EnumRole;
-import protensi.sita.model.JadwalBimbinganModel;
-import protensi.sita.model.PembimbingModel;
-import protensi.sita.model.SeminarProposalModel;
-import protensi.sita.model.UgbModel;
-import protensi.sita.model.MahasiswaModel;
-import protensi.sita.model.UserModel;
-import protensi.sita.security.UserDetailsServiceImpl;
-import protensi.sita.service.AvailableBimbinganServiceImpl;
-import protensi.sita.service.BaseService;
-import protensi.sita.service.JadwalBimbinganServiceImpl;
-import protensi.sita.service.MahasiswaServiceImpl;
-import protensi.sita.service.PembimbingServiceImpl;
-import protensi.sita.service.UgbServiceImpl;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +16,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.core.Authentication;
+
+import protensi.sita.model.AvailableBimbinganModel;
+import protensi.sita.model.EnumRole;
+import protensi.sita.model.JadwalBimbinganModel;
+import protensi.sita.model.MahasiswaModel;
+import protensi.sita.model.PembimbingModel;
+import protensi.sita.model.UgbModel;
+import protensi.sita.model.UserModel;
+import protensi.sita.security.UserDetailsServiceImpl;
+import protensi.sita.service.AvailableBimbinganServiceImpl;
+import protensi.sita.service.BaseService;
+import protensi.sita.service.JadwalBimbinganServiceImpl;
+import protensi.sita.service.MahasiswaServiceImpl;
+import protensi.sita.service.PembimbingServiceImpl;
+import protensi.sita.service.UgbServiceImpl;
 
 
 @Controller
@@ -104,26 +103,27 @@ public class BimbinganController {
                             model.addAttribute("listAvailable", listAvailable);
                             return "redirect:/bimbingan/atur-jadwal/";
                         } else {
-                            model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                            model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                             return "bimbingan/error-bimbingan";
                         }
                     } else {
-                        model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                        model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                         return "bimbingan/error-bimbingan";
                     } 
                 } else {
-                    model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                    model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                     return "bimbingan/error-bimbingan";
                 }
             } else {
-                model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                 return "bimbingan/error-bimbingan";
         }
         } else {
-            model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+            model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
             return "bimbingan/error-bimbingan";
         }
     }
+
 
     @GetMapping("/atur-jadwal/update/{idAvailableBimbingan}")
     public String updateAvailableBimbinganFormPage(@PathVariable Long idAvailableBimbingan, Model model) {
@@ -134,7 +134,6 @@ public class BimbinganController {
         model.addAttribute("pembimbingId", pembimbing.getIdUser());
         return "bimbingan/update-available-bimbingan-form";
     }
-
 
     @PostMapping("/atur-jadwal/update")
     public String updateAvailableBimbinganSubmitPage(@ModelAttribute AvailableBimbinganModel availableBimbingan, Model model) {
@@ -163,22 +162,23 @@ public class BimbinganController {
                             return "bimbingan/error-bimbingan";
                         }
                     } else {
-                        model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                        model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                         return "bimbingan/error-bimbingan";
                     } 
                 } else {
-                    model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                    model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                     return "bimbingan/error-bimbingan";
                 }
             } else {
-                model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+                model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
                 return "bimbingan/error-bimbingan";
         }
         } else {
-            model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan sudah bertabrakan ");
+            model.addAttribute("pesan", "Waktu mulai bimbingan atau waktu selesai bimbingan bertabrakan ");
             return "bimbingan/error-bimbingan";
         }
     }
+
 
     @GetMapping("/viewall")
     public String listBimbingan(Model model, Authentication authentication) {
@@ -278,6 +278,7 @@ public class BimbinganController {
 
         JadwalBimbinganModel jadwalBimbingan = new JadwalBimbinganModel();
         AvailableBimbinganModel availableBimbingan = availableBimbinganService.findById(idAvailableBimbingan);
+        availableBimbingan.setMahasiswa(mahasiswa);
         jadwalBimbingan.setAvailableBimbingan(availableBimbingan);
         jadwalBimbingan.setMahasiswa(mahasiswa);
         jadwalBimbinganService.save(jadwalBimbingan);
@@ -294,6 +295,7 @@ public class BimbinganController {
         jadwalBimbinganService.delete(jadwalBimbingan.getIdJadwalBimbingan());
 
         AvailableBimbinganModel availableBimbingan = availableBimbinganService.findById(idAvailableBimbingan);
+        availableBimbingan.setMahasiswa(null);
         availableBimbingan.setBookingStatus("AVAILABLE");
         availableBimbinganService.save(availableBimbingan);
         model.addAttribute("availableBimbingan", availableBimbingan);

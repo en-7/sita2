@@ -20,12 +20,16 @@
     border: none;
 }
 
+#profpicDropdown{
+  padding-right: 20px;
+}
+
 #profileDropdown{
   color: #4A4A4B;
   margin-top: 5px;
   margin-right: 5px;
   margin-left: 12px;
-}
+} 
 
 /* .dropbtn {
     background-color: #04AA6D;

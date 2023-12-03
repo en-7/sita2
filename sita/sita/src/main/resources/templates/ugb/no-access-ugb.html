@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SITA</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <style>
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+        }
+    
+        .kuantitas-input{
+            height: 40px !important;
+        }
+    
+        .container-content {
+            width: 850px;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 80px;
+        }
+    
+        .container-table {
+            width: 900px;
+            height: auto;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #2D89FF;
+        }
+    
+        .header-container-table {
+            height: 60px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            background-color: #2D89FF;
+        }
+    
+        .table {
+            margin-top: 20px;
+            width: 800px;
+            height: auto;
+        }
+    
+        th {
+            text-align: center;
+        }
+    
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/fragment :: navbar(${'/ugb'})"></div>
+
+<div class="container">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Waktu pendaftaran ugb sudah lewat</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

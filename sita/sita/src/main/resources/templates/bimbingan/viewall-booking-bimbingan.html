@@ -64,6 +64,7 @@
                 <tr>
                     <th>Hari, Tanggal</th>
                     <th>Waktu</th>
+                    <th>Dosen Pembimbing</th>
                     <th style="text-align: center">Aksi</th>
                 </tr>
                 </thead>
@@ -72,18 +73,19 @@
                     th:style="${iterationStatus.even} ? 'background-color:#f2f2f2;' : 'background-color:#eceaea;'">
                     <td th:text="${#temporals.format(available.startBimbinganTime, 'EEEE, dd MMMM yyyy')}"></td>
                     <td th:text="${#temporals.format(available.startBimbinganTime, 'HH:mm')} + ' - ' + ${#temporals.format(available.endBimbinganTime, 'HH:mm')}"></td>
-                        <td>
-                            <div class="btn-group" th:if="${available?.bookingStatus == 'AVAILABLE'}">
-                                <button class="btn btn-sm btn-primary booking-button" data-toggle="modal" data-target="#bookingConfirmationModal"
-                                th:attr="data-id=${available.idAvailableBimbingan}">Pilih</button>
-                            </div>
-                            <div class="btn-group" th:if="${available?.bookingStatus == 'BOOKED'}">
-                                <button th:each="jadwal, iterationStatus : ${listBimbingan}"
-                                    th:if="${(jadwal?.availableBimbingan?.idAvailableBimbingan == available?.idAvailableBimbingan) && (jadwal?.mahasiswa?.idUser == user?.idUser)}" 
-                                    class="btn btn-sm btn-primary cancel-button" data-toggle="modal" data-target="#cancelConfirmationModal"
-                                    th:attr="data-id=${available?.idAvailableBimbingan}">Batal</button>
-                            </div>
-                        </td>
+                    <td th:text="${available.pembimbing.nama}"></td>
+                    <td>
+                        <div class="btn-group" th:if="${available?.bookingStatus == 'AVAILABLE'}">
+                            <button class="btn btn-sm btn-primary booking-button" data-toggle="modal" data-target="#bookingConfirmationModal"
+                            th:attr="data-id=${available.idAvailableBimbingan}">Pilih</button>
+                        </div>
+                        <div class="btn-group" th:if="${available?.bookingStatus == 'BOOKED'}">
+                            <button th:each="jadwal, iterationStatus : ${listBimbingan}"
+                                th:if="${(jadwal?.availableBimbingan?.idAvailableBimbingan == available?.idAvailableBimbingan) && (jadwal?.mahasiswa?.idUser == user?.idUser)}" 
+                                class="btn btn-sm btn-danger cancel-button" data-toggle="modal" data-target="#cancelConfirmationModal"
+                                th:attr="data-id=${available?.idAvailableBimbingan}">Batal</button>
+                        </div>
+                    </td>
                     </tr>
                 </tbody>
             </table>

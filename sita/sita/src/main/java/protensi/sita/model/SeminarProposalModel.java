@@ -24,7 +24,7 @@ public class SeminarProposalModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_seminar_proposal", updatable = false, nullable = false)
     private Long idSeminarProposal;
-    
+
     @Lob
     @Column(name = "draft_proposal_ta", nullable = false)
     private byte[] draftProposalTa;
@@ -67,7 +67,7 @@ public class SeminarProposalModel {
 
     @Column(name = "nilai_huruf")
     private String nilaiHuruf;
-    
+
     @Column(name = "tanggal_lulus")
     private LocalDateTime tanggalLulus;
 
@@ -75,9 +75,9 @@ public class SeminarProposalModel {
     @JoinColumn(name = "id_ugb")
     private UgbModel ugb;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_jadwal_sidang")
-//    private JadwalSidangModel jadwalSidang;
+    // @OneToOne
+    // @JoinColumn(name = "id_jadwal_sidang")
+    // private JadwalSidangModel jadwalSidang;
 
     @OneToOne(mappedBy = "seminarProposal")
     private JadwalSidangModel jadwalSidang;

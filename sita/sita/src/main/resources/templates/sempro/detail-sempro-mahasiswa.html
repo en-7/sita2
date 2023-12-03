@@ -146,6 +146,33 @@
         <div class="pb-2 d-flex justify-content-center">
             <a th:if="${seminarProposal?.statusDokumen == 'DITOLAK'}" class="btn btn-primary mx-1" th:href="@{'/seminar-proposal/update/'+ ${seminarProposal?.idSeminarProposal}}">Update</a>
         </div>
+        <div class="card">
+            <h5 class="card-header text-white bg-info  mb-auto">Jadwal Seminar Proposal</h5>
+            <div class="card-body">
+                <div th:if="*{seminarProposal?.jadwalSidang != null}">
+                    <table class="table">
+                        <tr>
+                            <th>Tanggal</th>
+                            <td th:text="${#temporals.format(seminarProposal?.jadwalSidang?.tanggalSempro, 'dd MMMM yyyy')}"></td>
+                        </tr>
+                        <tr>
+                            <th>Waktu</th>
+                            <td>
+                                 <span th:text="${#temporals.format(seminarProposal?.jadwalSidang?.tanggalSempro, 'HH:mm')} + ' WIB'">
+                                 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tempat</th>
+                            <td  th:text="${seminarProposal?.jadwalSidang?.tempatSempro}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div th:unless="*{seminarProposal?.jadwalSidang != null}">
+                    <h3 class="text-center" th:text="'Belum ada Penjadwalan'"></h3>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

@@ -42,9 +42,29 @@ public class UserServiceImpl {
         return hashedPassword;
     }
 
+    public boolean matcher(String inputPassword){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserModel thisUser = userDb.findByUsername(username);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
+        boolean isMatched = encoder.matches(inputPassword, thisUser.getPassword()); 
+        return isMatched;
+    }
+
     public UserModel findByUsername(String username) {
         return userDb.findByUsername(username);
     }
+
+    public void updatePass(String newPass){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String encryptedPass = encrypt(newPass);
+        UserModel thisUser = userDb.findByUsername(username);
+        thisUser.setPassword(encryptedPass);
+        userDb.save(thisUser);
+        System.out.println("pass changed");
+    }
+
 
     // public void addDummy() {
     // AdminModel admin = new AdminModel();

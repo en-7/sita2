@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <style>
+        body {
+            background-color: #e0e0e0;
+        }
+        .card-body{
+            padding: 0;
+        }
+        .card-text.judul{
+            padding-left: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav th:replace="fragments/fragment :: navbar (${'/profile'})"></nav>
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="m-4">
+            <div class="d-flex justify-content-center">
+                <h2 class="mt-4" style="font-weight: bold;">Profil Mahasiswa</h2>
+                <br><br><br><br>
+            </div>
+            <div class="d-flex justify-content-center">
+                <divclass="m-4">
+                    <div id="cardProfile" class="card bg-light mb-3" style="width: 800px;">
+                        <div class="card-header" style="font-weight: bold;">Tentang Mahasiswa</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <tr>
+                                    <th class="card-text judul">Nama</th>
+                                    <td class="card-text" th:text="${mahasiswa.nama}"></td>
+                                </tr>
+                                <tr>
+                                    <th class="card-text judul">NIM</th>
+                                    <td class="card-text" th:text="${mahasiswa.nim}"></td>
+                                </tr>
+                                <tr>
+                                    <th class="card-text judul">Email</th>
+                                    <td class="card-text" th:text="${pengguna.email}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="card-header" style="font-weight: bold; border-top: 1px solid rgba(0,0,0,.1);">Riwayat Penyusunan TA</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <div th:if="${mahasiswa.tahap} != 'NEW'">
+                                    <tr>
+                                        <th class="card-text judul">Judul Tugas Akhir</th>
+                                        <td class="card-text" th:text="${ugb.judulUgb}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Dosen Pembimbing 1</th>
+                                        <td class="card-text" th:text="${pembimbing1.nama}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Dosen Pembimbing 2</th>
+                                        <td class="card-text" th:text="${pembimbing2.nama}"></td>
+                                    </tr>
+                                </div>
+                                <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB'">
+                                    <tr>
+                                        <th class="card-text judul">Dosen Penguji 1</th>
+                                        <td class="card-text" th:text="${penguji1.nama}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Dosen Penguji 2</th>
+                                        <td class="card-text" th:text="${penguji2.nama}"></td>
+                                    </tr>
+                                </div>
+                                <div th:if="${mahasiswa.tahap} != 'NEW'">
+                                    <tr>
+                                        <th class="card-text judul">Status UGB</th>
+                                        <td class="card-text" th:text="${ugb.statusUgb}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Nilai UGB</th>
+                                        <td class="card-text"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Tanggal Lulus UGB</th>
+                                        <td class="card-text" th:text="${ugb.tanggalLulus}"></td> 
+                                    </tr>
+                                </div>
+
+                                <!-- <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB' AND ${mahasiswa.tahap} != 'EVAL_UGB'">
+
+                                </div> -->
+                                <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB' AND ${mahasiswa.tahap} != 'EVAL_UGB'">
+                                    <tr>
+                                        <th class="card-text judul">Status Seminar Proposal</th>
+                                        <td class="card-text" th:text="${sempro.statusSeminarProposal}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Nilai Seminar Proposal</th>
+                                        <td class="card-text" th:text="${sempro.nilai}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Tanggal Lulus Seminar Proposal</th>
+                                        <td class="card-text" th:text="${sempro.tanggalLulus}"></td> 
+                                    </tr>
+                                </div>
+
+                                <div th:if="${mahasiswa.tahap} == 'SEMHAS' OR ${mahasiswa.tahap} == 'SIDANG'">
+                                    <tr>
+                                        <th class="card-text judul">Status Seminar Hasil</th>
+                                        <td class="card-text" th:text="${semhas.statusSeminarHasil}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Nilai Seminar Hasil</th>
+                                        <td class="card-text" th:text="${semhas.nilai}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Tanggal Lulus Seminar Hasil</th>
+                                        <td class="card-text" th:text="${semhas.tanggalLulus}"></td> 
+                                    </tr>
+                                </div>
+
+                                <div th:if="${mahasiswa.tahap} == 'SIDANG'">
+                                    <tr>
+                                        <th class="card-text judul">Status Sidang</th>
+                                        <td class="card-text" th:text="${tugas_akhir.statusSidang}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Nilai Sidang</th>
+                                        <td class="card-text" th:text="${tugas_akhir.nilai}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="card-text judul">Tanggal Lulus Sidang</th>
+                                        <td class="card-text" th:text="${tugas_akhir.tanggalLulus}"></td> 
+                                    </tr>
+                                </div>
+
+
+                            </table>
+                        </div>
+                    </div>
+                </divclass>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+

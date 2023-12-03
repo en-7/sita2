@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SITA</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tlform.css}"/>
+
+    <!-- <script type="text/javascript" th:src="@{/js/tlform.js}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+</style>
+<style>
+    table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+    #mergedRow{
+        border-collapse: collapse;
+        border-spacing: 0 0px;
+    }
+    #topButton{
+        background-color: #3c7850;
+        border: none;
+    }
+
+    #topButton:hover{
+    background-color: rgb(38, 63, 14);
+    }
+</style>
+</head>
+<body>
+    <div th:replace="fragments/fragment :: navbar(${'/ugb'})"></div>
+
+<div class="container" id="formadd">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Input Timeline</h2>
+                <a id="topButton" class="btn btn-primary mx-1" style="float: right;" th:href="@{'/timeline/update'}">Update</a>
+                <br>
+                <form th:action="@{/timeline/add}" th:object="${timeline}" method="POST">
+                    <table>
+                        <tr>
+                            <td align="right">
+                                Periode: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input id="period" class="form-control" type="month" th:field="*{periode}" onchange="limit()" >
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran Sidang: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regSidang}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr id="mergedRow">
+                            <td align="right">
+                                Pelaksanaan Sidang: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <h1 class="marker">start date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{startSidang}" data-date-format="DD MMMM YYYY">
+                            </td>
+                            <td>
+                                <h1 class="marker">end date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{endSidang}" data-date-format="DD MMMM YYYY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumuman Hasil Sidang: 
+                            </td>
+                            <td class="pembatas">                
+                            </td>
+                            <td>
+                                <input class="form-control dateTime" type="datetime-local" name="pengumumanSidang"  th:value="*{pengumumanSidang}"/>  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran UGB: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regUGB}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumuman Evaluasi UGB: 
+                            </td>
+                            <td class="pembatas">                
+                            </td>
+                            <td>
+                                <input class="form-control dateTime" type="datetime-local" name="pengumumanUGB" th:value="*{pengumumanUGB}"/>  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran Seminar Proposal: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regSempro}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr id="mergedRow">
+                            <td align="right">
+                                Pelaksanaan Seminar Proposal: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <h1 class="marker">start date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{startSempro}" data-date-format="DD MMMM YYYY">
+                            </td>
+                            <td>   
+                                <h1 class="marker">end date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{endSempro}"  data-date-format="DD MMMM YYYY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumuman Hasil Sempro: 
+                            </td>
+                            <td class="pembatas">                
+                            </td>
+                            <td>
+                                <input class="form-control dateTime" type="datetime-local" name="pengumumanSempro" th:value="*{pengumumanSempro}"/>  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran Seminar Hasil: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regSemhas}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr id="mergedRow">
+                            <td align="right">
+                                Pelaksanaan Seminar Hasil: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <h1 class="marker">start date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{startSemhas}" data-date-format="DD MMMM YYYY">
+                            </td>
+                            <td>    
+                                <h1 class="marker">end date</h1>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{endSemhas}"  data-date-format="DD MMMM YYYY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumuman Hasil Semhas: 
+                            </td>
+                            <td class="pembatas">                
+                            </td>
+                            <td>
+                                <input class="form-control dateTime" id="checked" type="datetime-local" name="pengumumanSemhas" th:value="*{pengumumanSemhas}"/>  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pendaftaran Validasi TA: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{regValidasiTA}" data-date-format="DD MMMM YYYY" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                Pengumpulan TA: 
+                            </td>
+                            <td class="pembatas">
+
+                            </td>
+                            <td>
+                                <input class="form-control dateInput" type="date" data-date="" th:field="*{pengumpulanTA}" data-date-format="DD MMMM YYYY">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="pb-2 d-flex justify-content-center">
+                        <button class="btn btn-primary" id="submitBtn" type="submit" name="save">Submit</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    // function print(){
+    //     var checked = document.getElementById("checked").value;
+    //     console.log(checked);
+    //     console.log(typeof checked);
+
+    // }
+    function limit(){
+        var periodChosen = document.getElementById("period");
+        var today = new Date();
+
+        const myArray = periodChosen.value.split("-");
+
+        var yyyy = today.getFullYear();
+        var mm = myArray[1]
+        var dd = "01"
+
+        var dateString = yyyy + "-"+ mm + "-" + dd;
+        var dateTimeLocalString = yyyy + "-"+ mm + "-" + dd + "T01:30";
+        console.log(dateTimeLocalString);
+        console.log(typeof dateTimeLocalString);
+
+
+        // var endDate = new Date(today.getFullYear(), myArray[1]-1, 31);
+
+        if (periodChosen.value) {
+            $('.dateInput').val(dateString);
+            $('.dateTime').val(dateTimeLocalString);
+            // console.log(endDate);
+        }
+
+    }
+
+
+</script>

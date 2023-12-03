@@ -40,4 +40,8 @@ public class AvailableBimbinganModel {
     @ManyToOne
     @JoinColumn(name = "id_pembimbing", nullable = false)
     private PembimbingModel pembimbing;
+
+    @ManyToOne
+    @JoinColumn(name = "id_mahasiswa")
+    private MahasiswaModel mahasiswa;
 }

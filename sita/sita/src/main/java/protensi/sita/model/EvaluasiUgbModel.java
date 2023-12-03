@@ -24,30 +24,47 @@ public class EvaluasiUgbModel {
     @Column(name = "id_evaluasi_ugb", updatable = false, nullable = false)
     private Long idEvaluasiUgb;
 
-    @NotNull
-    @Size(max = 100)
-    @Column(name = "judul", nullable = false)
-    private String judul;
+    @Lob
+    @Column(name = "catatan_judul", nullable = false)
+    private String catatanJudul;
+
+    @Column(name = "nilai_judul")
+    private Long nilaiJudul;
 
     @Lob
     @Column(name = "latar_belakang", nullable = false)
     private String latarBelakang;
 
+    @Column(name = "nilai_latar_belakang")
+    private Long nilaiLatarBelakang;
+
     @Lob
     @Column(name = "tujuan_manfaat", nullable = false)
     private String tujuanManfaat;
+
+    @Column(name = "nilai_tujuan_manfaat")
+    private Long nilaiTujuanManfaat;
 
     @Lob
     @Column(name = "ruang_lingkup", nullable = false)
     private String ruangLingkup;
 
+    @Column(name = "nilai_ruang_lingkup")
+    private Long nilaiRuangLingkup;
+
     @Lob
     @Column(name = "keterbaruan", nullable = false)
     private String keterbaruan;
 
+    @Column(name = "nilai_keterbaruan")
+    private Long nilaiKeterbaruan;
+
     @Lob
     @Column(name = "metodologi", nullable = false)
     private String metodologi;
+
+    @Column(name = "nilai_metodologi")
+    private Long nilaiMetodologi;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
@@ -56,5 +73,4 @@ public class EvaluasiUgbModel {
     @OneToOne
     @JoinColumn(name = "id_ugb")
     private UgbModel ugb;
-
 }

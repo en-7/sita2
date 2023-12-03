@@ -67,37 +67,48 @@
             <div class="justify-content-center">
                 <h2>Update Seminar Hasil</h2>
                 <br>
-                <form th:action="@{/seminar-hasil/add}" th:object="${seminarHasil}" method="POST" enctype="multipart/form-data">
+                <form th:action="@{'/seminar-hasil/update/' + ${seminarHasil.idSeminarHasil}}" th:object="${seminarHasil}" method="POST" enctype="multipart/form-data">
 
                     File Persetujuan Pembimbing (PDF):
-                    <input required class="form-control" type="file" name="acc_pembimbing" accept=".pdf" />
-                    <br><br>
+                    <div class="file-upload-container-pdf">
+                        <input class="form-control" type="file" name="acc_pembimbing" accept=".pdf" id="acc_pembimbing" onchange="updateValidation()">
+                        <a class="ignore-click-persetujuan-pembimbing" id="fileLabelPersetujuanPembimbing" th:text="${seminarHasil.nameFilePersetujuanPembimbing}" th:href="@{/seminar-hasil/downloadFile(type='FILE PERSETUJUAN PEMBIMBING',id=${seminarHasil.idSeminarHasil})}"></a>
+                    </div>
 
                     Tanda Terima Laporan KP (PDF):
-                    <input required class="form-control" type="file" name="bukti_kp" accept=".pdf" />
-                    <br><br>
+                    <div class="file-upload-container-pdf">
+                        <input class="form-control" type="file" name="bukti_kp" accept=".pdf" id="bukti_kp" onchange="updateValidation()">
+                        <a class="ignore-click-bukti-kp" id="fileLabelBuktiKp" th:text="${seminarHasil.nameFileLaporanKp}" th:href="@{/seminar-hasil/downloadFile(type='FILE TANDA TERIMA LAPORAN KP',id=${seminarHasil.idSeminarHasil})}"></a>
+                    </div>
 
                     Risalah Seminar Proposal (PDF):
-                    <input required class="form-control" type="file" name="risalah_sempro" accept=".pdf" />
-                    <br><br>
+                    <div class="file-upload-container-pdf">
+                        <input class="form-control" type="file" name="risalah_sempro" accept=".pdf" id="risalah_sempro" onchange="updateValidation()">
+                        <a class="ignore-click-risalah-sempro" id="fileLabelRisalahSempro" th:text="${seminarHasil.nameFileRisalahSempro}" th:href="@{/seminar-hasil/downloadFile(type='FILE RISALAH SEMINAR PROPOSAL',id=${seminarHasil.idSeminarHasil})}"></a>
+                    </div>
 
-                    Catatan setelah Seminar Proposal (PDF)
-                    <input required class="form-control" type="file" name="notes_sempro" accept=".pdf" />
-                    <br><br>
-                    
+                    Catatan setelah Seminar Proposal (PDF):
+                    <div class="file-upload-container-pdf">
+                        <input class="form-control" type="file" name="notes_sempro" accept=".pdf" id="notes_sempro" onchange="updateValidation()">
+                        <a class="ignore-click-notes-sempro" id="fileLabelNotesSempro" th:text="${seminarHasil.nameFileCatatanSempro}" th:href="@{/seminar-hasil/downloadFile(type='FILE CATATAN SETELAH SEMINAR PROPOSAL',id=${seminarHasil.idSeminarHasil})}"></a>
+                    </div>
+
                     Form SAPS (PDF):
-                    <input required class="form-control" type="file" name="form_saps" accept=".pdf" />
-                    <br><br>
-
-                    Draft Proposal TA (PDF):
-                    <input required class="form-control" type="file" name="draft_TA" accept=".pdf" />
-                    <br><br>
-
+                    <div class="file-upload-container-pdf">
+                        <input class="form-control" type="file" name="form_saps" accept=".pdf" id="form_saps" onchange="updateValidation()">
+                        <a class="ignore-click-form-saps" id="fileLabelFormSaps" th:text="${seminarHasil.nameFileSaps}" th:href="@{/seminar-hasil/downloadFile(type='FILE FORM SAPS',id=${seminarHasil.idSeminarHasil})}"></a>
+                    </div>
+                    
+                    Draft Laporan TA (PDF):
+                    <div class="file-upload-container-pdf">
+                        <input class="form-control" type="file" name="draft_TA" accept=".pdf" id="draft_TA" onchange="updateValidation()">
+                        <a class="ignore-click-draft-ta" id="fileLabelDraftTA" th:text="${seminarHasil.nameFileDraftLaporanTa}" th:href="@{/seminar-hasil/downloadFile(type='FILE DRAFT LAPORAN TA',id=${seminarHasil.idSeminarHasil})}"></a>
+                    </div>
                     <div class="pb-2 d-flex justify-content-center">
-                        <button class="btn btn-primary" type="submit" name="save">Submit</button>
+                        <button class="btn btn-primary" type="submit" name="save" id="submitButton" disabled>Submit</button>
+                        <!-- <button class="btn btn-primary" type="submit" name="save">Submit</button> -->
                     </div>
                 </form>
-                
             </div>
         </div>
     </div>
@@ -105,3 +116,174 @@
 
 </body>
 </html>
+
+<script>
+    function validateFile() {
+        var persetujuanPembimbing = document.getElementById("acc_pembimbing");
+        var buktiKp = document.getElementById("bukti_kp");
+        var risalahSempro = document.getElementById("risalah_sempro");
+        var notesSempro = document.getElementById("notes_sempro");
+        var formSaps = document.getElementById("form_saps");
+        var draftTA = document.getElementById("draft_TA");
+
+        var isValid = true;
+
+        if (!isValidFileType(persetujuanPembimbing, 'application/pdf')) {
+            isValid = false;
+            persetujuanPembimbing.value = '';
+        }
+
+        if (!isValidFileType(buktiKp, 'application/pdf')) {
+            isValid = false;
+            buktiKp.value = ''; 
+        }
+
+        if (!isValidFileType(risalahSempro, 'application/pdf')) {
+            isValid = false;
+            risalahSempro.value = ''; 
+        }
+
+        if (!isValidFileType(notesSempro, 'application/pdf')) {
+            isValid = false;
+            notesSempro.value = ''; 
+        }
+        
+        if (!isValidFileType(formSaps, 'application/pdf')) {
+            isValid = false;
+            formSaps.value = ''; 
+        }
+
+        if (!isValidFileType(draftTA, 'application/pdf')) {
+            isValid = false;
+            draftTA.value = ''; 
+        }
+
+        // Nonaktifkan tombol submit jika file tidak valid
+        submitButton.disabled = !isValid;
+
+        // Tampilkan alert jika ada file yang tidak valid
+        if (!isValid) {
+            alert("Invalid file type. Please choose PDF files for all attachments.");
+        }
+
+    }
+
+    function isValidFileType(input, validType) {
+        if (input.files.length > 0) {
+            var fileType = input.files[0].type;
+            return fileType === validType;
+        } 
+        return true;
+    } 
+</script>
+
+<script>
+    function updateValidation(){
+        validateFile();
+        pressed();
+    }
+    
+    window.pressed = function(event){
+        var a = document.getElementById('acc_pembimbing');
+        if(a.value != "")
+            {
+                var theSplit = a.value.split('\\');
+                fileLabelPersetujuanPembimbing.innerHTML = theSplit[theSplit.length-1];
+                fileLabelPersetujuanPembimbing.href = "";
+                fileLabelPersetujuanPembimbing.style.textDecoration = 'none';
+                fileLabelPersetujuanPembimbing.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-persetujuan-pembimbing").length; i++) {
+                    document.getElementsByClassName("ignore-click-persetujuan-pembimbing")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }
+
+        var b = document.getElementById('bukti_kp');
+        if(b.value != "")
+            {
+                var theSplit = b.value.split('\\');
+                fileLabelBuktiKp.innerHTML = theSplit[theSplit.length-1];
+                fileLabelBuktiKp.href = "";
+                fileLabelBuktiKp.style.textDecoration = 'none';
+                fileLabelBuktiKp.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-bukti-kp").length; i++) {
+                    document.getElementsByClassName("ignore-click-bukti-kp")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }
+
+        var c = document.getElementById('risalah_sempro');
+        if(c.value != "")
+            {
+                var theSplit = c.value.split('\\');
+                fileLabelRisalahSempro.innerHTML = theSplit[theSplit.length-1];
+                fileLabelRisalahSempro.href = "";
+                fileLabelRisalahSempro.style.textDecoration = 'none';
+                fileLabelRisalahSempro.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-risalah-sempro").length; i++) {
+                    document.getElementsByClassName("ignore-click-risalah-sempro")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }
+
+        var d = document.getElementById('notes_sempro');
+        if(d.value != "")
+            {
+                var theSplit = d.value.split('\\');
+                fileLabelNotesSempro.innerHTML = theSplit[theSplit.length-1];
+                fileLabelNotesSempro.href = "";
+                fileLabelNotesSempro.style.textDecoration = 'none';
+                fileLabelNotesSempro.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-notes-sempro").length; i++) {
+                    document.getElementsByClassName("ignore-click-notes-sempro")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }
+
+        var e = document.getElementById('form_saps');
+        if(e.value != "")
+            {
+                var theSplit = e.value.split('\\');
+                fileLabelFormSaps.innerHTML = theSplit[theSplit.length-1];
+                fileLabelFormSaps.href = "";
+                fileLabelFormSaps.style.textDecoration = 'none';
+                fileLabelFormSaps.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-form-saps").length; i++) {
+                    document.getElementsByClassName("ignore-click-form-saps")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }   
+        
+        var f = document.getElementById('draft_TA');
+        if(f.value != "")
+            {
+                var theSplit = f.value.split('\\');
+                fileLabelDraftTA.innerHTML = theSplit[theSplit.length-1];
+                fileLabelDraftTA.href = "";
+                fileLabelDraftTA.style.textDecoration = 'none';
+                fileLabelDraftTA.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-draft-ta").length; i++) {
+                    document.getElementsByClassName("ignore-click-draft-ta")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }
+    };
+</script>

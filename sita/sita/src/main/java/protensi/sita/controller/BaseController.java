@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import protensi.sita.model.AnnouncementModel;
 import protensi.sita.model.EnumRole;
 import protensi.sita.security.UserDetailsServiceImpl;
+import protensi.sita.service.AnnouncementService;
+import protensi.sita.service.AnnouncementServiceImpl;
 import protensi.sita.service.BaseService;
+import protensi.sita.service.TimelineServiceImpl;
 
 import java.util.*;
 
@@ -27,8 +31,17 @@ public class BaseController {
     @Autowired
     public BaseService baseService;
 
+    @Autowired
+    public AnnouncementService announcementService;
+    
+    private TimelineServiceImpl tlService;
+
+
     @GetMapping("/")
     private String home(Model model) {
+        List<AnnouncementModel> listAnnounce = announcementService.getListAnnounce();
+        model.addAttribute("roleUser", baseService.getCurrentRole());
+        model.addAttribute("listAnnounce", listAnnounce);
         model.addAttribute("roleUser", baseService.getCurrentRole());
         return "home";
     }
@@ -44,6 +57,7 @@ public class BaseController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+
         return "redirect:/";
     }
 
@@ -58,4 +72,5 @@ public class BaseController {
         model.addAttribute("roleUser", baseService.getCurrentRole());
         return "error";
     }
+
 }

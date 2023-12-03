@@ -158,9 +158,14 @@
                                         <a class="btn btn-sm btn-primary" th:href="@{/ugb/allocate/} + ${ugb.idUgb}">Allocate</a>
                                     </div>
                                 </div>
-                                <div th:case="*">
+                                <div th:case="ALLOCATED">
                                     <div class="btn-group">
                                         <a class="btn btn-sm btn-primary" th:href="@{/ugb/addcatatan/} + ${ugb.idUgb}">Evaluasi</a>
+                                    </div>
+                                </div>
+                                <div th:case="DIEVALUASI">
+                                    <div class="btn-group">
+                                        <a class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}">Detail</a>
                                     </div>
                                 </div>
                             </div>

@@ -86,6 +86,9 @@ public class SeminarHasilModel {
     @Column(name = "nilai")
     private Long nilai;
 
+    @Column(name = "nilai_huruf")
+    private String nilaiHuruf;
+
     @Column(name = "tanggal_lulus")
     private LocalDateTime tanggalLulus;
 

@@ -29,4 +29,8 @@ public class MahasiswaModel extends UserModel {
     @Column(name = "tahap", nullable = false)
     private String tahap;
 
+    // public MahasiswaModel(String nama, Set<EnumRole> roles, String username,
+    // String password, String email) {
+    // super(nama, roles, username, password, email);
+    // }
 }

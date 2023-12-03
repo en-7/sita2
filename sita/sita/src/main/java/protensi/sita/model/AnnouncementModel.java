@@ -35,8 +35,11 @@ public class AnnouncementModel {
     private String deskripsi;
 
     @Lob
-    @Column(name = "file", nullable = false)
+    @Column(name = "file")
     private byte[] file;
+
+    @Column(name = "nama_file")
+    private String namaFile;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)

@@ -15,32 +15,24 @@
                 <h2>Tambah Mahasiswa</h2>
                 <br>
                 <form th:action="@{/mahasiswa/add}" th:object="${mahasiswa}" method="POST">
-                    <input type="hidden" th:field="*{role}"/>
-
-                    <label>ID User</label>
-                    <input class="form-control" type="number" name="id_user" required/>
-
-                    <label>Nama Mahasiswa</label>
-                    <input class="form-control" type="text" name="nama" required/>
-
                     <label>Username</label>
                     <input class="form-control" type="text" name="username" required/>
-
+                    <br>
+                    <label>Nama</label>
+                    <input class="form-control" type="text" name="nama" required/>
+                    <br>
+                    <label>Email</label>
+                    <input class="form-control" type="text" name="email" required/>
+                    <br>
                     <label>Password</label>
                     <input class="form-control" type="password" name="password" required/>
-
-                    <label>E-mail</label>
-                    <input class="form-control" type="text" name="email" required/>
-
-                    <label>Created At</label>
-                    <input class="form-control" type="text" name="created_at" required/>
-                    
+                    <br>
                     <label>NIM</label>
                     <input class="form-control" type="number" name="nim" required/>
-
+                    <br>
                     <label>Tahap</label>
                     <input class="form-control" type="text" name="tahap" required/>
-
+                    <br>
                     <button class="btn btn-primary" type="submit" name="save">Submit</button>
                     <a class="btn btn-primary" href="/">Home</a>
                 </form>

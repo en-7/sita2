@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SITA</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar('/ugb')"></nav>
+<div class="container">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2 class="text-center">Allocate Evaluator</h2>
+                <br>
+                <div th:object="${ugbUser}">
+                    Mahasiswa :
+                    <span class="font-weight-bold" th:text="*{mahasiswa.nama}" />
+                    <br><br>
+
+                    NIM :
+                    <span class="font-weight-bold" th:text="*{mahasiswa.nim}" />
+                    <br><br>
+
+                    Judul UGB :
+                    <span class="font-weight-bold" th:text="*{judulUgb}"/>
+                    <br><br>
+                </div>
+    
+                <form th:action="@{'/ugb/allocate/' + ${ugbUser.idUgb}}" th:object="${ugbUser}" method="POST"  enctype="multipart/form-data">
+                    <!-- <input type="hidden" th:field="*{idJadwalSidang}" />
+                    <input type="hidden" th:field="*{seminarProposal.idSeminarProposal}" /> -->
+                    
+                    Penguji 1 : <br>
+                    <select name="id_pj1" class="form-control"  id="dropOperator1">
+                        <option th:each="penguji : ${listPenguji}" 
+                                th:value="${penguji.idUser}" 
+                                th:text="${penguji.nama}"
+                                th:selected="${penguji.idUser} == 0">
+                        </option>
+                    </select>
+                    <br>
+
+                    Penguji 2 : <br>
+                    <select name="id_pj2" class="form-control" id="dropOperator2">
+                        <option th:each="penguji : ${listPenguji}"
+                                th:value="${penguji.idUser}"
+                                th:text="${penguji.nama}"
+                                th:selected="${penguji.idUser} == 0"></option>
+                    </select>
+                    <br>
+                    <button class="btn btn-primary float-right" type="submit">Submit</button>
+                    <a class="btn btn-secondary" th:href="@{/ugb/viewall}">Kembali</a>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <title>Daftar Koordinator</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+  <nav th:replace="fragments/fragment :: navbar('/')"></nav>
+<div class="container">
+    <div class="card m-4 p-4">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <h2>Daftar Koordinator</h2>
+                <a th:href="@{/}" class="mx-2 my-4 btn btn-primary">Home</a>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Email</th>
+                        <th>Nama</th>
+                        <!-- <th colspan="4" style="text-align: center">Aksi</th> -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="koordinator, iterationStatus : ${listKoordinator}"
+                        th:style="${iterationStatus.even} ? 'font-weight:bold;'">
+                        <td th:text="${iterationStatus.count}"></td>
+
+                        <td th:text="${koordinator.email}"></td>
+                        <td th:text="${koordinator.nama}"></td>
+                        <!-- <td>
+                            <a class="btn btn-danger" th:href="@{/manager/delete/} + ${manager.id}">Delete</a>
+                        </td> -->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
