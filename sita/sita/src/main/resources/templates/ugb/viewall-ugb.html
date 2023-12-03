@@ -186,18 +186,16 @@
                             <div th:switch="${ugb.statusUgb}">
                                 <div th:case="'DISETUJUI'">
                                     <div class="btn-group">
-                                        <a class="btn btn-sm btn-primary" th:href="@{/ugb/allocate/} + ${ugb.idUgb}">Allocate</a>
+                                        <a class="btn btn-sm btn-primary" th:href="@{/ugb/allocate/} + ${ugb.idUgb}">Alokasi</a>
                                     </div>
                                 </div>
                                 <div th:case="DIEVALUASI">
-                                    <div class="btn-group">
+                                    <div class="btn-group" th:if="${stat} == 'DIEVALUASI'" sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]')">
                                         <a class="btn btn-sm btn-primary" th:href="@{/ugb/addcatatan/} + ${ugb.idUgb}">Evaluasi</a>
                                     </div>
                                 </div>
-                                <div th:case="DIEVALUASI">
-                                    <div class="btn-group">
-                                        <a class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}">Detail</a>
-                                    </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-primary" th:href="@{/ugb/detail/} + ${ugb.idUgb}" style="margin-top: 2px;">Detail</a>
                                 </div>
                             </div>
                         </td>
@@ -256,6 +254,14 @@
         btnd3.addEventListener("click", function () {
             console.log("MASUK");
             window.location.href = "/ugb/filter?status=LULUS";
+        });
+    }
+
+    const btnd4 = document.getElementById("filterAll");
+    if(btnd4){
+        btnd4.addEventListener("click", function () {
+            console.log("MASUK");
+            window.location.href = "/ugb/filter?status=ALL";
         });
     }
 
