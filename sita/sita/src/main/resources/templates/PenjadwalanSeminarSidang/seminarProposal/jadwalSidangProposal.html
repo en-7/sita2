@@ -87,7 +87,9 @@
                                 <td>
                                     <div class="btn btn-group">
                                         <a class="btn btn-sm btn-warning" th:href="@{/jadwalSidangProposal/setJadwal/} + ${jadwalSidangSeminar.idJadwalSidang}">Set Jadwal</a>
-                                        <a class="btn btn-sm btn-danger" th:href="@{/jadwalSidangProposal/delete/} + ${jadwalSidangSeminar.idJadwalSidang}">Delete</a>
+                                        <!-- <a class="btn btn-sm btn-danger" th:href="@{/jadwalSidangProposal/delete/} + ${jadwalSidangSeminar.idJadwalSidang}">Delete</a> -->
+                                        <a class="btn btn-sm btn-danger" data-toggle="modal" data-target="#approveModal">Delete</a>
+                                        <!-- <a class="btn btn-primary mx-1" data-toggle="modal" data-target="#approveModal">Approve</a> -->
                                     </div>
                                 </td>
                             </div>
@@ -104,6 +106,47 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">Persetujuan Penghapusan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Apakah Anda yakin ingin Menghapus Jadwal ini?
+        </div>
+        <div th:each="jadwalSidangSeminar, iterationStatus : ${listjadwalSidangSeminar}" class="modal-footer">
+          <button type="button" id="denyButton" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          <a class="btn btn-primary" href="#" id="approveButton">Ya, Setujui</a>
+          <input type="hidden" id="jadwalId" th:value="${jadwalSidangSeminar.idJadwalSidang}">
+        </div>
+      </div>
+    </div>
+</div>
 <!--body-->
 </body>
 </html>
+
+<script>
+    document.getElementById("approveButton").addEventListener("click", function (e) {
+        e.preventDefault();
+        var jadwalId = document.getElementById("jadwalId").value;
+
+        fetch("/jadwalSidangProposal/delete/" + jadwalId, {
+            method: "GET",
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    $("#approveModal").modal("hide");
+                    window.location.href = "/jadwalSidangProposal";
+                }
+            })
+            .catch(function (error) {
+                console.error("Error:", error);
+            });
+    });
+</script>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- Bootstrap CSS -->
+    <title>SITA | ANNOUNCE</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
@@ -17,8 +18,7 @@
                 <div class="justify-content-center">
                     <h2>Add Pengumuman</h2>
                     <br>
-                    <!-- <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" enctype="multipart/form-data"> -->
-                    <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" >
+                    <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" enctype="multipart/form-data">
                         Judul :
                         <input required class="form-control" type="text" name="judul" th:value="*{judul}"/>
                         <br><br>
@@ -27,10 +27,9 @@
                         <input required class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}"/>
                         <br><br>
 
-                        <!-- File (PDF) :
-                        <input class="form-control" type="file" id="file" name="file" accept=".pdf" onchange="validateFile()"/>
-                        <br><br> -->
-
+                        File (PDF) :
+                        <input class="form-control" type="file" id="ancFile" name="ancFile" accept=".pdf" onchange="validateFile()"/>
+                        <br><br>
                         <button class="btn btn-primary float-right" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="/">Back</a>
                     </form>
@@ -44,8 +43,7 @@
 
 <script>
     function validateFile() {
-
-        var file = document.getElementById("file");
+        var file = document.getElementById("ancFile");
         var isValid = true;
 
         if (!isValidFileType(file, 'application/pdf')) {
