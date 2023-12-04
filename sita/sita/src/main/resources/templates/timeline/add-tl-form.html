@@ -290,7 +290,8 @@
                                 var similarity = document.getElementById("similarity");
                                 var today = new Date();
                                 var month = today.getMonth() +1;
-                                console.log("monthNoew: "+month);
+                                var year = today.getFullYear();
+
                                 var retrievedMonth = myArray[1] * 1;
                                 let a = 5;
 
@@ -298,13 +299,13 @@
                                 let isPast = false;
                                 let i = 0;
                                 while(i < listPeriod.length){
-                                    console.log("i = "+i.toString() + " and listPeriodNow = "+ listPeriod[i]);
+                                    // console.log("i = "+i.toString() + " and listPeriodNow = "+ listPeriod[i]);
                                     if(chosenPeriod == listPeriod[i]){
                                         isExist = true;
                                     }
                                     i++;
                                 }
-                                if(retrievedMonth < month){
+                                if(retrievedMonth < month && myArray[0] <= year){
                                     isPast = true;
                                 }
                                 if(isExist == true){

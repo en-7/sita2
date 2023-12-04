@@ -234,6 +234,9 @@ public class UGBController {
         System.out.println("*** test ***");
 
         List<UgbModel> result = ugbService.viewAllUgb();
+        // myList.sort(Comparator.comparingInt(MyClass::getMyAttribute));
+        // Collections.sort(listTl, (a1, a2) -> a1.getPeriode().compareTo(a2.getPeriode()));
+        Collections.sort(result, (a1, a2) -> a2.getCreatedAt().compareTo(a1.getCreatedAt()));
 
         System.out.println("*** list ugb retrieved: " + result);
 
