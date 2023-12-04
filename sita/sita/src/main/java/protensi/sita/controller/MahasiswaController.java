@@ -46,6 +46,7 @@ public class MahasiswaController {
         mahasiswa.setRoles(roleMahasiswa);
         mahasiswaService.addMahasiswa(mahasiswa);
         model.addAttribute("mahasiswa", mahasiswa);
+        model.addAttribute("nama", mahasiswa.getNama());
         return "user/mahasiswa-add-form";
     }
 

@@ -24,10 +24,9 @@ public class EvaluasiUgbModel {
     @Column(name = "id_evaluasi_ugb", updatable = false, nullable = false)
     private Long idEvaluasiUgb;
 
-    @NotNull
-    @Size(max = 100)
-    @Column(name = "judul", nullable = false)
-    private String judul;
+    @Lob
+    @Column(name = "catatan_judul", nullable = false)
+    private String catatanJudul;
 
     @Column(name = "nilai_judul")
     private Long nilaiJudul;
@@ -74,5 +73,4 @@ public class EvaluasiUgbModel {
     @OneToOne
     @JoinColumn(name = "id_ugb")
     private UgbModel ugb;
-
 }

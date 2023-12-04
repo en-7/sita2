@@ -16,6 +16,16 @@
         }
         .card-text.judul{
             padding-left: 40px;
+            width: 50%;
+        }
+        .card-text{
+            width: auto;
+        }
+        .table{
+            margin-bottom: 0;
+        }
+        .card-header{
+            color: rgb(78, 78, 78);
         }
     </style>
 </head>
@@ -29,7 +39,7 @@
                 <br><br><br><br>
             </div>
             <div class="d-flex justify-content-center">
-                <divclass="m-4">
+                <div class="m-4">
                     <div id="cardProfile" class="card bg-light mb-3" style="width: 800px;">
                         <div class="card-header" style="font-weight: bold;">Tentang Mahasiswa</div>
                         <div class="card-body">
@@ -75,25 +85,33 @@
                                         <td class="card-text" th:text="${penguji2.nama}"></td>
                                     </tr>
                                 </div>
+                            </table>
+                        </div>
+                        <div th:if="${mahasiswa.tahap} != 'NEW'" class="card-header" style="font-weight: bold; border-top: 1px solid rgba(0,0,0,.1);">UGB</div>
+                        <div class="card-body">
+                            <table class="table">
                                 <div th:if="${mahasiswa.tahap} != 'NEW'">
                                     <tr>
                                         <th class="card-text judul">Status UGB</th>
                                         <td class="card-text" th:text="${ugb.statusUgb}"></td>
                                     </tr>
-                                    <tr>
-                                        <th class="card-text judul">Nilai UGB</th>
-                                        <td class="card-text"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="card-text judul">Tanggal Lulus UGB</th>
-                                        <td class="card-text" th:text="${ugb.tanggalLulus}"></td> 
-                                    </tr>
+                                    <div th:if="${ugb.statusUgb} == 'LULUS'">
+                                        <tr>
+                                            <th class="card-text judul">Hasil UGB</th>
+                                            <td class="card-text"><a class="btn btn-sm btn-primary" th:href="@{/ugb/catatan/} + ${ugb.idUgb}">Hasil Evaluasi</a> </td>
+                                        </tr>
+                                        <tr>
+                                            <th  class="card-text judul">Tanggal Lulus UGB</th>
+                                            <td id="tglLulusUgb" class="card-text" th:text="${#temporals.format(ugb.tanggalLulus, 'dd MMMM yyyy hh:mm a')}"></td> 
+                                        </tr>
+                                    </div>
                                 </div>
-
-                                <!-- <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB' AND ${mahasiswa.tahap} != 'EVAL_UGB'">
-
-                                </div> -->
-                                <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB' AND ${mahasiswa.tahap} != 'EVAL_UGB'">
+                            </table>
+                        </div>
+                        <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB'" class="card-header" style="font-weight: bold; border-top: 1px solid rgba(0,0,0,.1);">Seminar Proposal</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <div th:if="${mahasiswa.tahap} != 'NEW' AND ${mahasiswa.tahap} != 'UGB'">
                                     <tr>
                                         <th class="card-text judul">Status Seminar Proposal</th>
                                         <td class="card-text" th:text="${sempro.statusSeminarProposal}"></td>
@@ -103,12 +121,16 @@
                                         <td class="card-text" th:text="${sempro.nilai}"></td>
                                     </tr>
                                     <tr>
-                                        <th class="card-text judul">Tanggal Lulus Seminar Proposal</th>
-                                        <td class="card-text" th:text="${sempro.tanggalLulus}"></td> 
+                                        <th  class="card-text judul">Tanggal Lulus Seminar Proposal</th>
+                                        <td id="tglLulusSempro" class="card-text" th:text="${#temporals.format(sempro.tanggalLulus, 'dd MMMM yyyy hh:mm a')}"></td> 
                                     </tr>
-                                </div>
-
-                                <div th:if="${mahasiswa.tahap} == 'SEMHAS' OR ${mahasiswa.tahap} == 'SIDANG'">
+                                </div>        
+                            </table>
+                        </div>
+                        <div th:if="${mahasiswa.tahap} == 'SEMHAS' OR ${mahasiswa.tahap} == 'TUGASAKHIR'" class="card-header" style="font-weight: bold; border-top: 1px solid rgba(0,0,0,.1);">Seminar Hasil</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <div th:if="${mahasiswa.tahap} == 'SEMHAS' OR ${mahasiswa.tahap} == 'TUGASAKHIR'">
                                     <tr>
                                         <th class="card-text judul">Status Seminar Hasil</th>
                                         <td class="card-text" th:text="${semhas.statusSeminarHasil}"></td>
@@ -118,12 +140,16 @@
                                         <td class="card-text" th:text="${semhas.nilai}"></td>
                                     </tr>
                                     <tr>
-                                        <th class="card-text judul">Tanggal Lulus Seminar Hasil</th>
-                                        <td class="card-text" th:text="${semhas.tanggalLulus}"></td> 
+                                        <th  class="card-text judul">Tanggal Lulus Seminar Hasil</th>
+                                        <td id="tglLulusSemhas" class="card-text" th:text="${#temporals.format(semhas.tanggalLulus, 'dd MMMM yyyy hh:mm a')}"></td> 
                                     </tr>
-                                </div>
-
-                                <div th:if="${mahasiswa.tahap} == 'SIDANG'">
+                                </div>        
+                            </table>
+                        </div>
+                        <div th:if="${mahasiswa.tahap} == 'TUGASAKHIR'" class="card-header" style="font-weight: bold; border-top: 1px solid rgba(0,0,0,.1);">Sidang</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <div th:if="${mahasiswa.tahap} == 'TUGASAKHIR'">
                                     <tr>
                                         <th class="card-text judul">Status Sidang</th>
                                         <td class="card-text" th:text="${tugas_akhir.statusSidang}"></td>
@@ -133,12 +159,10 @@
                                         <td class="card-text" th:text="${tugas_akhir.nilai}"></td>
                                     </tr>
                                     <tr>
-                                        <th class="card-text judul">Tanggal Lulus Sidang</th>
-                                        <td class="card-text" th:text="${tugas_akhir.tanggalLulus}"></td> 
+                                        <th  class="card-text judul">Tanggal Lulus Sidang</th>
+                                        <td id="tglLulusSidang" class="card-text" th:text="${#temporals.format(tugas_akhir.tanggalLulus, 'dd MMMM yyyy hh:mm a')}"></td> 
                                     </tr>
                                 </div>
-
-
                             </table>
                         </div>
                     </div>
@@ -149,7 +173,9 @@
     </div>
 </body>
 </html>
+<script>
 
+</script>
 
 
 

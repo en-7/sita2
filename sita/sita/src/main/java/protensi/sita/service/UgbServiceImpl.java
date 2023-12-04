@@ -16,11 +16,14 @@ import javax.transaction.Transactional;
 import protensi.sita.model.EnumRole;
 import protensi.sita.model.MahasiswaModel;
 import protensi.sita.model.PembimbingModel;
+import protensi.sita.model.SeminarProposalModel;
 import protensi.sita.model.TugasAkhirModel;
 import protensi.sita.model.UgbModel;
+import protensi.sita.model.EvaluasiUgbModel;
 import protensi.sita.model.UserModel;
 import protensi.sita.repository.MahasiswaDb;
 import protensi.sita.repository.UgbDb;
+import protensi.sita.repository.EvaluasiUgbDb;
 import protensi.sita.repository.UserDb;
 import reactor.netty.http.server.HttpServerResponse;
 
@@ -32,6 +35,9 @@ import java.util.*;
 public class UgbServiceImpl {
     @Autowired
     UgbDb ugbDb;
+
+    @Autowired
+    EvaluasiUgbDb evaluasiUgbDb;
 
     @Autowired
     MahasiswaDb mahasiswaDb;
@@ -52,13 +58,13 @@ public class UgbServiceImpl {
         return listPembimbing;
     }
 
-    public List<UserModel> getListPenguji(){
+    public List<UserModel> getListPenguji() {
         List<UserModel> listPenguji = new ArrayList<>();
         List<UserModel> listUser = userDb.findAll();
-        
-        for(UserModel i : listUser){
+
+        for (UserModel i : listUser) {
             Set<EnumRole> roles = i.getRoles();
-            if(roles.contains(EnumRole.PENGUJI) == true){
+            if (roles.contains(EnumRole.PENGUJI) == true) {
                 listPenguji.add(i);
             }
         }
@@ -102,7 +108,7 @@ public class UgbServiceImpl {
         ugbDb.save(ugb);
     }
 
-    public void updateUGBKoordinatorforPenguji(Long idUgb, Long idPJ1, Long idPJ2){
+    public void updateUGBKoordinatorforPenguji(Long idUgb, Long idPJ1, Long idPJ2) {
         UgbModel ugb = getUgbById(idUgb);
         Set<UserModel> set_penguji = new HashSet<>();
         UserModel penguji1 = userDb.findByIdUser(idPJ1);
@@ -112,10 +118,26 @@ public class UgbServiceImpl {
         set_penguji.add(penguji2);
 
         ugb.setPenguji(set_penguji);
-        ugb.setStatusUgb("ALLOCATED");
+        ugb.setStatusUgb("DIEVALUASI");
+        ugb.setStatusDokumen("DIEVALUASI");
         ugbDb.save(ugb);
     }
-    
+
+    public void evaluasiUgb(UgbModel ugb) {
+        ugb.setStatusDokumen("DIEVALUASI");
+        ugb.setStatusUgb("DIEVALUASI");
+        ugbDb.save(ugb);
+    }
+
+    public String addCatatanUgb(EvaluasiUgbModel idUgb, String catatanJudul, Long nilaiJudul, String latarBelakang,
+            Long nilaiLatarBelakang, String tujuanManfaat, Long nilaiTujuanManfaat,
+            String ruangLingkup, Long nilaiRuangLingkup, String keterbaruan, Long nilaiKeterbaruan, String metodologi,
+            Long nilaiMetodologi, UgbModel ugb) {
+
+        evaluasiUgbDb.save(idUgb);
+        return "success";
+    }
+
     public void updateUgbMahasiswa(Long idUgb, String judul, MultipartFile bukti_kp, MultipartFile transcript,
             MultipartFile file_khs, MultipartFile file_ugb) {
 
@@ -148,8 +170,8 @@ public class UgbServiceImpl {
             if (judul != null) {
                 ugb.setJudulUgb(judul);
             }
-            ugb.setStatusDokumen("SUBMITTED");
-            ugb.setStatusUgb("SUBMITTED");
+            ugb.setStatusDokumen("TERDAFTAR");
+            ugb.setStatusUgb("TERDAFTAR");
             ugb.setCatatan(null);
             ugbDb.save(ugb);
         } catch (IOException e) {
@@ -174,8 +196,8 @@ public class UgbServiceImpl {
             ugb.setTranskrip(transcript.getBytes());
             ugb.setFileKhs(file_khs.getBytes());
             ugb.setFileUgb(file_ugb.getBytes());
-            ugb.setStatusUgb("SUBMITTED");
-            ugb.setStatusDokumen("SUBMITTED");
+            ugb.setStatusUgb("TERDAFTAR");
+            ugb.setStatusDokumen("TERDAFTAR");
             UserModel user = getCurrentUser();
             // System.out.println("### id mahassiswa noww: "+ user.getIdUser());
 
@@ -196,12 +218,6 @@ public class UgbServiceImpl {
                     HttpStatus.INTERNAL_SERVER_ERROR, "Document");
         }
 
-    }
-
-    public String addCatatanUgb(UgbModel ugb, String catatanJudulUgb, String latarBelakang, String tujuanManfaat,
-            String ruangLingkup, String keterbaruan, String metodologi) {
-        ugbDb.save(ugb);
-        return "success";
     }
 
     public List<UgbModel> viewAllUgb() {
@@ -225,7 +241,7 @@ public class UgbServiceImpl {
             // }
             // }
             // return retrievedUgb;
-            return filterUgb("SUBMITTED");
+            return filterUgb("TERDAFTAR");
         } else if (roles.contains(EnumRole.PENGUJI) == true) {
             // *** the default filter would be 'EVALUATE'
             // *** returns the default list for dosen with role [PENGUJI]
@@ -242,7 +258,7 @@ public class UgbServiceImpl {
 
             // }
             // return retrievedUgb;
-            return filterUgb("EVALUATE");
+            return filterUgb("DIEVALUASI");
         } else {
             // *** the default filter would be 'VERIFY'
             // returns the default list for dosen with role [KOORDINATOR]
@@ -250,7 +266,7 @@ public class UgbServiceImpl {
             // List<UgbModel> submitted_ugb = ugbDb.getUgbBasedOnStatus("APPROVE");
             // System.out.println("@@@@ initial list ugb koordinator = "+submitted_ugb);
             // return retrievedUgb;
-            return filterUgb("SUBMITTED");
+            return filterUgb("TERDAFTAR");
         }
     }
 
@@ -261,9 +277,14 @@ public class UgbServiceImpl {
         System.out.println("*** ROLES == " + roles.toString());
 
         if (roles.contains(EnumRole.KOORDINATOR)) {
-            List<UgbModel> submitted_ugb = ugbDb.getUgbBasedOnStatus(status);
-            return submitted_ugb;
-        } else if (roles.contains(EnumRole.PENGUJI) && status.equals("EVALUATE") || status.equals("EVALUATED")) {
+            if(status.equals("ALL")){
+                List<UgbModel> submitted_ugb = ugbDb.findAll();
+                return submitted_ugb;
+            }else{
+                List<UgbModel> submitted_ugb = ugbDb.getUgbBasedOnStatus(status);
+                return submitted_ugb;
+            }
+        } else if (roles.contains(EnumRole.PENGUJI) && status.equals("DIEVALUASI") || status.equals("LULUS")) {
             // as penguji
             System.out.println("masuk else if penguji");
             List<UgbModel> submitted_ugb = ugbDb.getUgbBasedOnStatus(status);
@@ -296,15 +317,19 @@ public class UgbServiceImpl {
         return ugbDb.findByIdUgb(idUgb);
     }
 
+    public EvaluasiUgbModel getEvaluasiUgbById(Long idEvaluasiUgb) {
+        return evaluasiUgbDb.findByIdEvaluasiUgb(idEvaluasiUgb);
+    }
+
     public void approveUgb(UgbModel ugb) {
-        ugb.setStatusDokumen("APPROVED");
-        ugb.setStatusUgb("ALLOCATE");
+        ugb.setStatusDokumen("DISETUJUI");
+        ugb.setStatusUgb("DISETUJUI");
         ugbDb.save(ugb);
     }
 
     public void denyUgb(UgbModel ugb, String ctt) {
-        ugb.setStatusDokumen("DENIED");
-        ugb.setStatusUgb("DENIED");
+        ugb.setStatusDokumen("DITOLAK");
+        ugb.setStatusUgb("DITOLAK");
         ugb.setCatatan(ctt);
         ugbDb.save(ugb);
     }

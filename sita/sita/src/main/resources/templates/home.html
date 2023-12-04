@@ -23,8 +23,18 @@
             /* color: #6a5b31; */
             font-weight: bold;
         }
+
+        h2.center {
+            text-align: center;
+        }
+
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #3c7850 !important;
+            border-color:#3c7850 !important;
+        }
+        
         .container-content {
-            max-width: 850px;
+            width: 90%;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
@@ -40,7 +50,7 @@
             border-top-right-radius: 8px;
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
-            background-color: #3CB371;
+            background-color: grey;
             color: #fff;
             padding-left: 20px;
         }
@@ -65,34 +75,57 @@
             border-radius: 50px;
         }
 
+        .m-4{
+            margin: 0;
+            width: 80%;
+        }
+        #buttonDiv{
+            margin-left: auto;
+            margin-right: 3%;
+        }
+        .bi.bi-calendar4-week{
+            padding: 15px;
+            color: rgb(77, 77, 77);
+        }
+
     </style>
 </head>
 
 <body>
     <nav th:replace="fragments/fragment :: navbar (${'/'})"></nav>
-    <div class="d-flex justify-content-center align-items-center">
+    <div sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]', 'ROLE_[MAHASISWA]')" class="d-flex justify-content-center align-items-center">
+        <div class="m-4" style="align-self: start; width: fit-content;">
+            <a th:href="@{/timeline}">
+                <div class="d-flex justify-content-center" style="background-color: #fff;  border-radius: 10px;  margin-top: 30%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="grey" class="bi bi-calendar4-week" viewBox="0 0 16 16">
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+                        <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </div>
+            </a>
+
+            <p style="font-size: small; font-weight: bolder; margin-top: 5px; text-align: center;">Timeline TA</p>
+        </div>
+        
         <div class="m-4">
-            <div class="d-flex justify-content-around">
-                <h3 style="color: whitesmoke;" th:text=" 'Welcome to SITA, '+${#httpServletRequest.remoteUser}+'!'">Login as</h3>
-            </div>
             <br>
-            <div class="container-fluid">
                 <div class="container-content">
                     <br>
-                    <div class="header-container-table">
-                            <h4 style="font-weight: bold;" >Pengumuman</h4>
-                    </div>
-                    <br>
-                    <div class="new-container">
-                        <div sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]')">
-                            <div class="add-button" role="group" aria-label="First group">
-                                <a class="btn btn-success f-r" href="/announce/create">+</a>
+                    <div class="header-container-table" style="    margin-bottom: 10px;">
+                        <div class="text-left">
+                            <h4 style="font-weight: medium;margin-bottom: 0;">Pengumuman</h4>
+                        </div>
+
+                        <div id="buttonDiv" sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]')">
+                            <div class="f-r btn-group" role="group" aria-label="First group">
+                                <a class="btn btn-success text-right" href="/announce/create">+</a>
                             </div>
                         </div>
-                        <br><br>
+                    </div>
+                        <br>
                         <div th:if="*{listAnnounce.size() !=0}">
                             <div th:each="announce, iterationStatus : ${listAnnounce}">
-                                <div class="card text-dark bg-light border-dark mb-3" style="max-width: 45rem;">
+                                <div class="card text-dark bg-light border-dark mb-3" style="width: 100%;">
                                     <div class="card-header border-dark">
                                         <div th:each="author, iterationStatus2 : ${announce.author}">
                                             <h6 th:text="${author.nama}"></h6>
@@ -118,20 +151,34 @@
                         <div th:unless="*{listAnnounce.size() !=0}">
                             <h4 style="text-align: center;" th:text="'Tidak ada Pengumuman'"></h4>
                         </div>    
+                </div>
+        </div>
+    </div>
+    <div sec:authorize="hasAnyAuthority('ROLE_[ADMIN]')">
+        <div class="d-flex justify-content-center">
+            <div class="card m-4 p-4">
+                <div class="card-body">
+                    <div class="m-4">
+                        <h2 class="center">Selamat datang di SITA</h2>
+                            
+                        <div class="d-flex justify-content-center">
+                            <a th:href="@{/mahasiswa/viewall}" class="mx-2 btn btn-outline-primary">Daftar Mahasiswa</a>
+                            <a th:href="@{/mahasiswa/add}" class="mx-2 btn btn-outline-primary">Tambah Mahasiswa</a>
+                            <!-- <a th:href="@{'/mahasiswa/update/'+ ${mahasiswa.idUser}}" class="mx-2 btn btn-outline-primary">Update Mahasiswa</a> -->
+                        </div>
+                        <div class="my-3 d-flex justify-content-center">
+                            <a th:href="@{/dosen/viewall}" class="mx-2 btn btn-outline-primary">Daftar Dosen</a>
+                            <a th:href="@{/dosen/add}" class="mx-2 btn btn-outline-primary">Tambah Dosen</a>
+                            <!-- <a th:href="@{/dosen/update}" class="mx-2 btn btn-outline-primary">Update Dosen</a> -->
+                        </div>
+                        <div class="my-3 d-flex justify-content-center">
+                            <a th:href="@{/koordinator/viewall}" class="mx-2 btn btn-outline-primary">Daftar Koordinator</a>
+                            <a th:href="@{/koordinator/add}" class="mx-2 btn btn-outline-primary">Tambah Koordinator</a>
+                            <!-- <a th:href="@{/koordinator/update}" class="mx-2 btn btn-outline-primary">Update Koordinator</a> -->
+                        </div>
+                           
                     </div>
                 </div>
-            </div>
-            <div sec:authorize="hasRole('KOORDINATOR')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/mahasiswa/viewall}" class="mx-2 btn btn-outline-success">List Mahasiswa</a>
-            </div>
-            <div sec:authorize="hasRole('ADMIN')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/dokter/viewall}" class="mx-2 btn btn-outline-success" >List Dokter</a>
-            </div>
-            <div sec:authorize="hasRole('ADMIN')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/apoteker/viewall}" class="mx-2 btn btn-outline-success" >List Apoteker</a>
-            </div>
-            <div sec:authorize="hasRole('KOORDINATOR')" class="my-3 d-flex justify-content-center">
-                <a th:href="@{/whitelist/add}" class="mx-2 btn btn-outline-success" >Tambah Whitelist</a>
             </div>
         </div>
     </div>

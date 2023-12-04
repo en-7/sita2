@@ -86,7 +86,7 @@
                 <th>Nilai Semhas</th>
                 <td>
                     <span th:if="${seminarHasil?.nilai == null}">-</span>
-                    <span th:unless="${seminarHasil?.nilai == null}" th:text="${seminarHasil?.nilai}"></span>
+                    <span th:unless="${seminarHasil?.nilai == null}" th:text="${seminarHasil?.nilai} + '  (' + ${seminarHasil?.nilaiHuruf} + ')' "></span>
                 </td>
             </tr>
             <tr>
@@ -170,121 +170,40 @@
                     </svg>
                     <a th:href="@{/seminar-hasil/downloadFile(type='FILE DRAFT LAPORAN TA',id=${seminarHasil.idSeminarHasil})}" th:text="${seminarHasil.nameFileDraftLaporanTa}"></a>
                 </td>
-            </tr>            
+            </tr>                   
         </table>
         <br><br>
         <div class="pb-2 d-flex justify-content-center">
-            <span th:if="${seminarHasil?.statusDokumen == 'TERDAFTAR'}">
-                <a class="btn btn-primary" data-toggle="modal" data-target="#denyModal">Tolak</a>
-                <a class="btn btn-primary mx-1" data-toggle="modal" data-target="#approveModal">Setujui</a>
-            </span>
+            <a th:if="${seminarHasil?.statusDokumen == 'DITOLAK'}" class="btn btn-primary mx-1" th:href="@{'/seminar-hasil/update/'+ ${seminarHasil?.idSeminarHasil}}">Update</a>
         </div>
-    </div>
-</div>
-
-<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="approveModalLabel">Persetujuan Pendaftaran</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Apakah Anda yakin ingin menyetujui Pendaftaran Seminar Hasil ini?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-          <a class="btn btn-primary" href="#" id="approveButton">Ya, Setujui</a>
-          <input type="hidden" id="seminarHasilId" th:value="${seminarHasil.idSeminarHasil}">
-        </div>
-      </div>
-    </div>
-</div>
-
-<div class="modal fade" id="denyModal" tabindex="-1" role="dialog" aria-labelledby="denyModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="denyModalLabel">Catatan Penolakan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div>
-                    <h5>Nama:</h5>
-                    <p th:text="${seminarHasil?.ugb?.mahasiswa?.nama}"></p>
+        <div class="card">
+            <h5 class="card-header text-white bg-info  mb-auto">Jadwal Seminar Hasil</h5>
+            <div class="card-body">
+                <div th:if="*{seminarHasil?.jadwalSidang != null}">
+                    <table class="table">
+                        <tr>
+                            <th>Tanggal</th>
+                            <td th:text="${#temporals.format(seminarHasil?.jadwalSidang?.tanggalSemhas, 'dd MMMM yyyy')}"></td>
+                        </tr>
+                        <tr>
+                            <th>Waktu</th>
+                            <td>
+                                 <span th:text="${#temporals.format(seminarHasil?.jadwalSidang?.tanggalSemhas, 'HH:mm')} + ' WIB'">
+                                 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tempat</th>
+                            <td  th:text="${seminarHasil?.jadwalSidang?.tempatSemhas}"></td>
+                        </tr>
+                    </table>
                 </div>
-                <div>
-                    <h5>NIM:</h5>
-                    <p th:text="${seminarHasil?.ugb?.mahasiswa?.nim}"></p>
-                <div>
-                    <h5>Judul UGB:</h5>
-                    <p th:text="${seminarHasil?.ugb?.judulUgb}"></p>
+                <div th:unless="*{seminarHasil?.jadwalSidang != null}">
+                    <h3 class="text-center" th:text="'Belum ada Penjadwalan'"></h3>
                 </div>
-                <div>
-                    <h5>Catatan:</h5>
-                    <textarea id="catatan" rows="4" cols="50"></textarea>
-                </div>
-                <input type="hidden" id="seminarHasilId" th:value="${seminarHasil.idSeminarHasil}">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-danger" id="denyProposalButton">Simpan</button>
             </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>
-
-<script>
-    document.getElementById("approveButton").addEventListener("click", function (e) {
-        e.preventDefault();
-        var seminarHasilId = document.getElementById("seminarHasilId").value;
-
-        fetch("/seminar-hasil/approve/" + seminarHasilId, {
-            method: "GET",
-        })
-            .then(function (response) {
-                if (response.ok) {
-                    $("#approveModal").modal("hide");
-                    window.location.href = "/seminar-hasil/detail/" + seminarHasilId;
-                }
-            })
-            .catch(function (error) {
-                console.error("Error:", error);
-            });
-    });
-</script>
-
-<script>
-    document.getElementById("denyProposalButton").addEventListener("click", function () {
-    var catatan = document.getElementById("catatan").value;
-    var seminarHasilId = document.getElementById("seminarHasilId").value;
-    if (catatan) {
-        fetch("/seminar-hasil/deny/" + seminarHasilId, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'catatan=' + encodeURIComponent(catatan)
-        })
-        .then(function (response) {
-            if (response.ok) {
-                $("#denyModal").modal("hide");
-                window.location.href = "/seminar-hasil/detail/" + seminarHasilId;
-            }
-        })
-        .catch(function (error) {
-            console.error("Error:", error);
-        });
-    } else {
-        alert("Catatan tidak boleh kosong."); 
-    }
-});
-
-</script>

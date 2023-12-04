@@ -83,10 +83,10 @@
                 </td>
             </tr>
             <tr>
-                <th>Nilai Sempro</th>
+                <th>Nilai Semhas</th>
                 <td>
                     <span th:if="${seminarHasil?.nilai == null}">-</span>
-                    <span th:unless="${seminarHasil?.nilai == null}" th:text="${seminarHasil?.nilai}"></span>
+                    <span th:unless="${seminarHasil?.nilai == null}" th:text="${seminarHasil?.nilai} + '  (' + ${seminarHasil?.nilaiHuruf} + ')' "></span>
                 </td>
             </tr>
             <tr>
@@ -170,39 +170,9 @@
                     </svg>
                     <a th:href="@{/seminar-hasil/downloadFile(type='FILE DRAFT LAPORAN TA',id=${seminarHasil.idSeminarHasil})}" th:text="${seminarHasil.nameFileDraftLaporanTa}"></a>
                 </td>
-            </tr>                   
+            </tr>            
         </table>
         <br><br>
-        <div class="pb-2 d-flex justify-content-center">
-            <a th:if="${seminarHasil?.statusDokumen == 'DITOLAK'}" class="btn btn-primary mx-1" th:href="@{'/seminar-hasil/update/'+ ${seminarHasil?.idSeminarHasil}}">Update</a>
-        </div>
-        <div class="card">
-            <h5 class="card-header text-white bg-info  mb-auto">Jadwal Seminar Hasil</h5>
-            <div class="card-body">
-                <div th:if="*{seminarHasil?.jadwalSidang != null}">
-                    <table class="table">
-                        <tr>
-                            <th>Tanggal</th>
-                            <td th:text="${#temporals.format(seminarHasil?.jadwalSidang?.tanggalSemhas, 'dd MMMM yyyy')}"></td>
-                        </tr>
-                        <tr>
-                            <th>Waktu</th>
-                            <td>
-                                 <span th:text="${#temporals.format(seminarHasil?.jadwalSidang?.tanggalSemhas, 'HH:mm')} + ' WIB'">
-                                 </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Tempat</th>
-                            <td  th:text="${seminarHasil?.jadwalSidang?.tempatSemhas}"></td>
-                        </tr>
-                    </table>
-                </div>
-                <div th:unless="*{seminarHasil?.jadwalSidang != null}">
-                    <h3 class="text-center" th:text="'Belum ada Penjadwalan'"></h3>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 </body>

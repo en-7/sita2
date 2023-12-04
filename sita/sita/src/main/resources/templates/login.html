@@ -2,14 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
   <title>Login</title>
-  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
-  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+  <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
   <style>
-    .card{
+    
+    /* .card {
       margin-top: 80px;
     }
+
+    .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+        background-color: #3c7850 !important;
+        border-color:#3c7850 !important;
+    } */
+
   </style>
 </head>
 
@@ -18,34 +29,24 @@
   <br>
   <br>
 
-  <div class="row justify-content-center">
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-          Log In
-        </div>
-        <div class="card-body">
-          <div th:if="${param.error}">
-            <span style="color:red">Invalid username and password</span>
-          </div>
-          <br>
-          <form th:action="@{/login}" method="POST">
-            <div class="row form-group">
-              <label class="col-sm-4">Username:</label>
-              <input type="text" class="col-sm-8 form-control input-sm" name="username">
-            </div>
-            <div class="row form-group">
-              <label class="col-sm-4">Password:</label>
-              <input type="password" class="col-sm-8 form-control input-sm" name="password">
-            </div>
-            <div class="row form-group justify-content-center">
-              <button type="submit" class="btn btn-primary">Sign In</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+<div class="wrapper bg-white">
+  <a class="navbar-brand" style="padding-top: 0;" id="logoContainer">
+    <img src="/logo/unand-logo.png" height="60" width="50">
+    <img src="/logo/sita-logo.png" height="80" width="150">
+  </a>
+  <!-- <div class="h4 text-muted text-center pt-2">Enter your login details</div> -->
+  <div th:if="${param.error}">
+    <span style="color:red">Invalid username and password</span>
   </div>
+  <form class="pt-3" th:action="@{/login}" method="POST">
+      <div class="form-group py-2">
+          <div class="input-field"> <span class="far fa-user p-2"></span> <input type="text" placeholder="Username" name="username" required> </div>
+      </div>
+      <div class="form-group py-1 pb-2">
+          <div class="input-field"> <span class="fas fa-lock p-2"></span> <input type="password" placeholder="Masukkan kata sandi anda" name="password" required> <button class="btn bg-white text-muted"> <span class="far fa-eye-slash"></span> </button> </div>
+      </div>
+      <button type="submit" class="btn btn-block text-center my-3">Log in</button>
+  </form>
 </div>
 </body>
 

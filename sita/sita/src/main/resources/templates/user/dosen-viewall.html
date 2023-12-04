@@ -3,8 +3,18 @@
 
 <head>
     <title>Daftar Dosen</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <style>
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #3c7850 !important;
+            border-color:#3c7850 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,14 +24,14 @@
         <div class="card-body">
             <div class="justify-content-center">
                 <h2>Daftar Dosen</h2>
-                <a th:href="@{/}" class="mx-2 my-4 btn btn-primary">Home</a>
+                <br>
                 <table class="table">
                     <thead>
                     <tr>
                         <th>No</th>
                         <th>Email</th>
                         <th>Nama</th>
-                        <!-- <th colspan="4" style="text-align: center">Aksi</th> -->
+                        <th colspan="4" style="text-align: center">Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -31,9 +41,9 @@
 
                         <td th:text="${dosen.email}"></td>
                         <td th:text="${dosen.nama}"></td>
-                        <!-- <td>
-                            <a class="btn btn-danger" th:href="@{/manager/delete/} + ${manager.id}">Delete</a>
-                        </td> -->
+                        <td>
+                            <a class="btn btn-primary" th:href="@{'/dosen/update/'+ ${dosen.idUser}}">Ubah</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

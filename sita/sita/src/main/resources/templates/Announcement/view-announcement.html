@@ -13,7 +13,7 @@
             font-weight: bold;
         }
         .container-content {
-            max-width: 850px;
+            width: 90%;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
@@ -33,7 +33,10 @@
             color: #fff;
             padding-left: 20px;
         }
-
+        .m-4{
+            margin: 0;
+            width: 80%;
+        }
     </style>
 </head>
 
@@ -45,7 +48,7 @@
             <div class="container-fluid">
                 <!-- Content here -->
                 <div class="container-content">
-                    <div class="card text-dark bg-light border-dark mb-3" style="max-width: 36rem;">
+                    <div class="card text-dark bg-light border-dark mb-3" style="width: 100%;">
                         <div class="card-header border-dark">
                             <div th:each="author, iterationStatus2 : ${announce.author}">
                                 <h5 th:text="${author.nama}"></h5>
