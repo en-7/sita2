@@ -1,6 +1,8 @@
 package protensi.sita.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,8 @@ import org.springframework.ui.Model;
 import protensi.sita.security.UserDetailsServiceImpl;
 import protensi.sita.service.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +47,7 @@ public class PenjadwalanSeminarSidang {
         SeminarProposalModel getSeminarProposalById = seminarProposalService.findSemproById(id);
         jadwalSidang.setSeminarProposal(getSeminarProposalById);
 
+    
         model.addAttribute("addJadwalSempro", jadwalSidang);
         model.addAttribute("getPenguji", jadwalSidang.getSeminarProposal().getUgb().getPenguji());
         return "PenjadwalanSeminarSidang/seminarProposal/form-add-jadwalSempro";
@@ -50,8 +55,12 @@ public class PenjadwalanSeminarSidang {
     }
 
     @PostMapping("/jadwalSidangProposal/create")
-    public String addJadwalSidangProposalSubmitPage(@ModelAttribute JadwalSidangModel jadwalSidangSeminar,
-            Model model) {
+    public String addJadwalSidangProposalSubmitPage (@ModelAttribute JadwalSidangModel jadwalSidangSeminar, Model model){
+
+    
+        if(jadwalSidangSeminar.getTanggalSempro().isBefore(LocalDateTime.now())){
+            return "PenjadwalanSeminarSidang/error-tanggal-sebelum";
+        }
         jadwalSidangSeminarService.addJadwalSidangSeminar(jadwalSidangSeminar);
         return "redirect:/jadwalSidangProposal";
     }
@@ -110,6 +119,9 @@ public class PenjadwalanSeminarSidang {
 
     @PostMapping("/jadwalSidangProposal/setJadwal")
     public String SetJadwalSidangProposalSubmitPage(@ModelAttribute JadwalSidangModel jadwalSempro, Model model) {
+        if(jadwalSempro.getTanggalSempro().isBefore(LocalDateTime.now())){
+            return "PenjadwalanSeminarSidang/error-tanggal-sebelum-set";
+        }
         jadwalSidangSeminarService.setJadwalSidang(jadwalSempro);
         System.out.println(jadwalSempro.getTanggalSempro().getClass());
         return "redirect:/jadwalSidangProposal";
@@ -133,7 +145,10 @@ public class PenjadwalanSeminarSidang {
     }
 
     @PostMapping("/jadwalSidangHasil/create")
-    public String addJadwalSeminarHasilSubmitPage(@ModelAttribute JadwalSidangModel jadwalSemhas, Model model) {
+    public String addJadwalSeminarHasilSubmitPage(@ModelAttribute JadwalSidangModel jadwalSemhas, Model model){
+        if(jadwalSemhas.getTanggalSemhas().isBefore(LocalDateTime.now())){
+            return "PenjadwalanSeminarSidang/error-tanggal-semhas";
+        }
         jadwalSidangSeminarService.addJadwalSemhas(jadwalSemhas);
         return "redirect:/jadwalSidangHasil";
     }
@@ -190,6 +205,9 @@ public class PenjadwalanSeminarSidang {
 
     @PostMapping("/jadwalSidangHasil/setJadwal")
     public String SetJadwalSidangHasilSubmitPage(@ModelAttribute JadwalSidangModel jadwalSemhas, Model model) {
+        if(jadwalSemhas.getTanggalSemhas().isBefore(LocalDateTime.now())){
+            return "PenjadwalanSeminarSidang/error-tanggal-set-semhas";
+        }
         jadwalSidangSeminarService.setJadwalSidang(jadwalSemhas);
         System.out.println(jadwalSemhas.getTanggalSempro());
         return "redirect:/jadwalSidangHasil";
@@ -211,7 +229,10 @@ public class PenjadwalanSeminarSidang {
     }
 
     @PostMapping("/jadwalSidangTugasAkhir/create")
-    public String addJadwalSidangTASubmit(@ModelAttribute JadwalSidangModel tugasAkhir) {
+    public String addJadwalSidangTASubmit(@ModelAttribute JadwalSidangModel tugasAkhir){
+        if(tugasAkhir.getTanggalSidangTa().isBefore(LocalDateTime.now())){
+            return "PenjadwalanSeminarSidang/error-tanggal-ta";
+        }
         jadwalSidangSeminarService.addJadwalSidangTa(tugasAkhir);
         return "redirect:/jadwalSidangTugasAkhir";
     }
@@ -268,6 +289,9 @@ public class PenjadwalanSeminarSidang {
 
     @PostMapping("/jadwalSidangTugasAkhir/setJadwal")
     public String SetJadwalSidangTASubmitPage(@ModelAttribute JadwalSidangModel jadwalSidangTA, Model model) {
+        if(jadwalSidangTA.getTanggalSidangTa().isBefore(LocalDateTime.now())){
+            return "PenjadwalanSeminarSidang/error-tanggal-set-ta";
+        }
         System.out.println(jadwalSidangTA.getTanggalSempro());
         jadwalSidangSeminarService.setJadwalSidang(jadwalSidangTA);
         System.out.println(jadwalSidangTA.getTanggalSempro());

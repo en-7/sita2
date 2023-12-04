@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <!-- Bootstrap CSS -->
+    <title>SITA | ANNOUNCE</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
 </head>
+<style>
+    .file-upload-container-pdf {
+            width:auto;
+            grid-template-columns: 130px auto 1rem;
+            display: grid;
+            border: 1px solid #CED4DA;
+            border-radius: 6px;
+            color: #495057;
+            -webkit-border-radius: 4px;
+            background: #E9ECEF;
+    }
 
+
+    #ancLabelFile{
+        margin-top: 0.5rem;
+    }
+
+    input[type=file]{
+        background-color: transparent;
+        border: transparent;
+        width:120px;
+        color:transparent;
+    }    
+</style>
 <body>
     <nav th:replace="fragments/fragment :: navbar (${'/'})"></nav>
     <div class="container">
@@ -17,8 +41,7 @@
                 <div class="justify-content-center">
                     <h2>Update Pengumuman</h2>
                     <br>
-                    <!-- <form th:action="@{/announce/create}" th:object="${newAnnouncement}" method="POST" enctype="multipart/form-data"> -->
-                    <form th:action="@{/announce/update}" th:object="${updateAnnounce}" method="POST">
+                    <form th:action="@{/announce/update}" th:object="${updateAnnounce}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" th:field="*{createdAt}">
                         <input type="hidden" th:field="*{idAnnouncement}">
 
@@ -30,10 +53,12 @@
                         <input required class="form-control" type="text" name="deskripsi" th:value="*{deskripsi}"/>
                         <br><br>
 
-                        <!-- File (PDF) :
-                        <input class="form-control" type="file" id="file" name="file" accept=".pdf" onchange="validateFile()"/>
-                        <br><br> -->
-
+                        File (PDF) :
+                        <div class="file-upload-container-pdf">
+                            <input class="form-control" type="file" id="ancFile" name="ancFile" accept=".pdf" onchange="updateValidation()"/>
+                            <a class="ignore-click-ancFile" id="ancLabelFile" th:text="${updateAnnounce.namaFile}"  th:href="@{/downloadFile(type='FILE',id=${updateAnnounce.idAnnouncement})}"></a>
+                        </div>
+                        <br><br>
                         <button class="btn btn-primary float-right" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="/">Back</a>
                     </form>
@@ -44,3 +69,55 @@
 
 </body>
 </html>
+<script>
+    function validateFile() {
+
+        var file = document.getElementById("ancFile");
+        var isValid = true;
+
+        if (!isValidFileType(file, 'application/pdf')) {
+            isValid = false;
+            file.value = '';
+        }
+        // Nonaktifkan tombol submit jika file tidak valid
+        submitButton.disabled = !isValid;
+
+        // Tampilkan alert jika ada file yang tidak valid
+        if (!isValid) {
+            alert("Invalid file type. Please choose PDF files for all attachments.");
+        }
+    }
+
+    function isValidFileType(input, validType) {
+        if (input.files.length > 0) {
+            var fileType = input.files[0].type;
+            return fileType === validType;
+        } 
+        return true;
+    } 
+</script>
+<script>
+    function updateValidation(){
+        validateFile();
+        pressed();
+    }
+    
+    window.pressed = function(event){
+        var a = document.getElementById('ancFile');
+        if(a.value != "")
+            {
+                var theSplit = a.value.split('\\');
+                ancLabelFile.innerHTML = theSplit[theSplit.length-1];
+                ancLabelFile.href = "";
+                ancLabelFile.style.textDecoration = 'none';
+                ancLabelFile.style.color = 'black';
+
+                for (var i = 0; i < document.getElementsByClassName("ignore-click-ancFile").length; i++) {
+                    document.getElementsByClassName("ignore-click-ancFile")[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        return false;
+                    });
+                }
+            }
+    };
+</script>

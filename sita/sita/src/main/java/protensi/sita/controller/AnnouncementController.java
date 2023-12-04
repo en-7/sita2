@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.util.StringUtils;
 import protensi.sita.model.AnnouncementModel;
+import protensi.sita.model.SeminarProposalModel;
 import protensi.sita.model.UserModel;
 import protensi.sita.security.UserDetailsServiceImpl;
 import protensi.sita.service.AnnouncementService;
@@ -42,25 +46,35 @@ public class AnnouncementController {
         return "Announcement/form-add-announcement";
         
     }
+
     @PostMapping("/announce/create")
-    public String createAnnouhncementSubmit(@ModelAttribute AnnouncementModel announce,
+    public String createAnnouhncementSubmit(@ModelAttribute AnnouncementModel newAnnouncement,
                                             Model model, 
-                                            Authentication auth){
+                                            Authentication auth,
+                                            @RequestParam("ancFile") MultipartFile ancFile){
 
+        try{
+            byte[] fileAnnounce = ancFile.getBytes();
+            String namaFile = StringUtils.cleanPath(ancFile.getOriginalFilename());
 
-        Set<UserModel> setAuthor = new HashSet<>();
-        String namaUser = auth.getName();
-        UserModel getUser = userDetailsService.findByUsername(namaUser);
+            newAnnouncement.setNamaFile(namaFile);
+            newAnnouncement.setFile(fileAnnounce);
+            Set<UserModel> setAuthor = new HashSet<>();
+            String namaUser = auth.getName();
+            UserModel getUser = userDetailsService.findByUsername(namaUser);
 
-        setAuthor.add(getUser);
-        announce.setAuthor(setAuthor);
-        
-        announcementService.addAnnouncement(announce);
-
-        System.out.println(announce.getAuthor());
-        return "redirect:/";
-   
+            setAuthor.add(getUser);
+            newAnnouncement.setAuthor(setAuthor);
+            announcementService.addAnnouncement(newAnnouncement);
+            return "redirect:/";
+        }
+        catch (IOException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
+    
+        }
     }
+
 
     @GetMapping("/announce/view")
     public String viewDetailAnnouncement (@RequestParam(value = "id") Long id, Model model ){
@@ -79,46 +93,55 @@ public class AnnouncementController {
     }
 
     @PostMapping("/announce/update")
-    public String updateAnnouncementSubmit(@ModelAttribute AnnouncementModel announce, Authentication auth){
-
-        Set<UserModel> setAuthor = new HashSet<>();
-        String namaUser = auth.getName();
-        UserModel getUser = userDetailsService.findByUsername(namaUser);
-
-        setAuthor.add(getUser);
-        announce.setAuthor(setAuthor);
+    public String updateAnnouncementSubmit(@ModelAttribute AnnouncementModel announce, 
+                                            Authentication auth,
+                                            @RequestParam("ancFile") MultipartFile ancFile){
         
-        announcementService.addAnnouncement(announce);
+        try{
+            byte[] updateAnnouncement = ancFile.getBytes();
+            if(!ancFile.isEmpty()){
+                String namaFileUpdate = StringUtils.cleanPath(ancFile.getOriginalFilename());
+                announce.setNamaFile(namaFileUpdate);
+                announce.setFile(updateAnnouncement);
+            }
 
+            Set<UserModel> setAuthor = new HashSet<>();
+            String namaUser = auth.getName();
+            UserModel getUser = userDetailsService.findByUsername(namaUser);
 
-        announcementService.updateAnnouncement(announce);
-        System.out.println(announce.getIdAnnouncement());
-        return "redirect:/";
-    }
-
-
-
-
-    // @PostMapping("/announce/create")
-    // public String createAnnouhncementSubmit(@ModelAttribute AnnouncementModel announce,
-    //                                         Model model, 
-    //                                         Authentication auth,
-    //                                         @RequestParam("file") MultipartFile file){
-
-    //     try{
-    //         // byte[] fileAnnounce = file.getBytes();
-    //         String namaFile = StringUtils.cleanPath(file.getOriginalFilename());
-
-    //         announce.setNamaFile(namaFile);
-    //         announce.setFile(file.getBytes());
-            
-    //         announcementService.addAnnouncement(announce);
-    //         return "redirect:/";
-    //     }
-    //     catch (IOException e) {
-    //         throw new ResponseStatusException(
-    //                 HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
+            setAuthor.add(getUser);
+            announce.setAuthor(setAuthor);
+            announcementService.updateAnnouncement(announce);
+            System.out.println(announce.getIdAnnouncement());
+            return "redirect:/";
+        }
+        catch (IOException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
     
-    //     }
-    // }
+        }
+    }
+   
+    @GetMapping("/downloadFile")
+    public void downloadFile(@RequestParam("type") String type,
+            @RequestParam("id") Long id,
+            HttpServletResponse response) {
+        try {
+            AnnouncementModel retrievedAnnouncement = announcementService.getAnnounceById(id);
+            response.setContentType("application/ocetet-stream");
+            String headerKey = "Content-Disposition";
+
+            if (type.equals("FILE")) {
+                String headerValue = "attachment; filename=" + retrievedAnnouncement.getNamaFile();
+                response.setHeader(headerKey, headerValue);
+                ServletOutputStream outputStream = response.getOutputStream();
+                outputStream.write(retrievedAnnouncement.getFile());
+                outputStream.close();
+            }
+        } catch (IOException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
+        }
+
+    }
 }
