@@ -118,7 +118,11 @@
             width:120px;
             color:transparent;
         }
-
+        #same1, #same2 {
+            display: none; 
+            color: red;
+            font-size: smaller;
+        }
     </style>
 </head>
 <body>
@@ -131,21 +135,22 @@
                 <h2>Update Pendaftaran UGB</h2>
                 <br>
                 <form th:object="${ugb.mahasiswa}">
-                    Nama: <br>
+                    Nama<FONT COLOR="red"> * </FONT>: <br>
                     <input required class="form-control" type="text" th:field="*{nama}" maxlength="30" readonly="true"/>
                     <br>
-                    NIM: <br>
+                    NIM<FONT COLOR="red"> * </FONT>: <br>
                     <input required class="form-control" type="text" th:field="*{nim}" maxlength="30" readonly="true"/>
                     <br>
                 </form>
                 <div th:switch="${roleUser}">
                     <div th:case="'[ROLE_[KOORDINATOR]]'">
                         <form th:action="@{'/ugb/updateK/' + ${ugb.idUgb}}" method="POST" enctype="multipart/form-data">
-                            Judul UGB: <br>
+                            Judul UGB<FONT COLOR="red"> * </FONT>: <br>
                             <input required class="form-control" type="text" th:value="${ugb.judulUgb}" maxlength="30" readonly="true"/>
                             <br>
-                            Nama Pembimbing 1: <br>
-                            <select name="id_p1" class="form-control"  id="dropOperator">
+                            <p id="same1" style="margin-bottom: 0;margin-block-end: 0;">Pembimbing 1 dan 2 tidak boleh sama</p>
+                            Nama Pembimbing 1<FONT COLOR="red"> * </FONT>: <br>
+                            <select name="id_p1" class="form-control"  id="dropOperator1" oninput="samePbb(1)">
                                 <option th:each="pembimbing : ${listPembimbing}" 
                                         th:value="${pembimbing.idUser}" 
                                         th:text="${pembimbing.nama}" 
@@ -153,8 +158,9 @@
                                 </option>
                             </select>
                             <br>
-                            Nama Pembimbing 2: <br>
-                            <select name="id_p2" class="form-control"  id="dropOperator">
+                            <p id="same2" style="margin-bottom: 0;margin-block-end: 0;">Pembimbing 1 dan 2 tidak boleh sama</p>
+                            Nama Pembimbing 2<FONT COLOR="red"> * </FONT>: <br>
+                            <select name="id_p2" class="form-control"  id="dropOperator2" oninput="samePbb(2)">
                                 <option th:each="pembimbing : ${listPembimbing}" 
                                         th:value="${pembimbing.idUser}" 
                                         th:text="${pembimbing.nama}" 
@@ -163,7 +169,7 @@
                             </select>
                             <br>
                             <tr>
-                            <th>File UGB:</th><br>
+                            <th>File UGB<FONT COLOR="red"> * </FONT>:</th><br>
                                 <div class="file-upload-container-updatek">
                                     <td>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
@@ -175,7 +181,7 @@
                                 </div>
                             </tr><br>
                             <tr>
-                                <th>Bukti KP</th><br>
+                                <th>Bukti KP<FONT COLOR="red"> * </FONT>:</th><br>
                                 <div class="file-upload-container-updatek">
                                     <td>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
@@ -187,7 +193,7 @@
                                 </div>
                             </tr><br>
                             <tr>
-                                <th>Transkrip Nilai</th><br>
+                                <th>Transkrip Nilai<FONT COLOR="red"> * </FONT>:</th><br>
                                 <div class="file-upload-container-updatek">
                                     <td>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
@@ -199,7 +205,7 @@
                                 </div>
                             </tr><br>
                             <tr>
-                                <th>File KHS</th><br>
+                                <th>File KHS<FONT COLOR="red"> * </FONT>:</th><br>
                                 <div class="file-upload-container-updatek">
                                     <td>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
@@ -217,36 +223,36 @@
                     </div>
                     <div th:case="'[ROLE_[MAHASISWA]]'">
                         <form th:action="@{'/ugb/updateM/' + ${ugb.idUgb}}" method="POST" enctype="multipart/form-data">
-                            Judul UGB: <br>
+                            Judul UGB<FONT COLOR="red"> * </FONT>: <br>
                             <input required class="form-control" type="text" th:value="${ugb.judulUgb}" name="judul_ugb" maxlength="30"/>
                             <br>
-                            Nama Pembimbing 1: <br>
+                            Nama Pembimbing 1<FONT COLOR="red"> * </FONT>: <br>
                             <div class="file-upload-container">
                                 <a th:text="${pembimbing1.nama}" ></a>
                             </div><br>
-                            Nama Pembimbing 2: <br>
+                            Nama Pembimbing 2<FONT COLOR="red"> * </FONT>: <br>
                             <div class="file-upload-container">
                                 <a th:text="${pembimbing2.nama}" ></a>
                             </div><br>
-                            Bukti telah / sedang melaksanakan KP (PDF): <br>
+                            Bukti telah / sedang melaksanakan KP (PDF)<FONT COLOR="red"> * </FONT>: <br>
                             <div class="file-upload-container-pdf">
                                 <input class="form-control" type="file" name="bukti_kp" accept=".pdf" id="buktiKp" onchange="updateValidation()">
                                 <a class="ignore-click" id="fileLabelKp" th:text="${ugb.nameFileKp}" th:href="@{/ugb/downloadFile(type='FILE KP',id=${ugb.idUgb})}"></a>
                             </div>
                             <br>
-                            Transkrip Nilai (PDF): <br>
+                            Transkrip Nilai (PDF)<FONT COLOR="red"> * </FONT>: <br>
                             <div class="file-upload-container-pdf">
                                 <input class="form-control" type="file" name="transcript" accept=".pdf" id="transkrip" onchange="updateValidation()">
                                 <a class="ignore-click-transkrip" id="fileLabelTranskrip" th:text="${ugb.nameFileTranskrip}" th:href="@{/ugb/downloadFile(type='FILE TRANSKRIP',id=${ugb.idUgb})}"></a>
                             </div>
                             <br>
-                            File KHS (PDF): <br>
+                            File KHS (PDF)<FONT COLOR="red"> * </FONT>: <br>
                             <div class="file-upload-container-pdf">
                                 <input class="form-control" type="file" name="file_khs" accept=".pdf" id="fileKhs" onchange="updateValidation()">
                                 <a class="ignore-click-khs" id="fileLabelKhs" th:text="${ugb.nameFileKhs}" th:href="@{/ugb/downloadFile(type='FILE KHS',id=${ugb.idUgb})}"></a>
                             </div>
                             <br>
-                            File UGB (PDF): <br>
+                            File UGB (PDF)<FONT COLOR="red"> * </FONT>: <br>
                             <div class="file-upload-container-pdf">
                                 <input class="form-control" type="file" name="file_ugb" accept=".pdf" id="fileUgb" onchange="updateValidation()">
                                 <a class="ignore-click-ugb" id="fileLabelUgb" th:text="${ugb.nameFileUgb}" th:href="@{/ugb/downloadFile(type='FILE UGB',id=${ugb.idUgb})}"></a>
@@ -266,6 +272,32 @@
 </body>
 </html>
 <script>
+    let initial1 = document.getElementById("dropOperator1").value;
+    let initial2 = document.getElementById("dropOperator2").value;
+
+    function samePbb(number){
+        var same1 = document.getElementById("same1");
+        var same2 = document.getElementById("same2");
+        var pbb1 = document.getElementById("dropOperator1");
+        var pbb2 = document.getElementById("dropOperator2");
+        var isSame = false;
+        if(pbb1.value == pbb2.value){
+            isSame = true;
+        }
+        if(isSame == true){
+            if(number == 1){
+                same1.style.display = "block";
+                pbb1.value = initial1;
+            }else{
+                pbb2.value = initial2;
+                same2.style.display = "block";
+            }
+        }else{
+            same1.style.display = "none";
+            same2.style.display = "none";
+        }
+    } 
+    
     function updateValidation(){
         validateFile();
         pressed();

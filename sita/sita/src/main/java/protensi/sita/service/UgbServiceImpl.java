@@ -266,7 +266,7 @@ public class UgbServiceImpl {
             // List<UgbModel> submitted_ugb = ugbDb.getUgbBasedOnStatus("APPROVE");
             // System.out.println("@@@@ initial list ugb koordinator = "+submitted_ugb);
             // return retrievedUgb;
-            return filterUgb("TERDAFTAR");
+            return filterUgb("ALL");
         }
     }
 
