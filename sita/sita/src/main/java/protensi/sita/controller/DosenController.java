@@ -77,7 +77,7 @@ public class DosenController {
         dosen.setRoles(roleDosen);
         manageUserService.addUser(dosen);
         model.addAttribute("dosen", dosen);
-        return "user/dosen-add-form";
+        return "redirect:/dosen/viewall";
     }
 
     @GetMapping("/dosen/update/{idUser}")
@@ -93,13 +93,11 @@ public class DosenController {
             @RequestParam("username") String username,
             @RequestParam("nama") String nama,
             @RequestParam("email") String email,
-            @RequestParam("password") String password,
             Model model, Authentication authentication) {
         try {
             dosen.setUsername(username);
             dosen.setNama(nama);
             dosen.setEmail(email);
-            dosen.setPassword(password);
 
             dosen = manageUserService.findUserById(idUser);
 
@@ -115,10 +113,6 @@ public class DosenController {
                 dosen.setEmail(email);
             }
 
-            if (!password.isEmpty()) {
-                dosen.setPassword(password);
-            }
-
             Set<EnumRole> roleDosen = new HashSet<EnumRole>();
             roleDosen.add(EnumRole.PEMBIMBING);
             roleDosen.add(EnumRole.PENGUJI);
@@ -126,7 +120,7 @@ public class DosenController {
             manageUserService.updateUser(dosen);
             model.addAttribute("dosen", dosen);
             model.addAttribute("id", dosen.getIdUser());
-            return "user/dosen-update-form";
+            return "redirect:/dosen/viewall";
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");

@@ -133,7 +133,7 @@
                                 <div th:if="${mahasiswa.tahap} == 'SEMHAS' OR ${mahasiswa.tahap} == 'TUGASAKHIR'">
                                     <tr>
                                         <th class="card-text judul">Status Seminar Hasil</th>
-                                        <td class="card-text" th:text="${semhas.statusSeminarHasil}"></td>
+                                        <td class="card-text" th:text="${semhas.statusSemhas}"></td>
                                     </tr>
                                     <tr>
                                         <th class="card-text judul">Nilai Seminar Hasil</th>
@@ -152,7 +152,7 @@
                                 <div th:if="${mahasiswa.tahap} == 'TUGASAKHIR'">
                                     <tr>
                                         <th class="card-text judul">Status Sidang</th>
-                                        <td class="card-text" th:text="${tugas_akhir.statusSidang}"></td>
+                                        <td class="card-text" th:text="${tugas_akhir.statusTugasAkhir}"></td>
                                     </tr>
                                     <tr>
                                         <th class="card-text judul">Nilai Sidang</th>

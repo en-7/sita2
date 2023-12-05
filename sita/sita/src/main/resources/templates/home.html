@@ -86,6 +86,14 @@
             padding: 15px;
             color: rgb(77, 77, 77);
         }
+        #timelineText:hover{
+            text-decoration: none;
+            color: #3c7850;
+            font-weight: bold;
+        }
+        #timelineText{
+            color: grey;
+        }
 
     </style>
 </head>
@@ -93,17 +101,16 @@
 <body>
     <nav th:replace="fragments/fragment :: navbar (${'/'})"></nav>
     <div sec:authorize="hasAnyAuthority('ROLE_[PEMBIMBING, PENGUJI]', 'ROLE_[PENGUJI, PEMBIMBING]', 'ROLE_[KOORDINATOR]', 'ROLE_[PEMBIMBING]', 'ROLE_[PENGUJI]', 'ROLE_[MAHASISWA]')" class="d-flex justify-content-center align-items-center">
-        <div class="m-4" style="align-self: start; width: fit-content;">
-            <a th:href="@{/timeline}">
-                <div class="d-flex justify-content-center" style="background-color: #fff;  border-radius: 10px;  margin-top: 30%;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="grey" class="bi bi-calendar4-week" viewBox="0 0 16 16">
+        <div class="m-4" style="align-self: start; width: 290px; padding-left: 30px;">
+            <a id="timelineText" th:href="@{/timeline}">
+                <div class="d-flex justify-content-center" style="background-color: #fff;  border-radius: 10px;  margin-top: 14%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="grey" class="bi bi-calendar4-week" viewBox="0 0 16 16" style="margin-left: 10px;">
                         <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
                         <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
                     </svg>
+                    <p style="font-size: medium; margin-top: 19px; text-align: center; margin-right: 40px;">Timeline TA</p>
                 </div>
             </a>
-
-            <p style="font-size: small; font-weight: bolder; margin-top: 5px; text-align: center;">Timeline TA</p>
         </div>
         
         <div class="m-4">

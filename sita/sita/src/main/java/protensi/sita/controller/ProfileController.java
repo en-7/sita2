@@ -66,7 +66,7 @@ public class ProfileController {
             model.addAttribute("pembimbing1", pembimbing1);
 
             if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
-                    || mahasiswa.getTahap().equals("SIDANG") || mahasiswa.getTahap().equals("EVAL_UGB")) {
+                    || mahasiswa.getTahap().equals("TUGASAKHIR") || mahasiswa.getTahap().equals("EVAL_UGB")) {
                 Set<UserModel> setPenguji = thisUgb.getPenguji();
 
                 iterator = setPenguji.iterator();
@@ -77,18 +77,18 @@ public class ProfileController {
             }
 
             if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
-                    || mahasiswa.getTahap().equals("SIDANG")) {
+                    || mahasiswa.getTahap().equals("TUGASAKHIR")) {
                 SeminarProposalModel sempro = semproService.findSemproByUgb(thisUgb);
                 model.addAttribute("sempro", sempro);
 
-                if (mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")) {
+                if (mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("TUGASAKHIR")) {
                     SeminarHasilModel semhas = semhasService.findSemhasBySempro(sempro);
                     model.addAttribute("semhas", semhas);
 
                 }
             }
 
-            if (mahasiswa.getTahap().equals("SIDANG")) {
+            if (mahasiswa.getTahap().equals("TUGASAKHIR")) {
                 TugasAkhirModel ta = taService.findTAByUgb(thisUgb);
                 model.addAttribute("tugas_akhir", ta);
 
@@ -118,8 +118,8 @@ public class ProfileController {
             model.addAttribute("pembimbing2", pembimbing2);
             model.addAttribute("pembimbing1", pembimbing1);
 
-            if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
-                    || mahasiswa.getTahap().equals("SIDANG") || mahasiswa.getTahap().equals("EVAL_UGB")) {
+            if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("TUGASAKHIR") || mahasiswa.getTahap().equals("EVAL_UGB")) {
+                System.out.println("---masuk if---");
                 Set<UserModel> setPenguji = thisUgb.getPenguji();
 
                 iterator = setPenguji.iterator();
@@ -130,18 +130,18 @@ public class ProfileController {
             }
 
             if (mahasiswa.getTahap().equals("SEMPRO") || mahasiswa.getTahap().equals("SEMHAS")
-                    || mahasiswa.getTahap().equals("SIDANG")) {
+                    || mahasiswa.getTahap().equals("TUGASAKHIR")) {
                 SeminarProposalModel sempro = semproService.findSemproByUgb(thisUgb);
                 model.addAttribute("sempro", sempro);
 
-                if (mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("SIDANG")) {
+                if (mahasiswa.getTahap().equals("SEMHAS") || mahasiswa.getTahap().equals("TUGASAKHIR")) {
                     SeminarHasilModel semhas = semhasService.findSemhasBySempro(sempro);
                     model.addAttribute("semhas", semhas);
 
                 }
             }
 
-            if (mahasiswa.getTahap().equals("SIDANG")) {
+            if (mahasiswa.getTahap().equals("TUGASAKHIR")) {
                 TugasAkhirModel ta = taService.findTAByUgb(thisUgb);
                 model.addAttribute("tugas_akhir", ta);
 

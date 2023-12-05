@@ -88,7 +88,7 @@ public class PenjadwalanSeminarSidang {
             List<SeminarProposalModel> listPendaftarSempro = seminarProposalService.findAllSempro();
             List<SeminarProposalModel> newListPendaftarSempro = new ArrayList<SeminarProposalModel>();
             for (SeminarProposalModel i : listPendaftarSempro) {
-                if (i.getJadwalSidang() == null && i.getStatusDokumen().equalsIgnoreCase("APPROVED")) {
+                if (i.getJadwalSidang() == null && i.getStatusDokumen().equalsIgnoreCase("DISETUJUI")) {
                     newListPendaftarSempro.add(i);
                 }
             }
@@ -176,7 +176,7 @@ public class PenjadwalanSeminarSidang {
             List<SeminarHasilModel> listPedaftarSemhas = seminarHasilService.findAllSeminarHasil();
             List<SeminarHasilModel> newLisPendaftarSemhas = new ArrayList<>();
             for (SeminarHasilModel j : listPedaftarSemhas) {
-                if (j.getJadwalSidang() == null && j.getStatusDokumen().equalsIgnoreCase("APPROVED")) {
+                if (j.getJadwalSidang() == null && j.getStatusDokumen().equalsIgnoreCase("DISETUJUI")) {
                     newLisPendaftarSemhas.add(j);
                 }
             }
@@ -260,7 +260,7 @@ public class PenjadwalanSeminarSidang {
             List<TugasAkhirModel> listPendaftarTugasAkhir = tugasAkhirService.findAllTugasAkhir();
             List<TugasAkhirModel> newListPendaftarTugasAkhir = new ArrayList<>();
             for (TugasAkhirModel k : listPendaftarTugasAkhir) {
-                if (k.getJadwalSidang() == null && k.getStatusDokumen().equalsIgnoreCase("APPROVED")) {
+                if (k.getJadwalSidang() == null && k.getStatusDokumen().equalsIgnoreCase("DISETUJUI")) {
                     newListPendaftarTugasAkhir.add(k);
                 }
             }

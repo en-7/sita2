@@ -47,7 +47,7 @@ public class KoordinatorController {
         koordinator.setRoles(roleKoordinator);
         koordinatorService.addKoordinator(koordinator);
         model.addAttribute("koordinator", koordinator);
-        return "user/koordinator-add-form";
+        return "redirect:/koordinator/viewall";
     }
 
     @GetMapping("/koordinator/update/{idUser}")
@@ -63,13 +63,11 @@ public class KoordinatorController {
             @RequestParam("username") String username,
             @RequestParam("nama") String nama,
             @RequestParam("email") String email,
-            @RequestParam("password") String password,
             Model model, Authentication authentication) {
         try {
             koordinator.setUsername(username);
             koordinator.setNama(nama);
             koordinator.setEmail(email);
-            koordinator.setPassword(password);
 
             koordinator = koordinatorService.findKoordinatorById(idUser);
 
@@ -85,17 +83,13 @@ public class KoordinatorController {
                 koordinator.setEmail(email);
             }
 
-            if (!password.isEmpty()) {
-                koordinator.setPassword(password);
-            }
-
             Set<EnumRole> roleKoordinator = new HashSet<EnumRole>();
             roleKoordinator.add(EnumRole.KOORDINATOR);
             koordinator.setRoles(roleKoordinator);
             koordinatorService.updateKoordinator(koordinator);
             model.addAttribute("koordinator", koordinator);
             model.addAttribute("id", koordinator.getIdUser());
-            return "user/koordinator-update-form";
+            return "redirect:/koordinator/viewall";
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");
