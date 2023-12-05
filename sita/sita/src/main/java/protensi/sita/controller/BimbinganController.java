@@ -36,6 +36,7 @@ import protensi.sita.service.JadwalBimbinganServiceImpl;
 import protensi.sita.service.MahasiswaServiceImpl;
 import protensi.sita.service.PembimbingServiceImpl;
 import protensi.sita.service.UgbServiceImpl;
+import protensi.sita.repository.UserDb;
 
 
 @Controller
@@ -69,6 +70,9 @@ public class BimbinganController {
     @Autowired
     public BaseService baseService;
 
+    @Autowired
+    private UserDb userDb;
+
     @GetMapping("/atur-jadwal/add")
     public String addAvailableBimbinganFormPage(Model model) {
         AvailableBimbinganModel availableBimbingan = new AvailableBimbinganModel();
@@ -100,7 +104,7 @@ public class BimbinganController {
                 if (endBimbinganExist == null){
                     if (endBimbinganBentrok == null){
                         if (overlappingBimbingan.isEmpty()) {
-                            PembimbingModel pembimbing = pembimbingService.findPembimbingById(user.getIdUser()); 
+                            UserModel pembimbing = userDb.findByIdUser(user.getIdUser());
                             availableBimbingan.setPembimbing(pembimbing);
                             availableBimbingan.setBookingStatus("AVAILABLE");
                             availableBimbinganService.add(availableBimbingan);
@@ -134,7 +138,7 @@ public class BimbinganController {
     @GetMapping("/atur-jadwal/update/{idAvailableBimbingan}")
     public String updateAvailableBimbinganFormPage(@PathVariable Long idAvailableBimbingan, Model model) {
         AvailableBimbinganModel availableBimbingan = availableBimbinganService.findById(idAvailableBimbingan);
-        PembimbingModel pembimbing = availableBimbingan.getPembimbing();
+        UserModel pembimbing = availableBimbingan.getPembimbing();
         model.addAttribute("bookingStatus", availableBimbingan.getBookingStatus());
         model.addAttribute("availableBimbingan", availableBimbingan);
         model.addAttribute("pembimbingId", pembimbing.getIdUser());
@@ -195,8 +199,8 @@ public class BimbinganController {
                                 @DateTimeFormat(iso = ISO.DATE) LocalDate selectedDate) {
         String namaUser = authentication.getName();
         UserModel user = userDetailsService.findByUsername(namaUser);
-        if (user.getRoles().contains(EnumRole.PEMBIMBING)) {
-            PembimbingModel pembimbing = pembimbingService.findPembimbingById(user.getIdUser());
+        if (!user.getRoles().contains(EnumRole.MAHASISWA) && !user.getRoles().contains(EnumRole.KOORDINATOR) && !user.getRoles().contains(EnumRole.ADMIN)) {
+            UserModel pembimbing = userDb.findByIdUser(user.getIdUser());
             List<JadwalBimbinganModel> listBimbingan = jadwalBimbinganService.findBimbinganByIdPembimbing(pembimbing.getIdUser());
             if (selectedDate == null) {
                 // Jika tidak ada tanggal yang dipilih, set default ke minggu ini
@@ -263,8 +267,8 @@ public class BimbinganController {
         String namaUser = authentication.getName();
         UserModel user = userDetailsService.findByUsername(namaUser);
 
-        if (user.getRoles().contains(EnumRole.PEMBIMBING)) {
-            PembimbingModel pembimbing = pembimbingService.findPembimbingById(user.getIdUser());
+        if (!user.getRoles().contains(EnumRole.MAHASISWA) && !user.getRoles().contains(EnumRole.KOORDINATOR) && !user.getRoles().contains(EnumRole.ADMIN)) {
+            UserModel pembimbing = userDb.findByIdUser(user.getIdUser());
             // List<AvailableBimbinganModel> listAvailable = availableBimbinganService.findAllByIdPembimbing(pembimbing.getIdUser());
             if (selectedDate == null) {
                 // Jika tidak ada tanggal yang dipilih, set default ke minggu ini
