@@ -26,16 +26,13 @@
                 <br>
                 <form th:action="@{'/koordinator/update/' + ${koordinator.idUser}}" th:object="${koordinator}" method="POST">
                     <label>Username</label>
-                    <input class="form-control" type="text" name="username" required onchange="update()"/>
+                    <input class="form-control" type="text" name="username" th:field="*{username}" required onchange="update()"/>
                     <br>
                     <label>Nama</label>
-                    <input class="form-control" type="text" name="nama" required onchange="update()"/>
+                    <input class="form-control" type="text" name="nama" th:field="*{nama}" required onchange="update()"/>
                     <br>
                     <label>Email</label>
-                    <input class="form-control" type="text" name="email" required onchange="update()"/>
-                    <br>
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password" required onchange="update()"/>
+                    <input class="form-control" type="text" name="email" th:field="*{email}" required onchange="update()"/>
                     <br>
                     <button class="btn btn-primary" type="submit" name="save">Simpan</button>
                 </form>

@@ -44,10 +44,11 @@ public class MahasiswaController {
         Set<EnumRole> roleMahasiswa = new HashSet<EnumRole>();
         roleMahasiswa.add(EnumRole.MAHASISWA);
         mahasiswa.setRoles(roleMahasiswa);
+        mahasiswa.setTahap("NEW");
         mahasiswaService.addMahasiswa(mahasiswa);
         model.addAttribute("mahasiswa", mahasiswa);
         model.addAttribute("nama", mahasiswa.getNama());
-        return "user/mahasiswa-add-form";
+        return "redirect:/mahasiswa/viewall";
     }
 
     @GetMapping("/mahasiswa/update/{idUser}")
@@ -63,17 +64,13 @@ public class MahasiswaController {
             @RequestParam("username") String username,
             @RequestParam("nama") String nama,
             @RequestParam("email") String email,
-            @RequestParam("password") String password,
             @RequestParam("nim") Integer nim,
-            @RequestParam("tahap") String tahap,
             Model model, Authentication authentication) {
         try {
             mahasiswa.setUsername(username);
             mahasiswa.setNama(nama);
             mahasiswa.setEmail(email);
-            mahasiswa.setPassword(password);
             mahasiswa.setNim(nim);
-            mahasiswa.setTahap(tahap);
 
             mahasiswa = mahasiswaService.findMahasiswaById(idUser);
 
@@ -89,16 +86,8 @@ public class MahasiswaController {
                 mahasiswa.setEmail(email);
             }
 
-            if (!password.isEmpty()) {
-                mahasiswa.setPassword(password);
-            }
-
             if (nim != null) {
                 mahasiswa.setNim(nim);
-            }
-
-            if (!tahap.isEmpty()) {
-                mahasiswa.setTahap(tahap);
             }
 
             Set<EnumRole> roleMahasiswa = new HashSet<EnumRole>();
@@ -107,7 +96,7 @@ public class MahasiswaController {
             mahasiswaService.updateMahasiswa(mahasiswa);
             model.addAttribute("mahasiswa", mahasiswa);
             model.addAttribute("id", mahasiswa.getIdUser());
-            return "user/mahasiswa-update-form";
+            return "redirect:/mahasiswa/viewall";
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving the file.");

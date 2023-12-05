@@ -82,7 +82,7 @@ public class SeminarHasilController {
                     if (seminarHasil != null) {
                         model.addAttribute("roleUser", baseService.getCurrentRole());
                         model.addAttribute("seminarHasil", seminarHasil);
-                        return "detail-semhas-mahasiswa";
+                        return "semhas/detail-semhas-mahasiswa";
                     } else {
                         TimelineModel tl = tlService.checkDate();
                         Instant now = Instant.now();

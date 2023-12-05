@@ -26,22 +26,16 @@
                 <br>
                 <form th:action="@{'/mahasiswa/update/' + ${mahasiswa.idUser}}" th:object="${mahasiswa}" method="POST">
                     <label>Username</label>
-                    <input class="form-control" type="text" name="username" required onchange="update()"/>
+                    <input class="form-control" type="text" name="username" th:field="*{username}" required onchange="update()"/>
                     <br>
                     <label>Nama</label>
-                    <input class="form-control" type="text" name="nama" required onchange="update()"/>
+                    <input class="form-control" type="text" name="nama" th:field="*{nama}" required onchange="update()"/>
                     <br>
                     <label>Email</label>
-                    <input class="form-control" type="text" name="email" required onchange="update()"/>
-                    <br>
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password" required onchange="update()"/>
+                    <input class="form-control" type="text" name="email" th:field="*{email}" required onchange="update()"/>
                     <br>
                     <label>NIM</label>
-                    <input class="form-control" type="number" name="nim" required onchange="update()"/>
-                    <br>
-                    <label>Tahap</label>
-                    <input class="form-control" type="text" name="tahap" required onchange="update()"/>
+                    <input class="form-control" type="number" name="nim" th:field="*{nim}" required onchange="update()"/>
                     <br>
                     <button class="btn btn-primary" type="submit" name="save">Simpan</button>
                 </form>
