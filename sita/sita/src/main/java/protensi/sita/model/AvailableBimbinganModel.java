@@ -37,8 +37,8 @@ public class AvailableBimbinganModel {
     private LocalDateTime endBimbinganTime;
 
     @ManyToOne
-    @JoinColumn(name = "id_pembimbing", nullable = false)
-    private PembimbingModel pembimbing;
+    @JoinColumn(name = "id_user", nullable = false)
+    private UserModel pembimbing;
 
     @ManyToOne
     @JoinColumn(name = "id_mahasiswa")
